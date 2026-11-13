@@ -46,7 +46,7 @@ Disponível para os perfis de Administrador e Supervisora Operacional, a Central
 - painel de acompanhamento para aprovar, iniciar, atualizar, reatribuir, registrar evidência e encerrar a ocorrência;
 - histórico local de decisões e ações; o encerramento requer resumo da resolução e remove a ocorrência da fila ativa.
 
-O seletor de piso segue o padrão visual dos dropdowns do sistema: ocupa toda a largura da área de conteúdo e fica em uma linha própria abaixo do cabeçalho. O mapa expansível também ocupa a largura integral e permanece separado da fila e do painel de decisão.
+O seletor de piso segue o padrão visual dos dropdowns do sistema: ocupa toda a largura da área de conteúdo e fica em uma linha própria abaixo do cabeçalho. A Central também segue o fluxo vertical do sistema: **Fila Ativa**, **Ocorrência selecionada** e **Mapa expansível** ocupam a largura integral em blocos sucessivos, sem painéis lado a lado.
 
 > A Central de Controle usa dados sintéticos. Ela não representa telemetria real, geolocalização real de equipes ou decisões automáticas da IA.
 
