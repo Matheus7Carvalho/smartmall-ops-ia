@@ -8,6 +8,7 @@ Protótipo local em **HTML5** do SmartMall Ops IA. A identidade visual usa azul-
 - RF02 — dashboard operacional com ocorrências abertas, tarefas em andamento, equipamentos monitorados e alertas;
 - Central de Controle para supervisão, com indicadores, fila prioritária ampliada, mapa operacional simplificado em menu expansível e painel de decisão;
 - Quadro Kanban de tarefas para funcionários, com visualização pessoal e etapas A Fazer, Em Andamento, Aguardando Equipamento, Travada e Finalizada;
+- Tela de Equipes com presença operacional, pessoas disponíveis, ocupadas e indisponíveis, conectada aos status demonstrativos de ocorrências;
 - Estoque de equipamentos com saldos, alerta de mínimo, entradas, retiradas e histórico auditável por item e por movimentação;
 - Navegação lateral, alertas recentes e fila operacional sintética;
 - Fluxo de ocorrências em cinco modais: Registro, Análise, Aprovação, Execução e Encerramento;
@@ -55,6 +56,12 @@ O seletor de piso segue o padrão visual dos dropdowns do sistema: ocupa toda a 
 O módulo **Tarefas** apresenta um quadro Kanban de acompanhamento operacional com cinco etapas: **A Fazer**, **Em Andamento**, **Aguardando Equipamento**, **Travada** e **Finalizada**. O perfil de Funcionário visualiza apenas os cartões atribuídos a ele; os perfis de Administrador e Supervisora Operacional visualizam a distribuição completa da equipe.
 
 Cada cartão identifica a atividade, ocorrência ou rotina relacionada, prioridade, local, responsável, especialidade, prazo e pendência. As ações rápidas alteram o status apenas nesta demonstração local — elas não substituem o registro operacional real.
+
+## Equipes
+
+O módulo **Equipes** oferece uma visão de presença operacional em blocos verticais de largura total. Ele destaca o total de profissionais presentes, disponíveis, ocupados e indisponíveis, além de separar as listas de **Funcionários presentes**, **Funcionários disponíveis** e **Funcionários ocupados**.
+
+Cada pessoa exibe nome, especialidade, quantidade de atividades vinculadas e status atual. Os dados são demonstrativos e acompanham o estado local das ocorrências, incluindo atendimento e deslocamento.
 
 ## Estoque de equipamentos
 

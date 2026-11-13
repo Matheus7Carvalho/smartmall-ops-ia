@@ -42,7 +42,7 @@
           <button class="nav-item" type="button" data-permission="occurrences" data-view="occurrences"><span aria-hidden="true">⌁</span> Ocorrências <b>8</b></button>
           <button class="nav-item" type="button" data-permission="tasks" data-view="tasks"><span aria-hidden="true">✓</span> Tarefas <b>3</b></button>
           <button class="nav-item" type="button" data-permission="equipment" data-view="equipment"><span aria-hidden="true">▦</span> Equipamentos</button>
-          <button class="nav-item" type="button" data-permission="teams"><span aria-hidden="true">♧</span> Equipes</button>
+          <button class="nav-item" type="button" data-permission="teams" data-view="teams"><span aria-hidden="true">♧</span> Equipes</button>
           <button class="nav-item" type="button" data-permission="users"><span aria-hidden="true">◉</span> Usuários e permissões</button>
           <button class="nav-item" type="button" data-permission="reports"><span aria-hidden="true">▥</span> Relatórios</button>
         </nav>
@@ -193,6 +193,18 @@
             <article class="kanban-column kanban-column--done" data-task-status="done"><header><span class="kanban-column-icon" aria-hidden="true">✓</span><div><h2>Finalizada</h2><p>Concluídas nesta rotina</p></div><b id="task-count-done">0</b></header><div class="kanban-cards" id="tasks-done" role="list" aria-label="Tarefas finalizadas"></div></article>
           </section>
           <section class="tasks-disclaimer"><span aria-hidden="true">⌾</span><p><b>Ambiente demonstrativo:</b> alterações de status ficam somente nesta sessão local e devem ser registradas no fluxo operacional real antes de qualquer intervenção.</p></section>
+        </section>
+
+        <section class="teams-screen" id="teams-view" hidden aria-labelledby="teams-title">
+          <header class="teams-header"><div><button class="back-dashboard" type="button" data-view="dashboard"><span aria-hidden="true">←</span> Voltar ao dashboard</button><p class="eyebrow">GESTÃO DE EQUIPES</p><h1 id="teams-title">Equipes em operação</h1><p>Acompanhe a presença e a disponibilidade das pessoas que apoiam a operação do shopping.</p></div><span class="demo-label">ATUALIZAÇÃO LOCAL</span></header>
+          <section class="teams-metrics" aria-label="Resumo das equipes"><article><span aria-hidden="true">♧</span><div><p>Funcionários presentes</p><strong id="teams-present-count">0</strong><small>Escala desta operação</small></div></article><article class="teams-metric--available"><span aria-hidden="true">✓</span><div><p>Disponíveis agora</p><strong id="teams-available-count">0</strong><small>Podem receber atividade</small></div></article><article class="teams-metric--busy"><span aria-hidden="true">↻</span><div><p>Ocupados</p><strong id="teams-busy-count">0</strong><small>Em atendimento ou deslocamento</small></div></article><article class="teams-metric--offline"><span aria-hidden="true">○</span><div><p>Indisponíveis</p><strong id="teams-offline-count">0</strong><small>Sem atribuição no momento</small></div></article></section>
+          <section class="teams-info"><span aria-hidden="true">⌾</span><div><b>Visão de presença operacional</b><p>Os status abaixo são demonstrativos e acompanham as ocorrências e tarefas registradas nesta sessão.</p></div></section>
+          <section class="team-status-groups" aria-label="Funcionários por disponibilidade">
+            <article class="team-status-group team-status-group--present"><header><div><p class="eyebrow">PRESENÇA CONFIRMADA</p><h2>Funcionários presentes</h2><p>Profissionais disponíveis, ocupados ou em pausa na escala atual.</p></div><span class="team-group-count" id="teams-present-group-count">0</span></header><ul class="team-person-list" id="teams-present-list"></ul></article>
+            <article class="team-status-group team-status-group--available"><header><div><p class="eyebrow">PRONTOS PARA ATENDER</p><h2>Funcionários disponíveis</h2><p>Podem ser considerados na próxima atribuição operacional.</p></div><span class="team-group-count" id="teams-available-group-count">0</span></header><ul class="team-person-list" id="teams-available-list"></ul></article>
+            <article class="team-status-group team-status-group--busy"><header><div><p class="eyebrow">ATENDIMENTO EM CURSO</p><h2>Funcionários ocupados</h2><p>Estão em deslocamento ou realizando uma atividade.</p></div><span class="team-group-count" id="teams-busy-group-count">0</span></header><ul class="team-person-list" id="teams-busy-list"></ul></article>
+          </section>
+          <section class="teams-disclaimer"><span aria-hidden="true">⌾</span><p><b>Ambiente demonstrativo:</b> presença, escala e disponibilidade são dados sintéticos para apresentação. A gestão real requer registro de ponto, regras de turno e atualização pelo responsável.</p></section>
         </section>
       </main>
     </div>

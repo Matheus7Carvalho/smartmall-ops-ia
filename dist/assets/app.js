@@ -56,6 +56,17 @@
   const tasksFeedback = document.querySelector("#tasks-feedback");
   const tasksBoard = document.querySelector("#tasks-board");
   const equipmentView = document.querySelector("#equipment-view");
+  const teamsView = document.querySelector("#teams-view");
+  const teamsPresentCount = document.querySelector("#teams-present-count");
+  const teamsAvailableCount = document.querySelector("#teams-available-count");
+  const teamsBusyCount = document.querySelector("#teams-busy-count");
+  const teamsOfflineCount = document.querySelector("#teams-offline-count");
+  const teamsPresentGroupCount = document.querySelector("#teams-present-group-count");
+  const teamsAvailableGroupCount = document.querySelector("#teams-available-group-count");
+  const teamsBusyGroupCount = document.querySelector("#teams-busy-group-count");
+  const teamsPresentList = document.querySelector("#teams-present-list");
+  const teamsAvailableList = document.querySelector("#teams-available-list");
+  const teamsBusyList = document.querySelector("#teams-busy-list");
   const inventoryStockSelect = document.querySelector("#inventory-stock-select");
   const inventoryTotalItems = document.querySelector("#inventory-total-items");
   const inventoryTotalUnits = document.querySelector("#inventory-total-units");
@@ -845,7 +856,7 @@
 
   function navigateTo(view) {
     if (!currentUser) return;
-    const availableViews = new Set(["dashboard", "control", "occurrences", "tasks", "equipment"]);
+    const availableViews = new Set(["dashboard", "control", "occurrences", "tasks", "equipment", "teams"]);
     const allowedView = availableViews.has(view) && currentUser.permissions.includes(view)
       ? view
       : "dashboard";
@@ -855,6 +866,8 @@
     occurrencesView.hidden = allowedView !== "occurrences";
     tasksView.hidden = allowedView !== "tasks";
     equipmentView.hidden = allowedView !== "equipment";
+    teamsView.hidden = allowedView !== "teams";
+    if (allowedView === "teams") renderTeams();
     document.querySelectorAll(".nav-item[data-view]").forEach((item) => {
       item.classList.toggle("is-active", item.dataset.view === allowedView);
     });
@@ -878,6 +891,7 @@
     renderControl();
     renderTasks();
     renderInventory();
+    renderTeams();
     renderModalFlow();
     navigateTo("dashboard");
   }
@@ -1158,6 +1172,48 @@
     if (matchingIncident?.state === "assigned") return { label: "Em deslocamento", className: "is-busy" };
     if (!team.available) return { label: "Indisponível", className: "is-offline" };
     return { label: "Disponível", className: "" };
+  }
+
+  function createTeamPersonCard(team, status) {
+    const item = document.createElement("li");
+    item.className = "team-person-card";
+    const avatar = document.createElement("span");
+    avatar.className = "team-person-avatar";
+    avatar.textContent = team.initials;
+    const summary = document.createElement("div");
+    const name = document.createElement("b");
+    name.textContent = team.name;
+    const specialty = document.createElement("small");
+    specialty.textContent = team.specialty;
+    summary.append(name, specialty);
+    const activity = document.createElement("span");
+    activity.className = "team-person-activity";
+    activity.textContent = team.openTasks > 0
+      ? `${team.openTasks} atividade${team.openTasks > 1 ? "s" : ""} vinculada${team.openTasks > 1 ? "s" : ""}`
+      : "Sem atividade atribuída";
+    const statusChip = document.createElement("span");
+    statusChip.className = `team-person-status ${status.className}`.trim();
+    statusChip.textContent = status.label;
+    item.append(avatar, summary, activity, statusChip);
+    return item;
+  }
+
+  function renderTeams() {
+    const roster = CONTROL_ROSTER.map((team) => ({ team, status: teamStatus(team) }));
+    const available = roster.filter(({ status }) => status.label === "Disponível");
+    const busy = roster.filter(({ status }) => status.className === "is-busy");
+    const offline = roster.filter(({ status }) => status.className === "is-offline");
+
+    teamsPresentCount.textContent = String(roster.length);
+    teamsAvailableCount.textContent = String(available.length);
+    teamsBusyCount.textContent = String(busy.length);
+    teamsOfflineCount.textContent = String(offline.length);
+    teamsPresentGroupCount.textContent = String(roster.length);
+    teamsAvailableGroupCount.textContent = String(available.length);
+    teamsBusyGroupCount.textContent = String(busy.length);
+    teamsPresentList.replaceChildren(...roster.map(({ team, status }) => createTeamPersonCard(team, status)));
+    teamsAvailableList.replaceChildren(...available.map(({ team, status }) => createTeamPersonCard(team, status)));
+    teamsBusyList.replaceChildren(...busy.map(({ team, status }) => createTeamPersonCard(team, status)));
   }
 
   function renderControlTeams() {
