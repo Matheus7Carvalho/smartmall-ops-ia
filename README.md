@@ -8,17 +8,29 @@ Protótipo local em **HTML5** do SmartMall Ops IA. A identidade visual usa azul-
 - RF02 — dashboard operacional com ocorrências abertas, tarefas em andamento, equipamentos monitorados e alertas;
 - Central de Controle para supervisão, com indicadores, fila prioritária, equipes, mapa operacional simplificado e painel de decisão;
 - Navegação lateral, alertas recentes e fila operacional sintética;
-- Central de ocorrências em uma única tela, com registro e prévia local de foto;
-- Classificação demonstrativa e explicável por regras, com categoria e prioridade sugeridas;
-- Sugestão de responsável baseada em especialidade, disponibilidade e carga de tarefas;
-- Aprovação obrigatória por Administrador ou Supervisora Operacional antes da atribuição;
-- Atualizações auditáveis da tarefa e encerramento bloqueado até o registro de uma resolução.
+- Fluxo de ocorrências em cinco modais: Registro, Análise, Aprovação, Execução e Encerramento;
+- Registro público de ocorrência, sem login, com imagem ou vídeo opcional, descrição e localização;
+- Acesso por QR Code simulado com localização pré-cadastrada e bloqueada para edição;
+- Classificação demonstrativa e explicável por regras, com categoria, prioridade e equipe indicada;
+- Aprovação obrigatória por Administrador ou Supervisora Operacional antes da execução;
+- Execução técnica com materiais usados, rota estimada, início da atividade, descrição do serviço e gastos;
+- Encerramento com histórico, tempo, responsável técnico, gastos e finalização restrita a Administrador ou Supervisora Operacional.
 
 ## Fluxo da ocorrência
 
 `Registrar → Analisar → Aprovar → Executar → Encerrar`
 
-O protótipo mantém todas as etapas na mesma tela. A classificação é uma simulação local e determinística: ela não representa um modelo de IA em produção nem autoriza intervenções técnicas. Situações de risco continuam exigindo os protocolos e a decisão humana do shopping.
+As etapas são exibidas como botões na tela de Ocorrências e cada uma abre uma modal específica. A classificação é uma simulação local e determinística: ela não representa um modelo de IA em produção nem autoriza intervenções técnicas. Situações de risco continuam exigindo os protocolos e a decisão humana do shopping.
+
+### Registro público e QR Code
+
+O botão **“Registrar ocorrência sem login”** na tela de acesso abre a modal de Registro para clientes ou funcionários do local. Para simular a leitura de um QR Code com local pré-cadastrado, abra a URL abaixo:
+
+```text
+http://127.0.0.1:4174/?qr=1&local=praca-alimentacao
+```
+
+O parâmetro `local` aceita, nesta demonstração: `praca-alimentacao`, `banheiro-l1`, `corredor-l2`, `entrada` e `estacionamento`.
 
 ## Central de Controle
 

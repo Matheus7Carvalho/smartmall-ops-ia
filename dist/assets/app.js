@@ -26,7 +26,7 @@
       name: "João Costa",
       role: "Funcionário",
       initials: "JC",
-      permissions: ["dashboard", "tasks", "equipment"],
+      permissions: ["dashboard", "occurrences", "tasks", "equipment"],
       description: "Você pode consultar sua operação, tarefas e o estado dos equipamentos.",
     },
   ]);
@@ -119,8 +119,68 @@
   const controlFloor = document.querySelector("#control-floor");
   const controlTabs = [...document.querySelectorAll("[data-control-tab]")];
 
+  const publicReportButton = document.querySelector("#public-report-button");
+  const modalStepButtons = [...document.querySelectorAll("[data-modal-step] button")];
+  const modalFlowSummary = document.querySelector("#modal-flow-summary");
+  const publicRegistrationForm = document.querySelector("#public-registration-form");
+  const publicIncidentMedia = document.querySelector("#public-incident-media");
+  const publicMediaPreview = document.querySelector("#public-media-preview");
+  const publicIncidentDescription = document.querySelector("#public-incident-description");
+  const publicIncidentLocation = document.querySelector("#public-incident-location");
+  const publicRegistrationMessage = document.querySelector("#public-registration-message");
+  const qrLocationPanel = document.querySelector("#qr-location-panel");
+  const qrLocationDescription = document.querySelector("#qr-location-description");
+  const modalAnalysisCategory = document.querySelector("#modal-analysis-category");
+  const modalAnalysisPriority = document.querySelector("#modal-analysis-priority");
+  const modalAnalysisTeam = document.querySelector("#modal-analysis-team");
+  const modalAnalysisLocation = document.querySelector("#modal-analysis-location");
+  const modalAnalysisRules = document.querySelector("#modal-analysis-rules");
+  const modalAnalysisExplanation = document.querySelector("#modal-analysis-explanation");
+  const modalAnalysisMessage = document.querySelector("#modal-analysis-message");
+  const modalAnalysisNext = document.querySelector("#modal-analysis-next");
+  const modalApprovalAccess = document.querySelector("#modal-approval-access");
+  const modalApprovalReview = document.querySelector("#modal-approval-review");
+  const modalApprovalTitle = document.querySelector("#modal-approval-title");
+  const modalApprovalPriority = document.querySelector("#modal-approval-priority");
+  const modalApprovalTeam = document.querySelector("#modal-approval-team");
+  const modalApprovalCheck = document.querySelector("#modal-approval-check");
+  const modalApprovalUser = document.querySelector("#modal-approval-user");
+  const modalApprovalMessage = document.querySelector("#modal-approval-message");
+  const modalApproveButton = document.querySelector("#modal-approve-button");
+  const modalExecutionAccess = document.querySelector("#modal-execution-access");
+  const modalExecutionForm = document.querySelector("#modal-execution-form");
+  const modalExecutionTitle = document.querySelector("#modal-execution-title");
+  const modalExecutionTeam = document.querySelector("#modal-execution-team");
+  const modalExecutionLocation = document.querySelector("#modal-execution-location");
+  const modalExecutionRoute = document.querySelector("#modal-execution-route");
+  const modalExecutionMaterials = document.querySelector("#modal-execution-materials");
+  const modalStartExecution = document.querySelector("#modal-start-execution");
+  const modalExecutionDescriptionLabel = document.querySelector("#modal-execution-description-label");
+  const modalExecutionDescription = document.querySelector("#modal-execution-description");
+  const modalExecutionCostLabel = document.querySelector("#modal-execution-cost-label");
+  const modalExecutionCost = document.querySelector("#modal-execution-cost");
+  const modalExecutionMessage = document.querySelector("#modal-execution-message");
+  const modalSendToClose = document.querySelector("#modal-send-to-close");
+  const modalCloseTechnician = document.querySelector("#modal-close-technician");
+  const modalCloseDuration = document.querySelector("#modal-close-duration");
+  const modalCloseCost = document.querySelector("#modal-close-cost");
+  const modalCloseHistory = document.querySelector("#modal-close-history");
+  const modalCloseAccess = document.querySelector("#modal-close-access");
+  const modalCloseUser = document.querySelector("#modal-close-user");
+  const modalCloseMessage = document.querySelector("#modal-close-message");
+  const modalFinalizeButton = document.querySelector("#modal-finalize-button");
+  const flowDialogs = Object.freeze({
+    register: document.querySelector("#modal-register"),
+    analyze: document.querySelector("#modal-analyze"),
+    approve: document.querySelector("#modal-approve"),
+    execute: document.querySelector("#modal-execute"),
+    close: document.querySelector("#modal-close"),
+  });
+
   let currentUser = null;
   let photoUrl = "";
+  let publicMediaUrl = "";
+  let qrRegistrationActive = false;
 
   class OccurrenceWorkflow {
     constructor() {
@@ -464,6 +524,136 @@
 
   const controlCenter = new ControlCenter();
 
+  class ModalOccurrenceFlow {
+    constructor() {
+      this.reset();
+    }
+
+    reset() {
+      this.state = "draft";
+      this.record = { description: "", location: "Praça de Alimentação", mediaName: "", mediaType: "" };
+      this.analysis = null;
+      this.approvedBy = null;
+      this.technician = null;
+      this.startedAt = null;
+      this.materials = "";
+      this.executionDescription = "";
+      this.cost = 0;
+      this.history = [{ time: "Agora", message: "Fluxo de ocorrência preparado para um novo registro." }];
+    }
+
+    addHistory(message) {
+      this.history.push({
+        time: new Intl.DateTimeFormat("pt-BR", { hour: "2-digit", minute: "2-digit" }).format(new Date()),
+        message,
+      });
+    }
+
+    classify(description, location) {
+      const text = `${description} ${location}`.toLocaleLowerCase("pt-BR");
+      const has = (expression) => expression.test(text);
+      let category = "Infraestrutura geral";
+      let priority = "Média";
+      let team = "Caio Nunes · Infraestrutura";
+      let rules = ["Informações suficientes para iniciar a triagem demonstrativa."];
+      let explanation = "Prioridade média por impacto operacional sem sinal de risco imediato no relato.";
+      let route = "Rota estimada · 280 m · 5 min";
+
+      if (has(/fumaça|incêndio|evacua|explos|cheiro de queimado|choque|faísca|curto/)) {
+        category = "Segurança / risco imediato";
+        priority = "Crítica";
+        team = "Elisa Rocha · Segurança";
+        rules = ["Termo de risco imediato identificado.", "O protocolo de segurança e uma decisão humana são obrigatórios."];
+        explanation = "Prioridade crítica: o relato pode indicar risco a pessoas ou à operação.";
+        route = "Rota estimada · 190 m · 3 min";
+      } else if (has(/ar[ -]?condicionado|climatiza|calor|temperatura|refrigera/)) {
+        category = "Infraestrutura / Climatização";
+        priority = location === "Praça de Alimentação" ? "Alta" : "Média";
+        team = "João Costa · Climatização / HVAC";
+        rules = ["Termos de climatização direcionam a análise para a equipe HVAC.", "Área de alimentação eleva o impacto sobre conforto e fluxo de visitantes."];
+        explanation = priority === "Alta"
+          ? "Prioridade alta pela combinação de falha de climatização e área de alimentação."
+          : "Prioridade média por falha de climatização fora da área de maior fluxo.";
+        route = "Rota estimada · 350 m · 6 min";
+      } else if (has(/vazamento|água|alagamento|torneira|esgoto|infiltra/)) {
+        category = "Infraestrutura / Hidráulica";
+        priority = location.includes("Banheiro") || has(/alagamento|escorrega/) ? "Alta" : "Média";
+        team = "Luana Freitas · Hidráulica";
+        rules = ["Termos ligados a vazamento encaminham para a equipe hidráulica.", "Possível piso molhado ou interrupção de uso aumenta a atenção necessária."];
+        explanation = priority === "Alta"
+          ? "Prioridade alta pelo risco potencial de queda ou alagamento."
+          : "Prioridade média: vazamento sem risco ampliado informado.";
+        route = "Rota estimada · 210 m · 4 min";
+      } else if (has(/lixo|sujeira|limpeza|derramado|higieniza/)) {
+        category = "Serviços / Limpeza";
+        priority = has(/vidro|químico|escorrega/) ? "Alta" : "Baixa";
+        team = "Maria Souza · Limpeza";
+        rules = ["Termos relacionados à conservação do ambiente indicam a equipe de limpeza.", "Não foram relatados riscos críticos de segurança."];
+        explanation = priority === "Alta"
+          ? "Prioridade alta por possível risco de acidente no local."
+          : "Prioridade baixa por ausência de risco ou interrupção operacional descritos.";
+        route = "Rota estimada · 180 m · 12 min";
+      }
+
+      return { category, priority, team, rules, explanation, route };
+    }
+
+    register({ description, location, mediaName, mediaType }) {
+      this.record = { description, location, mediaName, mediaType };
+      this.analysis = this.classify(description, location);
+      this.state = "analyzed";
+      this.addHistory(`Ocorrência registrada em ${location}.`);
+      if (mediaName) this.addHistory(`Mídia anexada ao registro: ${mediaName}.`);
+      this.addHistory(`Análise demonstrativa sugeriu ${this.analysis.category} com prioridade ${this.analysis.priority}.`);
+      return this.analysis;
+    }
+
+    approve(user) {
+      if (this.state !== "analyzed" || !SUPERVISORY_ROLES.has(user?.role)) return false;
+      this.state = "approved";
+      this.approvedBy = user;
+      this.addHistory(`${user.name} aprovou o encaminhamento para ${this.analysis.team}.`);
+      return true;
+    }
+
+    start(user, materials) {
+      if (this.state !== "approved" || !user) return false;
+      this.state = "in_progress";
+      this.technician = user;
+      this.startedAt = new Date();
+      this.materials = materials.trim();
+      this.addHistory(`${user.name} iniciou a atividade técnica.`);
+      if (this.materials) this.addHistory(`Materiais informados: ${this.materials}.`);
+      return true;
+    }
+
+    submitExecution(user, { materials, description, cost }) {
+      if (this.state !== "in_progress" || !user || description.trim().length < 8) return false;
+      this.materials = materials.trim();
+      this.executionDescription = description.trim();
+      this.cost = Number.isFinite(cost) && cost >= 0 ? cost : 0;
+      this.state = "ready_to_close";
+      this.addHistory(`${user.name} registrou a execução: ${this.executionDescription}`);
+      this.addHistory(`Gastos informados para a atividade: ${new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(this.cost)}.`);
+      return true;
+    }
+
+    finalize(user) {
+      if (this.state !== "ready_to_close" || !SUPERVISORY_ROLES.has(user?.role)) return false;
+      this.state = "closed";
+      this.addHistory(`${user.name} finalizou a atividade após revisão do histórico e dos gastos.`);
+      return true;
+    }
+
+    duration() {
+      if (!this.startedAt) return "Ainda não iniciada";
+      const minutes = Math.max(1, Math.round((Date.now() - this.startedAt.getTime()) / 60000));
+      return `${minutes} min`;
+    }
+  }
+
+  const modalOccurrence = new ModalOccurrenceFlow();
+
   const getUser = () => {
     try {
       const email = sessionStorage.getItem(storageKey);
@@ -521,6 +711,7 @@
     });
     renderOccurrence();
     renderControl();
+    renderModalFlow();
     navigateTo("dashboard");
   }
 
@@ -536,6 +727,7 @@
     renderOccurrence();
     setControlMessage("");
     renderControl();
+    renderModalFlow();
     emailField.focus();
   }
 
@@ -549,6 +741,188 @@
   function setFormMessage(message = "", state = "error") {
     incidentFormMessage.textContent = message;
     incidentFormMessage.classList.toggle("is-success", Boolean(message) && state === "success");
+  }
+
+  function setModalMessage(element, message = "", state = "error") {
+    element.textContent = message;
+    element.classList.toggle("is-success", Boolean(message) && state === "success");
+  }
+
+  function configureQrRegistration() {
+    const query = new URLSearchParams(window.location.search);
+    const locationsByCode = {
+      "praca-alimentacao": "Praça de Alimentação",
+      "banheiro-l1": "Banheiro — Piso L1",
+      "corredor-l2": "Corredor — Piso L2",
+      entrada: "Entrada principal",
+      estacionamento: "Estacionamento",
+    };
+    qrRegistrationActive = query.get("qr") === "1";
+    const presetLocation = locationsByCode[query.get("local")] || "Praça de Alimentação";
+    publicIncidentLocation.disabled = qrRegistrationActive;
+    qrLocationPanel.hidden = !qrRegistrationActive;
+    if (qrRegistrationActive) {
+      publicIncidentLocation.value = presetLocation;
+      qrLocationDescription.textContent = presetLocation;
+    }
+  }
+
+  function currentModalStep() {
+    return ({ draft: 0, analyzed: 1, approved: 2, in_progress: 3, ready_to_close: 4, closed: 4 })[modalOccurrence.state];
+  }
+
+  function renderModalSteps() {
+    const step = currentModalStep();
+    modalStepButtons.forEach((button, index) => {
+      button.classList.toggle("is-complete", index < step || (modalOccurrence.state === "closed" && index === step));
+      button.classList.toggle("is-current", index === step && modalOccurrence.state !== "closed");
+    });
+    const summaries = {
+      draft: "Inicie um registro para encaminhar o chamado à análise.",
+      analyzed: "Análise concluída. Aguardando revisão de um supervisor ou administrador.",
+      approved: "Encaminhamento aprovado. A equipe técnica já pode iniciar a atividade.",
+      in_progress: "Atividade em andamento. Registre materiais e a descrição do serviço executado.",
+      ready_to_close: "Execução registrada. A atividade aguarda a finalização de um supervisor ou administrador.",
+      closed: "Atividade finalizada. O histórico, os gastos e a equipe responsável permanecem disponíveis no encerramento.",
+    };
+    modalFlowSummary.textContent = summaries[modalOccurrence.state];
+  }
+
+  function renderModalAnalysis() {
+    const analysis = modalOccurrence.analysis;
+    modalAnalysisCategory.textContent = analysis?.category || "Aguardando registro";
+    modalAnalysisPriority.textContent = analysis?.priority || "—";
+    modalAnalysisTeam.textContent = analysis?.team || "—";
+    modalAnalysisLocation.textContent = modalOccurrence.record.location || "—";
+    modalAnalysisRules.replaceChildren(...(analysis?.rules || ["Registre uma ocorrência para iniciar a análise."]).map((rule) => {
+      const item = document.createElement("li");
+      item.textContent = rule;
+      return item;
+    }));
+    modalAnalysisExplanation.textContent = analysis?.explanation || "A classificação demonstrativa será apresentada depois do registro.";
+    modalAnalysisNext.disabled = !analysis;
+    modalAnalysisNext.textContent = canApprove() ? "Revisar aprovação →" : "Enviar para supervisão";
+  }
+
+  function updateModalApprovalAction() {
+    modalApproveButton.disabled = !(modalOccurrence.state === "analyzed" && canApprove() && modalApprovalCheck.checked);
+  }
+
+  function renderModalApproval() {
+    const analysis = modalOccurrence.analysis;
+    const hasReview = Boolean(analysis && modalOccurrence.state === "analyzed" && canApprove());
+    modalApprovalReview.hidden = !hasReview;
+    modalApprovalAccess.hidden = hasReview;
+    modalApprovalCheck.checked = false;
+    modalApprovalTitle.textContent = modalOccurrence.record.description || "—";
+    modalApprovalPriority.textContent = analysis?.priority || "—";
+    modalApprovalTeam.textContent = analysis?.team || "—";
+    modalApprovalUser.textContent = canApprove()
+      ? `${currentUser.name} · ${currentUser.role}`
+      : "Acesso de Administrador ou Supervisora Operacional necessário";
+    if (!analysis) {
+      modalApprovalAccess.querySelector("b").textContent = "Aguardando análise";
+      modalApprovalAccess.querySelector("p").textContent = "Registre a ocorrência e conclua a análise antes de solicitar aprovação.";
+    } else if (modalOccurrence.state !== "analyzed") {
+      modalApprovalAccess.querySelector("b").textContent = "Encaminhamento já processado";
+      modalApprovalAccess.querySelector("p").textContent = "Acompanhe as próximas etapas do fluxo para a execução ou o encerramento.";
+    } else if (!canApprove()) {
+      modalApprovalAccess.querySelector("b").textContent = "Aguardando acesso autorizado";
+      modalApprovalAccess.querySelector("p").textContent = "Entre com um perfil de Administrador ou Supervisora Operacional para revisar e aprovar.";
+    }
+    setModalMessage(modalApprovalMessage, "");
+    updateModalApprovalAction();
+  }
+
+  function renderModalExecution() {
+    const hasTechnicianAccess = Boolean(currentUser?.permissions.includes("occurrences"));
+    const canExecute = hasTechnicianAccess && ["approved", "in_progress"].includes(modalOccurrence.state);
+    modalExecutionAccess.hidden = canExecute;
+    modalExecutionForm.hidden = !canExecute;
+    if (!canExecute) {
+      const accessTitle = modalExecutionAccess.querySelector("b");
+      const accessText = modalExecutionAccess.querySelector("p");
+      if (!modalOccurrence.analysis) {
+        accessTitle.textContent = "Aguardando análise";
+        accessText.textContent = "O registro precisa passar pela análise antes de ser encaminhado à equipe técnica.";
+      } else if (!["approved", "in_progress"].includes(modalOccurrence.state)) {
+        accessTitle.textContent = "Aguardando aprovação";
+        accessText.textContent = "A equipe técnica só pode executar a atividade após a aprovação de um supervisor ou administrador.";
+      } else {
+        accessTitle.textContent = "Acesso da equipe técnica necessário";
+        accessText.textContent = "Entre com uma conta de Funcionário, Supervisora ou Administrador para executar a atividade.";
+      }
+      modalSendToClose.hidden = true;
+      return;
+    }
+    modalExecutionTitle.textContent = modalOccurrence.analysis.category;
+    modalExecutionTeam.textContent = modalOccurrence.analysis.team;
+    modalExecutionLocation.textContent = modalOccurrence.record.location;
+    modalExecutionRoute.textContent = modalOccurrence.analysis.route;
+    modalExecutionMaterials.value = modalOccurrence.materials;
+    modalExecutionDescription.value = modalOccurrence.executionDescription;
+    modalExecutionCost.value = modalOccurrence.cost || "";
+    const inProgress = modalOccurrence.state === "in_progress";
+    modalStartExecution.hidden = inProgress;
+    modalExecutionDescriptionLabel.hidden = !inProgress;
+    modalExecutionCostLabel.hidden = !inProgress;
+    modalSendToClose.hidden = !inProgress;
+    setModalMessage(modalExecutionMessage, "");
+  }
+
+  function renderModalClosure() {
+    const technicianName = modalOccurrence.technician?.name || "Aguardando execução técnica";
+    const cost = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(modalOccurrence.cost || 0);
+    modalCloseTechnician.textContent = technicianName;
+    modalCloseDuration.textContent = modalOccurrence.duration();
+    modalCloseCost.textContent = cost;
+    modalCloseHistory.replaceChildren(...modalOccurrence.history.map((entry) => {
+      const item = document.createElement("li");
+      const time = document.createElement("time");
+      const message = document.createElement("span");
+      time.textContent = entry.time;
+      message.textContent = entry.message;
+      item.append(time, message);
+      return item;
+    }));
+    const canFinalize = modalOccurrence.state === "ready_to_close" && canApprove();
+    modalCloseAccess.hidden = canFinalize || modalOccurrence.state === "closed";
+    modalFinalizeButton.disabled = !canFinalize;
+    modalFinalizeButton.textContent = modalOccurrence.state === "closed" ? "✓ Atividade finalizada" : "✓ Finalizar atividade";
+    modalCloseUser.textContent = canApprove()
+      ? `${currentUser.name} · ${currentUser.role}`
+      : "Finalização disponível somente para Administrador ou Supervisora Operacional";
+    if (modalOccurrence.state !== "ready_to_close" && modalOccurrence.state !== "closed") {
+      modalCloseAccess.querySelector("b").textContent = "Aguardando execução registrada";
+      modalCloseAccess.querySelector("p").textContent = "A equipe técnica deve descrever a atividade e informar os gastos antes do encerramento.";
+    } else if (!canApprove() && modalOccurrence.state === "ready_to_close") {
+      modalCloseAccess.querySelector("b").textContent = "Finalização restrita";
+      modalCloseAccess.querySelector("p").textContent = "Somente Administrador ou Supervisora Operacional pode concluir a atividade.";
+    }
+  }
+
+  function renderModalFlow() {
+    renderModalSteps();
+    renderModalAnalysis();
+    renderModalApproval();
+    renderModalExecution();
+    renderModalClosure();
+  }
+
+  function closeFlowModal(name) {
+    const dialog = flowDialogs[name];
+    if (dialog?.open) dialog.close();
+  }
+
+  function openFlowModal(name) {
+    const dialog = flowDialogs[name];
+    if (!dialog) return;
+    if (name === "register") configureQrRegistration();
+    renderModalFlow();
+    Object.values(flowDialogs).forEach((item) => {
+      if (item !== dialog && item.open) item.close();
+    });
+    if (!dialog.open) dialog.showModal();
   }
 
   let activeControlTab = "map";
@@ -1054,8 +1428,126 @@
     }
   });
 
+  document.querySelectorAll("[data-open-modal]").forEach((button) => {
+    button.addEventListener("click", () => openFlowModal(button.dataset.openModal));
+  });
+
+  document.querySelectorAll("[data-close-modal]").forEach((button) => {
+    button.addEventListener("click", () => closeFlowModal(button.dataset.closeModal));
+  });
+
+  modalStepButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const stepName = button.closest("[data-modal-step]").dataset.modalStep;
+      openFlowModal(stepName);
+    });
+  });
+
+  publicReportButton.addEventListener("click", () => openFlowModal("register"));
+
+  publicIncidentMedia.addEventListener("change", () => {
+    const [file] = publicIncidentMedia.files;
+    if (!file) return;
+    if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) {
+      setModalMessage(publicRegistrationMessage, "Escolha uma imagem ou um vídeo para anexar ao registro.");
+      return;
+    }
+    if (publicMediaUrl) URL.revokeObjectURL(publicMediaUrl);
+    publicMediaUrl = URL.createObjectURL(file);
+    const media = document.createElement(file.type.startsWith("video/") ? "video" : "img");
+    media.src = publicMediaUrl;
+    media.muted = true;
+    media.playsInline = true;
+    media.alt = file.type.startsWith("image/") ? "Prévia da imagem anexada" : "Prévia do vídeo anexado";
+    publicMediaPreview.replaceChildren(media);
+    setModalMessage(publicRegistrationMessage, "");
+  });
+
+  publicRegistrationForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const description = publicIncidentDescription.value.trim();
+    const location = publicIncidentLocation.value;
+    const [media] = publicIncidentMedia.files;
+    if (description.length < 10) {
+      setModalMessage(publicRegistrationMessage, "Informe uma descrição com pelo menos 10 caracteres.");
+      publicIncidentDescription.focus();
+      return;
+    }
+    if (!location) {
+      setModalMessage(publicRegistrationMessage, "Selecione ou confirme o local da ocorrência.");
+      publicIncidentLocation.focus();
+      return;
+    }
+    modalOccurrence.reset();
+    modalOccurrence.register({ description, location, mediaName: media?.name || "", mediaType: media?.type || "" });
+    setModalMessage(publicRegistrationMessage, "");
+    renderModalFlow();
+    closeFlowModal("register");
+    openFlowModal("analyze");
+  });
+
+  modalAnalysisNext.addEventListener("click", () => {
+    if (!modalOccurrence.analysis) return;
+    if (!canApprove()) {
+      setModalMessage(modalAnalysisMessage, "Análise concluída. O chamado aguarda a aprovação de uma Supervisora ou Administrador.", "success");
+      return;
+    }
+    closeFlowModal("analyze");
+    openFlowModal("approve");
+  });
+
+  modalApprovalCheck.addEventListener("change", updateModalApprovalAction);
+
+  modalApproveButton.addEventListener("click", () => {
+    if (!modalApprovalCheck.checked || !modalOccurrence.approve(currentUser)) {
+      setModalMessage(modalApprovalMessage, "Confirme a revisão com um perfil autorizado antes de aprovar.");
+      return;
+    }
+    renderModalFlow();
+    closeFlowModal("approve");
+    openFlowModal("execute");
+  });
+
+  modalStartExecution.addEventListener("click", () => {
+    if (!modalOccurrence.start(currentUser, modalExecutionMaterials.value)) {
+      setModalMessage(modalExecutionMessage, "A atividade exige aprovação e acesso da equipe técnica.");
+      return;
+    }
+    renderModalFlow();
+    setModalMessage(modalExecutionMessage, "Atividade iniciada. Informe o que foi feito e os gastos antes do encerramento.", "success");
+  });
+
+  modalSendToClose.addEventListener("click", () => {
+    const cost = Number.parseFloat(modalExecutionCost.value || "0");
+    const submitted = modalOccurrence.submitExecution(currentUser, {
+      materials: modalExecutionMaterials.value,
+      description: modalExecutionDescription.value,
+      cost,
+    });
+    if (!submitted) {
+      setModalMessage(modalExecutionMessage, "Descreva a atividade com pelo menos 8 caracteres antes de enviar ao encerramento.");
+      modalExecutionDescription.focus();
+      return;
+    }
+    renderModalFlow();
+    closeFlowModal("execute");
+    openFlowModal("close");
+  });
+
+  modalFinalizeButton.addEventListener("click", () => {
+    if (!modalOccurrence.finalize(currentUser)) {
+      setModalMessage(modalCloseMessage, "A finalização exige uma execução registrada e um perfil autorizado.");
+      return;
+    }
+    renderModalFlow();
+    setModalMessage(modalCloseMessage, "Atividade finalizada com sucesso. O histórico permanece disponível.", "success");
+  });
+
   renderOccurrence();
   renderControl();
+  configureQrRegistration();
+  renderModalFlow();
   const savedUser = getUser();
   if (savedUser) setAuthenticatedView(savedUser);
+  if (qrRegistrationActive) openFlowModal("register");
 })();
