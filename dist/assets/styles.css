@@ -76,3 +76,70 @@
 
 /* Tarefas — quadro Kanban pessoal e operacional. */
 .tasks-screen{max-width:1680px;margin:0 auto;padding:30px 3.2vw 44px}.tasks-header{display:flex;align-items:flex-end;justify-content:space-between;gap:1.25rem}.tasks-header h1{margin:0;color:#102642;font-size:clamp(1.6rem,3.1vw,2.45rem);letter-spacing:-.06em}.tasks-header p:not(.eyebrow){max-width:47rem;margin:.45rem 0 0;color:var(--muted);font-size:.86rem;line-height:1.5}.tasks-header-actions{display:flex;align-items:center;gap:.7rem}.tasks-assignee{display:flex;gap:.45rem;align-items:center;padding:.42rem .58rem;color:#27455e;background:#fff;border:1px solid #d9e8ef;border-radius:.6rem;box-shadow:0 5px 12px rgba(18,76,115,.04)}.tasks-assignee>i,.kanban-assignee>i{display:grid;place-items:center;width:1.7rem;height:1.7rem;flex:0 0 auto;color:#fff;background:linear-gradient(135deg,#0878bf,#38c4e8);border-radius:50%;font-size:.57rem;font-style:normal;font-weight:900}.tasks-assignee b,.tasks-assignee small{display:block}.tasks-assignee b{font-size:.63rem}.tasks-assignee small{margin-top:.1rem;color:#70889a;font-size:.53rem}.tasks-overview{display:flex;gap:.65rem;align-items:flex-start;margin:1.2rem 0 .65rem;padding:.75rem .9rem;color:#56768c;background:linear-gradient(110deg,#f5fcff,#eff8ff);border:1px solid #d2ebf6;border-radius:.7rem}.tasks-overview-icon{display:grid;place-items:center;width:2rem;height:2rem;flex:0 0 auto;color:#0878bf;background:#dff5fe;border:1px solid #bce7f6;border-radius:.55rem;font-size:.9rem;font-weight:900}.tasks-overview b{display:block;color:#24506b;font-size:.68rem}.tasks-overview p{margin:.18rem 0 0;font-size:.61rem;line-height:1.4}.tasks-local-status{display:flex;gap:.3rem;align-items:center;margin-left:auto;color:#297f5a;font-size:.57rem;font-weight:800;white-space:nowrap}.tasks-local-status i{width:.42rem;height:.42rem;background:#31b474;border-radius:50%;box-shadow:0 0 0 3px #dff8eb}.tasks-feedback{min-height:1rem;margin:.2rem 0 .45rem;color:#a46c08;font-size:.61rem;font-weight:750}.tasks-feedback.is-success{color:#198654}.tasks-board{display:grid;grid-template-columns:repeat(5,minmax(14.5rem,1fr));gap:.75rem;align-items:start;overflow-x:auto;padding:.15rem .05rem .7rem}.kanban-column{min-height:33rem;overflow:hidden;background:#f5f9fc;border:1px solid #d9e7ee;border-radius:.78rem}.kanban-column>header{display:flex;gap:.48rem;align-items:flex-start;min-height:4.4rem;padding:.75rem;border-bottom:1px solid #dce9ef;background:#fff}.kanban-column-icon{display:grid;place-items:center;width:1.62rem;height:1.62rem;flex:0 0 auto;border-radius:.48rem;font-size:.74rem;font-weight:900}.kanban-column h2{margin:0;color:#24445e;font-size:.75rem;letter-spacing:-.025em}.kanban-column header p{margin:.18rem 0 0;color:#7890a1;font-size:.54rem;line-height:1.25}.kanban-column header>b{display:grid;place-items:center;min-width:1.4rem;height:1.4rem;margin-left:auto;color:#557286;background:#edf4f7;border-radius:99px;font-size:.57rem}.kanban-column--todo .kanban-column-icon{color:#0878bf;background:#e3f6fe}.kanban-column--progress .kanban-column-icon{color:#6a45ca;background:#f0ebff}.kanban-column--waiting .kanban-column-icon{color:#af7609;background:#fff3da}.kanban-column--blocked .kanban-column-icon{color:#cf3f4b;background:#ffe8eb}.kanban-column--done .kanban-column-icon{color:#188b5a;background:#e5f8ef}.kanban-cards{display:grid;gap:.6rem;padding:.65rem}.kanban-task{display:grid;gap:.42rem;padding:.7rem;background:#fff;border:1px solid #dce8ef;border-radius:.62rem;box-shadow:0 4px 10px rgba(19,76,110,.045)}.kanban-task:hover{border-color:#a6d8ea;box-shadow:0 7px 15px rgba(19,76,110,.075)}.kanban-task-top{display:flex;align-items:center;justify-content:space-between;gap:.4rem}.kanban-task-top>span{color:#7a90a0;font-size:.53rem;font-weight:850;letter-spacing:.04em}.kanban-priority{padding:.18rem .34rem;border-radius:99px;font-size:.5rem}.kanban-priority--high{color:#bf3541;background:#ffe8eb}.kanban-priority--medium{color:#a66b06;background:#fff3d9}.kanban-priority--low{color:#168657;background:#e6f9ee}.kanban-task h3{margin:.02rem 0;color:#274762;font-size:.73rem;line-height:1.3}.kanban-occurrence,.kanban-location,.kanban-note{margin:0;color:#637d90;font-size:.58rem;line-height:1.35}.kanban-location{color:#3e7695;font-weight:700}.kanban-note{padding-top:.38rem;border-top:1px solid #edf2f5}.kanban-task footer{display:flex;justify-content:space-between;gap:.45rem;align-items:center;padding-top:.08rem}.kanban-assignee{display:flex;gap:.33rem;align-items:center;min-width:0}.kanban-assignee>i{width:1.3rem;height:1.3rem;font-size:.45rem}.kanban-assignee b,.kanban-assignee small{display:block;max-width:6.6rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.kanban-assignee b{color:#34536b;font-size:.53rem}.kanban-assignee small{margin-top:.08rem;color:#7d93a2;font-size:.48rem}.kanban-task time{color:#71899b;font-size:.49rem;font-weight:750;text-align:right}.kanban-task-action{width:100%;margin-top:.12rem;padding:.47rem;color:#0878bf;background:#f1fbff;border:1px solid #bfe7f5;border-radius:.42rem;font-size:.57rem;font-weight:850}.kanban-task-action:hover{color:#fff;background:linear-gradient(135deg,#0878bf,#35c1e8);border-color:transparent}.kanban-empty{margin:0;padding:1rem .35rem;color:#8297a6;font-size:.58rem;line-height:1.4;text-align:center}.tasks-disclaimer{display:flex;gap:.55rem;align-items:flex-start;margin-top:.3rem;padding:.65rem .8rem;color:#5e778b;background:#f3fbff;border:1px solid #d5edf8;border-radius:.62rem;font-size:.6rem;line-height:1.45}.tasks-disclaimer>span{color:#0878bf;font-size:.85rem}.tasks-disclaimer p{margin:0}.tasks-disclaimer b{color:#24536f}@media(max-width:1000px){.tasks-header{align-items:flex-start;flex-direction:column}.tasks-header-actions{width:100%;justify-content:space-between}.tasks-board{grid-template-columns:repeat(5,minmax(15rem,1fr))}}@media(max-width:620px){.tasks-screen{padding:1.4rem 1rem 2rem}.tasks-header-actions{align-items:flex-start;flex-direction:column}.tasks-overview{align-items:flex-start;flex-wrap:wrap}.tasks-local-status{width:100%;margin-left:0}.tasks-board{grid-template-columns:repeat(5,minmax(14.5rem,1fr))}}
+
+
+/* Relatórios — consolidação demonstrativa do histórico de estoque. */
+.reports-screen{max-width:1500px;margin:0 auto;padding:30px 3.2vw 44px;color:var(--ink)}
+.reports-header{display:flex;align-items:flex-end;justify-content:space-between;gap:1.25rem}
+.reports-header h1{margin:0;color:#102642;font-size:clamp(1.55rem,3vw,2.25rem);letter-spacing:-.06em}
+.reports-header p:not(.eyebrow){max-width:48rem;margin:.45rem 0 0;color:var(--muted);font-size:.86rem;line-height:1.5}
+.reports-header-actions{display:flex;align-items:center;gap:.6rem}
+.reports-export-button{width:auto;min-width:9.5rem;padding:.68rem .9rem;font-size:.68rem;white-space:nowrap}
+.reports-export-button:disabled{cursor:not-allowed;opacity:.48;filter:saturate(.55)}
+.reports-info,.reports-disclaimer{display:flex;gap:.6rem;align-items:flex-start;margin:1rem 0;padding:.72rem .85rem;color:#55758b;background:#effaff;border:1px solid #d0ebf7;border-radius:.65rem;font-size:.64rem;line-height:1.45}
+.reports-info>span,.reports-disclaimer>span{display:grid;place-items:center;width:1.15rem;height:1.15rem;flex:0 0 auto;color:#fff;background:#0878bf;border-radius:50%;font-size:.64rem;font-weight:900}
+.reports-info p,.reports-disclaimer p{margin:0}
+.reports-info b,.reports-disclaimer b{color:#24536f}
+.reports-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8rem;margin:1rem 0}
+.reports-metric{position:relative;display:flex;gap:.72rem;align-items:flex-start;min-height:6.4rem;padding:.9rem;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:.75rem;box-shadow:0 8px 20px rgba(18,76,115,.05)}
+.reports-metric::after{position:absolute;right:-1.1rem;bottom:-2.1rem;width:5.3rem;height:5.3rem;opacity:.14;border-radius:50%;background:#36c6ea;content:""}
+.reports-metric-icon{display:grid;place-items:center;width:2rem;height:2rem;flex:0 0 auto;color:#0878bf;background:#e5f8ff;border-radius:.5rem;font-size:.9rem;font-weight:900}
+.reports-metric p{margin:0;color:#647b8e;font-size:.63rem;font-weight:800;line-height:1.35}
+.reports-metric strong{display:block;margin:.2rem 0;color:#102642;font-size:1.45rem;letter-spacing:-.05em}
+.reports-metric small{color:#8295a4;font-size:.56rem}
+.reports-metric--entry .reports-metric-icon{color:#168b54;background:#e5faee}
+.reports-metric--exit .reports-metric-icon{color:#c73e4a;background:#ffeaec}
+.reports-metric--warning .reports-metric-icon{color:#a96b06;background:#fff3dd}
+.reports-card{overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:.8rem;box-shadow:0 8px 20px rgba(18,76,115,.05)}
+.reports-card-header{display:flex;align-items:center;justify-content:space-between;gap:.8rem;padding:.95rem 1rem;border-bottom:1px solid var(--line)}
+.reports-card-header .eyebrow{margin:0 0 .2rem;font-size:.55rem}
+.reports-card-header h2{margin:0;color:#193953;font-size:.9rem;letter-spacing:-.03em}
+.reports-clear-button{padding:.45rem .65rem;color:#0876b8;background:#effaff;border:1px solid #d0eaf5;border-radius:.45rem;font-size:.62rem;font-weight:800}
+.reports-clear-button:hover{background:#e1f6fd}
+.reports-filters{display:grid;grid-template-columns:minmax(15rem,1.5fr) repeat(3,minmax(9rem,1fr));gap:.7rem;padding:.9rem 1rem .6rem}
+.reports-filters label{display:grid;gap:.35rem;min-width:0;color:#49677d;font-size:.61rem;font-weight:800}
+.reports-filters input,.reports-filters select{width:100%;min-height:2.5rem;padding:.58rem .65rem;color:#1a3c58;background:#fff;border:1px solid #cddfe9;border-radius:.48rem;font:inherit;font-size:.65rem;font-weight:600}
+.reports-filters input::placeholder{color:#91a3b1;font-weight:500}
+.reports-filters input:focus-visible,.reports-filters select:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+.reports-result-count{min-height:1rem;margin:.15rem 1rem .45rem;color:#71889a;font-size:.59rem}
+.reports-table-wrap{width:100%;overflow-x:auto;border-top:1px solid #e6eef3}
+.reports-table{width:100%;border-collapse:collapse;text-align:left}
+.reports-table th{padding:.68rem .72rem;color:#71879a;background:#f7fafc;border-bottom:1px solid #e3edf2;font-size:.56rem;font-weight:850;letter-spacing:.035em;text-transform:uppercase;white-space:nowrap}
+.reports-table td{padding:.72rem;color:#405f76;border-bottom:1px solid #edf2f5;font-size:.62rem;line-height:1.4;vertical-align:middle}
+.reports-table tbody tr:hover{background:#f8fcfe}
+.reports-table tbody tr:last-child td{border-bottom:0}
+.reports-table td:first-child{min-width:8.2rem;color:#60798c;font-variant-numeric:tabular-nums;white-space:nowrap}
+.reports-table td:nth-child(3){min-width:10rem}
+.reports-table td:nth-child(3) b,.reports-table td:nth-child(3) small{display:block}
+.reports-table td:nth-child(3) b{color:#294a63;font-size:.64rem}
+.reports-table td:nth-child(3) small{margin-top:.14rem;color:#8195a4;font-size:.54rem}
+.reports-table td:nth-child(5){min-width:14rem;max-width:25rem;color:#5e7789}
+.reports-table td:last-child{text-align:right;white-space:nowrap}
+.report-action{display:inline-flex;align-items:center;padding:.25rem .45rem;border-radius:99px;font-size:.54rem;font-weight:850;white-space:nowrap}
+.report-action--entry{color:#168250;background:#e6f9ed}
+.report-action--exit{color:#bd3744;background:#ffeaec}
+.report-action--inventory{color:#89610e;background:#fff3da}
+.report-quantity{font-weight:850;font-variant-numeric:tabular-nums}
+.report-quantity.is-positive{color:#168250}
+.report-quantity.is-negative{color:#bd3744}
+.reports-empty{display:grid;justify-items:center;gap:.3rem;padding:2.1rem 1rem;color:#6b8192;text-align:center}
+.reports-empty[hidden]{display:none}
+.reports-empty>span{display:grid;place-items:center;width:2.2rem;height:2.2rem;margin-bottom:.25rem;color:#0878bf;background:#e9f8fd;border-radius:.65rem;font-size:1rem}
+.reports-empty b{color:#294a63;font-size:.75rem}
+.reports-empty p{max-width:28rem;margin:.1rem 0 0;font-size:.62rem;line-height:1.45}
+.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.reports-disclaimer{margin:.85rem 0 0;background:#f6fbfe}
+.reports-disclaimer>span{color:#0878bf;background:#dff5fe}
+@media(max-width:1050px){.reports-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.reports-filters{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.reports-screen{padding:1.4rem 1rem 2rem}.reports-header{align-items:flex-start;flex-direction:column}.reports-header-actions{width:100%;justify-content:space-between}.reports-filters{grid-template-columns:1fr}.reports-table{min-width:760px}.reports-info,.reports-disclaimer{font-size:.61rem}}
+@media(max-width:520px){.reports-metrics{grid-template-columns:1fr}.reports-card-header{align-items:flex-start}.reports-header-actions{align-items:flex-start;flex-direction:column}.reports-export-button{width:100%}.reports-metrics{gap:.55rem}}

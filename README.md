@@ -11,6 +11,7 @@ Protótipo local em **HTML5** do SmartMall Ops IA. A identidade visual usa azul-
 - Tela de Equipes com presença operacional, pessoas disponíveis, ocupadas e indisponíveis, conectada aos status demonstrativos de ocorrências;
 - Tela de Usuários e permissões exclusiva para Administradores, com perfis ativos, papéis e privilégios de acesso detalhados;
 - Estoque de equipamentos com saldos, alerta de mínimo, entradas, retiradas e histórico auditável por item e por movimentação;
+- Tela Relatórios para consulta consolidada das movimentações de estoque, com filtros por período, tipo e busca, indicadores resumidos e exportação CSV;
 - Navegação lateral, alertas recentes e fila operacional sintética;
 - Fluxo de ocorrências em cinco modais: Registro, Análise, Aprovação, Execução e Encerramento;
 - Registro público de ocorrência, sem login, com imagem ou vídeo opcional, descrição e localização;
@@ -84,6 +85,12 @@ Os fluxos locais disponíveis são:
 - **Histórico geral:** consolidado exclusivamente na área de Relatórios.
 
 As movimentações são demonstrativas e permanecem no navegador durante a execução atual. Em produção, esse fluxo exige inventário físico, autorização no servidor e persistência de dados.
+
+## Relatórios
+
+A tela **Relatórios** consolida o histórico geral de entradas, retiradas e registros de inventário. Administradores e Supervisoras Operacionais podem filtrar os lançamentos por intervalo de datas, tipo de movimentação e busca por item, código, responsável ou descrição. O resumo apresenta a quantidade de registros, unidades recebidas, unidades retiradas e itens no mínimo ou abaixo do mínimo no estado atual do estoque.
+
+O botão **Baixar CSV** exporta somente os registros que correspondem aos filtros aplicados. A tela e a exportação usam os dados demonstrativos mantidos em memória durante a sessão; não constituem auditoria persistente, relatório financeiro ou fonte oficial para operação. O perfil Funcionário não tem permissão para acessar o módulo.
 
 ## Credenciais de demonstração
 

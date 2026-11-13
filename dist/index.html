@@ -44,7 +44,7 @@
           <button class="nav-item" type="button" data-permission="equipment" data-view="equipment"><span aria-hidden="true">▦</span> Equipamentos</button>
           <button class="nav-item" type="button" data-permission="teams" data-view="teams"><span aria-hidden="true">♧</span> Equipes</button>
           <button class="nav-item" type="button" data-permission="users" data-view="users"><span aria-hidden="true">◉</span> Usuários e permissões</button>
-          <button class="nav-item" type="button" data-permission="reports"><span aria-hidden="true">▥</span> Relatórios</button>
+          <button class="nav-item" type="button" data-permission="reports" data-view="reports"><span aria-hidden="true">▥</span> Relatórios</button>
         </nav>
         <section class="sidebar-footer"><span class="mall-icon" aria-hidden="true">⌂</span><span><b>Capim Dourado</b><small>Shopping · Palmas, TO</small></span></section>
       </aside>
@@ -217,6 +217,48 @@
             <article class="user-access-card"><header><span class="user-avatar user-avatar--employee" aria-hidden="true">JC</span><div><p class="eyebrow">FUNCIONÁRIO</p><h2>João Costa</h2><small>funcionario@smartmall.local</small></div><span class="user-active-status">Ativo</span></header><div class="user-permission-summary"><span>Permissões de acesso</span><div><b>Dashboard</b><b>Ocorrências</b><b>Tarefas</b><b>Equipamentos</b></div></div><footer><span>Escopo limitado às atividades e registros operacionais.</span><span class="user-role-chip user-role-chip--employee">Acesso restrito</span></footer></article>
           </section>
           <section class="users-disclaimer"><span aria-hidden="true">⌾</span><p><b>Ambiente demonstrativo:</b> os perfis apresentados são estáticos e não permitem criar, editar ou remover contas. Em produção, essas ações devem exigir autenticação forte, confirmação administrativa e auditoria.</p></section>
+        </section>
+
+        <section class="reports-screen" id="reports-view" hidden aria-labelledby="reports-title">
+          <header class="reports-header">
+            <div>
+              <button class="back-dashboard" type="button" data-view="dashboard"><span aria-hidden="true">←</span> Voltar ao dashboard</button>
+              <p class="eyebrow">RELATÓRIOS OPERACIONAIS</p>
+              <h1 id="reports-title">Histórico de movimentações</h1>
+              <p>Consulte entradas, retiradas e registros do estoque em uma visão consolidada.</p>
+            </div>
+            <div class="reports-header-actions"><span class="demo-label">DADOS LOCAIS</span><button class="primary-button reports-export-button" id="reports-export-button" type="button">⇩ Baixar CSV</button></div>
+          </header>
+
+          <section class="reports-info" role="status"><span aria-hidden="true">i</span><p><b>Relatório demonstrativo:</b> os registros existem apenas nesta sessão do navegador. A exportação contém somente as movimentações exibidas após a aplicação dos filtros.</p></section>
+
+          <section class="reports-metrics" aria-label="Resumo das movimentações filtradas">
+            <article class="reports-metric"><span class="reports-metric-icon">▥</span><div><p>Movimentações</p><strong id="reports-movement-count">0</strong><small id="reports-period-label">No período selecionado</small></div></article>
+            <article class="reports-metric reports-metric--entry"><span class="reports-metric-icon">＋</span><div><p>Unidades recebidas</p><strong id="reports-entry-total">0</strong><small>Entradas registradas</small></div></article>
+            <article class="reports-metric reports-metric--exit"><span class="reports-metric-icon">−</span><div><p>Unidades retiradas</p><strong id="reports-withdrawal-total">0</strong><small>Saídas registradas</small></div></article>
+            <article class="reports-metric reports-metric--warning"><span class="reports-metric-icon">△</span><div><p>Itens no mínimo ou abaixo</p><strong id="reports-low-stock-count">0</strong><small>Posição atual do estoque</small></div></article>
+          </section>
+
+          <section class="reports-card" aria-labelledby="reports-filters-title">
+            <header class="reports-card-header"><div><p class="eyebrow">CONSULTA DO HISTÓRICO</p><h2 id="reports-filters-title">Filtre as movimentações</h2></div><button class="reports-clear-button" id="reports-clear-filters" type="button">Limpar filtros</button></header>
+            <div class="reports-filters">
+              <label class="reports-search-field">Buscar no histórico<input id="reports-search" type="search" placeholder="Item, código, responsável ou descrição" autocomplete="off" /></label>
+              <label>Tipo de movimentação<select id="reports-action-filter"><option value="all">Todas</option><option value="Entrada">Entrada</option><option value="Retirada">Retirada</option><option value="Inventário">Inventário</option></select></label>
+              <label>Data inicial<input id="reports-date-from" type="date" /></label>
+              <label>Data final<input id="reports-date-to" type="date" /></label>
+            </div>
+            <p class="reports-result-count" id="reports-result-count" aria-live="polite"></p>
+            <div class="reports-table-wrap">
+              <table class="reports-table">
+                <caption class="visually-hidden">Histórico geral das movimentações de estoque</caption>
+                <thead><tr><th scope="col">Data e hora</th><th scope="col">Tipo</th><th scope="col">Item</th><th scope="col">Responsável</th><th scope="col">Descrição</th><th scope="col">Quantidade</th></tr></thead>
+                <tbody id="reports-table-body"></tbody>
+              </table>
+              <div class="reports-empty" id="reports-empty" hidden><span aria-hidden="true">▤</span><b>Nenhuma movimentação encontrada</b><p>Ajuste os filtros ou registre uma entrada ou retirada no módulo Equipamentos.</p></div>
+            </div>
+          </section>
+
+          <section class="reports-disclaimer"><span aria-hidden="true">⌾</span><p><b>Limite do protótipo:</b> este relatório consolida somente o histórico local do estoque; não representa auditoria persistente nem relatório financeiro oficial. Em produção, os registros devem ser armazenados e protegidos no servidor.</p></section>
         </section>
       </main>
     </div>

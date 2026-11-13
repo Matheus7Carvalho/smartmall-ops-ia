@@ -58,6 +58,21 @@
   const equipmentView = document.querySelector("#equipment-view");
   const teamsView = document.querySelector("#teams-view");
   const usersView = document.querySelector("#users-view");
+  const reportsView = document.querySelector("#reports-view");
+  const reportsMovementCount = document.querySelector("#reports-movement-count");
+  const reportsEntryTotal = document.querySelector("#reports-entry-total");
+  const reportsWithdrawalTotal = document.querySelector("#reports-withdrawal-total");
+  const reportsLowStockCount = document.querySelector("#reports-low-stock-count");
+  const reportsPeriodLabel = document.querySelector("#reports-period-label");
+  const reportsSearch = document.querySelector("#reports-search");
+  const reportsActionFilter = document.querySelector("#reports-action-filter");
+  const reportsDateFrom = document.querySelector("#reports-date-from");
+  const reportsDateTo = document.querySelector("#reports-date-to");
+  const reportsTableBody = document.querySelector("#reports-table-body");
+  const reportsEmpty = document.querySelector("#reports-empty");
+  const reportsResultCount = document.querySelector("#reports-result-count");
+  const reportsExportButton = document.querySelector("#reports-export-button");
+  let filteredReportEntries = [];
   const teamsPresentCount = document.querySelector("#teams-present-count");
   const teamsAvailableCount = document.querySelector("#teams-available-count");
   const teamsBusyCount = document.querySelector("#teams-busy-count");
@@ -631,6 +646,13 @@
     }
 
     reset() {
+      const now = new Date();
+      const demoTimestamp = (daysAgo, hour, minute) => {
+        const date = new Date(now);
+        date.setDate(date.getDate() - daysAgo);
+        date.setHours(hour, minute, 0, 0);
+        return date.toISOString();
+      };
       this.items = [
         { id: "inv-filter-m8", code: "HVAC-008", name: "Filtro MERV 8", description: "Filtro de ar para unidades de climatização, usado na manutenção preventiva e na melhoria da qualidade do ar.", category: "Climatização / HVAC", location: "Estante A · Prateleira 02", quantity: 4, minimum: 6, unit: "unidades" },
         { id: "inv-gas-r410", code: "HVAC-021", name: "Gás refrigerante R-410A", description: "Fluido refrigerante destinado a equipamentos de ar-condicionado compatíveis com o padrão R-410A.", category: "Climatização / HVAC", location: "Gaiola técnica · Setor 01", quantity: 12, minimum: 4, unit: "kg" },
@@ -640,10 +662,10 @@
       ];
       this.selectedId = "inv-filter-m8";
       this.history = [
-        { id: "mov-01", time: "Hoje · 10:18", action: "Retirada", actor: "João Costa", itemId: "inv-filter-m8", message: "retirou 2 unidades para a manutenção do AC-03.", quantity: -2 },
-        { id: "mov-02", time: "Hoje · 09:42", action: "Entrada", actor: "Rafael Mendes", itemId: "inv-gas-r410", message: "registrou entrada de 8 kg para reposição preventiva.", quantity: 8 },
-        { id: "mov-03", time: "Ontem · 16:25", action: "Inventário", actor: "Ana Souza", itemId: "inv-hose", message: "confirmou o saldo físico no almoxarifado.", quantity: 0 },
-        { id: "mov-04", time: "Ontem · 14:10", action: "Retirada", actor: "Pedro Lima", itemId: "inv-disj-20", message: "retirou 1 unidade para correção em loja técnica.", quantity: -1 },
+        { id: "mov-01", time: "Hoje · 10:18", createdAt: demoTimestamp(0, 10, 18), action: "Retirada", actor: "João Costa", itemId: "inv-filter-m8", message: "retirou 2 unidades para a manutenção do AC-03.", quantity: -2 },
+        { id: "mov-02", time: "Hoje · 09:42", createdAt: demoTimestamp(0, 9, 42), action: "Entrada", actor: "Rafael Mendes", itemId: "inv-gas-r410", message: "registrou entrada de 8 kg para reposição preventiva.", quantity: 8 },
+        { id: "mov-03", time: "Ontem · 16:25", createdAt: demoTimestamp(1, 16, 25), action: "Inventário", actor: "Ana Souza", itemId: "inv-hose", message: "confirmou o saldo físico no almoxarifado.", quantity: 0 },
+        { id: "mov-04", time: "Ontem · 14:10", createdAt: demoTimestamp(1, 14, 10), action: "Retirada", actor: "Pedro Lima", itemId: "inv-disj-20", message: "retirou 1 unidade para correção em loja técnica.", quantity: -1 },
       ];
     }
 
@@ -659,6 +681,7 @@
       this.history.unshift({
         id: `mov-${Date.now()}`,
         time: new Intl.DateTimeFormat("pt-BR", { hour: "2-digit", minute: "2-digit" }).format(new Date()),
+        createdAt: new Date().toISOString(),
         action,
         actor,
         itemId,
@@ -857,7 +880,7 @@
 
   function navigateTo(view) {
     if (!currentUser) return;
-    const availableViews = new Set(["dashboard", "control", "occurrences", "tasks", "equipment", "teams", "users"]);
+    const availableViews = new Set(["dashboard", "control", "occurrences", "tasks", "equipment", "teams", "users", "reports"]);
     const allowedView = availableViews.has(view) && currentUser.permissions.includes(view)
       ? view
       : "dashboard";
@@ -869,7 +892,9 @@
     equipmentView.hidden = allowedView !== "equipment";
     teamsView.hidden = allowedView !== "teams";
     usersView.hidden = allowedView !== "users";
+    reportsView.hidden = allowedView !== "reports";
     if (allowedView === "teams") renderTeams();
+    if (allowedView === "reports") renderReports();
     document.querySelectorAll(".nav-item[data-view]").forEach((item) => {
       item.classList.toggle("is-active", item.dataset.view === allowedView);
     });
@@ -893,6 +918,7 @@
     renderControl();
     renderTasks();
     renderInventory();
+    renderReports();
     renderTeams();
     renderModalFlow();
     navigateTo("dashboard");
@@ -914,6 +940,7 @@
     renderControl();
     renderTasks();
     renderInventory();
+    renderReports();
     renderModalFlow();
     emailField.focus();
   }
@@ -1553,6 +1580,126 @@
     renderInventoryHistory(item);
   }
 
+  function reportTimestamp(entry) {
+    const date = new Date(entry.createdAt || Date.now());
+    return Number.isNaN(date.getTime()) ? new Date(0) : date;
+  }
+
+  function reportQuantity(entry, item) {
+    if (!entry.quantity) return "—";
+    const amount = Math.abs(entry.quantity);
+    const sign = entry.quantity > 0 ? "+" : "−";
+    return `${sign}${amount} ${inventoryUnitLabel(amount, item?.unit || "unidades")}`;
+  }
+
+  function renderReports() {
+    if (!currentUser?.permissions.includes("reports")) return;
+
+    const fromDate = reportsDateFrom.value ? new Date(`${reportsDateFrom.value}T00:00:00`) : null;
+    const toDate = reportsDateTo.value ? new Date(`${reportsDateTo.value}T23:59:59.999`) : null;
+    const action = reportsActionFilter.value;
+    const query = reportsSearch.value.trim().toLocaleLowerCase("pt-BR");
+    const itemsById = new Map(inventoryLedger.items.map((item) => [item.id, item]));
+    const invalidPeriod = fromDate && toDate && fromDate > toDate;
+
+    filteredReportEntries = invalidPeriod ? [] : inventoryLedger.history
+      .filter((entry) => {
+        const date = reportTimestamp(entry);
+        const item = itemsById.get(entry.itemId);
+        const searchable = [entry.action, entry.actor, entry.message, item?.name, item?.code, item?.category]
+          .filter(Boolean)
+          .join(" ")
+          .toLocaleLowerCase("pt-BR");
+        return (action === "all" || entry.action === action)
+          && (!fromDate || date >= fromDate)
+          && (!toDate || date <= toDate)
+          && (!query || searchable.includes(query));
+      })
+      .sort((first, second) => reportTimestamp(second) - reportTimestamp(first));
+
+    const entries = filteredReportEntries.filter((entry) => entry.action === "Entrada");
+    const withdrawals = filteredReportEntries.filter((entry) => entry.action === "Retirada");
+    reportsMovementCount.textContent = String(filteredReportEntries.length);
+    reportsEntryTotal.textContent = String(entries.reduce((sum, entry) => sum + Math.max(0, entry.quantity), 0));
+    reportsWithdrawalTotal.textContent = String(withdrawals.reduce((sum, entry) => sum + Math.abs(Math.min(0, entry.quantity)), 0));
+    reportsLowStockCount.textContent = String(inventoryLedger.items.filter((item) => item.quantity <= item.minimum).length);
+    reportsPeriodLabel.textContent = invalidPeriod ? "Período inválido" : (fromDate || toDate ? "Conforme as datas selecionadas" : "Todas as datas disponíveis");
+    reportsResultCount.textContent = invalidPeriod
+      ? "A data inicial deve ser anterior ou igual à data final."
+      : `${filteredReportEntries.length} movimentação(ões) exibida(s).`;
+    reportsEmpty.hidden = filteredReportEntries.length > 0;
+    reportsTableBody.replaceChildren(...filteredReportEntries.map((entry) => {
+      const item = itemsById.get(entry.itemId);
+      const row = document.createElement("tr");
+      const dateCell = document.createElement("td");
+      const dateTime = document.createElement("time");
+      dateTime.dateTime = reportTimestamp(entry).toISOString();
+      dateTime.textContent = new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(reportTimestamp(entry));
+      dateCell.append(dateTime);
+
+      const actionCell = document.createElement("td");
+      const actionBadge = document.createElement("span");
+      actionBadge.className = `report-action report-action--${entry.action === "Entrada" ? "entry" : entry.action === "Retirada" ? "exit" : "inventory"}`;
+      actionBadge.textContent = entry.action;
+      actionCell.append(actionBadge);
+
+      const itemCell = document.createElement("td");
+      const itemName = document.createElement("b");
+      itemName.textContent = item?.name || "Item removido do catálogo";
+      const itemCode = document.createElement("small");
+      itemCode.textContent = item?.code || "Sem código";
+      itemCell.append(itemName, itemCode);
+
+      const actorCell = document.createElement("td");
+      actorCell.textContent = entry.actor;
+      const descriptionCell = document.createElement("td");
+      descriptionCell.textContent = entry.message;
+      const quantityCell = document.createElement("td");
+      quantityCell.className = `report-quantity${entry.quantity > 0 ? " is-positive" : entry.quantity < 0 ? " is-negative" : ""}`;
+      quantityCell.textContent = reportQuantity(entry, item);
+      row.append(dateCell, actionCell, itemCell, actorCell, descriptionCell, quantityCell);
+      return row;
+    }));
+    reportsExportButton.disabled = filteredReportEntries.length === 0;
+  }
+
+  function exportReportsCsv() {
+    if (filteredReportEntries.length === 0) return;
+    const itemsById = new Map(inventoryLedger.items.map((item) => [item.id, item]));
+    const escapeCsv = (value) => {
+      let text = String(value ?? "");
+      if (/^[\t\r ]*[=+\-@]/.test(text)) text = `'${text}`;
+      return `"${text.replaceAll('"', '""')}"`;
+    };
+    const rows = [
+      ["Data e hora", "Tipo", "Item", "Código", "Categoria", "Responsável", "Descrição", "Quantidade"],
+      ...filteredReportEntries.map((entry) => {
+        const item = itemsById.get(entry.itemId);
+        return [
+          new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(reportTimestamp(entry)),
+          entry.action,
+          item?.name || "Item removido do catálogo",
+          item?.code || "",
+          item?.category || "",
+          entry.actor,
+          entry.message,
+          reportQuantity(entry, item),
+        ];
+      }),
+    ];
+    const csv = `\uFEFF${rows.map((row) => row.map(escapeCsv).join(";")).join("\r\n")}`;
+    const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+    const link = document.createElement("a");
+    link.href = url;
+    const now = new Date();
+    const dateStamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+    link.download = `smartmall-relatorio-estoque-${dateStamp}.csv`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 0);
+  }
+
   function setInventoryFormMessage(element, message = "", state = "error") {
     element.textContent = message;
     element.classList.toggle("is-success", state === "success");
@@ -1754,6 +1901,19 @@
     renderInventory();
   });
 
+  reportsSearch.addEventListener("input", renderReports);
+  reportsActionFilter.addEventListener("change", renderReports);
+  reportsDateFrom.addEventListener("change", renderReports);
+  reportsDateTo.addEventListener("change", renderReports);
+  reportsExportButton.addEventListener("click", exportReportsCsv);
+  document.querySelector("#reports-clear-filters").addEventListener("click", () => {
+    reportsSearch.value = "";
+    reportsActionFilter.value = "all";
+    reportsDateFrom.value = "";
+    reportsDateTo.value = "";
+    renderReports();
+  });
+
   inventoryWithdrawalItem.addEventListener("change", updateWithdrawalStock);
 
   inventoryEntryForm.addEventListener("submit", (event) => {
@@ -1772,6 +1932,7 @@
     const result = inventoryLedger.registerEntry({ name, code, quantity, category, minimum, location, note }, currentUser);
     setInventoryFormMessage(inventoryEntryMessage, result.message, "success");
     renderInventory();
+    renderReports();
     inventoryEntryForm.reset();
     closeInventoryModal("entry");
   });
@@ -1791,6 +1952,7 @@
     }
     setInventoryFormMessage(inventoryWithdrawalMessage, result.message, "success");
     renderInventory();
+    renderReports();
     inventoryWithdrawalForm.reset();
     closeInventoryModal("withdrawal");
   });
