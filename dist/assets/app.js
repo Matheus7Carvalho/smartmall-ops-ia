@@ -56,11 +56,10 @@
   const tasksFeedback = document.querySelector("#tasks-feedback");
   const tasksBoard = document.querySelector("#tasks-board");
   const equipmentView = document.querySelector("#equipment-view");
-  const inventoryList = document.querySelector("#inventory-list");
+  const inventoryStockSelect = document.querySelector("#inventory-stock-select");
   const inventoryTotalItems = document.querySelector("#inventory-total-items");
   const inventoryTotalUnits = document.querySelector("#inventory-total-units");
   const inventoryLowStock = document.querySelector("#inventory-low-stock");
-  const inventoryMovements = document.querySelector("#inventory-movements");
   const inventoryDetailName = document.querySelector("#inventory-detail-name");
   const inventoryDetailStatus = document.querySelector("#inventory-detail-status");
   const inventoryDetailQuantity = document.querySelector("#inventory-detail-quantity");
@@ -69,8 +68,15 @@
   const inventoryDetailMinimum = document.querySelector("#inventory-detail-minimum");
   const inventoryDetailCategory = document.querySelector("#inventory-detail-category");
   const inventoryDetailLocation = document.querySelector("#inventory-detail-location");
+  const inventoryDetailDescription = document.querySelector("#inventory-detail-description");
+  const inventoryDetailDropdown = document.querySelector("#inventory-detail-dropdown");
+  const inventoryTraceDropdown = document.querySelector("#inventory-trace-dropdown");
   const inventoryItemHistory = document.querySelector("#inventory-item-history");
-  const inventoryAuditList = document.querySelector("#inventory-audit-list");
+  const inventorySelectedIcon = document.querySelector("#inventory-selected-icon");
+  const inventorySelectedName = document.querySelector("#inventory-selected-name");
+  const inventorySelectedCode = document.querySelector("#inventory-selected-code");
+  const inventorySelectedQuantity = document.querySelector("#inventory-selected-quantity");
+  const inventorySelectedUnit = document.querySelector("#inventory-selected-unit");
   const inventoryEntryModal = document.querySelector("#inventory-entry-modal");
   const inventoryWithdrawalModal = document.querySelector("#inventory-withdrawal-modal");
   const inventoryEntryForm = document.querySelector("#inventory-entry-form");
@@ -614,11 +620,11 @@
 
     reset() {
       this.items = [
-        { id: "inv-filter-m8", code: "HVAC-008", name: "Filtro MERV 8", category: "Climatização / HVAC", location: "Estante A · Prateleira 02", quantity: 4, minimum: 6, unit: "unidades" },
-        { id: "inv-gas-r410", code: "HVAC-021", name: "Gás refrigerante R-410A", category: "Climatização / HVAC", location: "Gaiola técnica · Setor 01", quantity: 12, minimum: 4, unit: "kg" },
-        { id: "inv-disj-20", code: "ELE-020", name: "Disjuntor bipolar 20 A", category: "Elétrica", location: "Estante B · Prateleira 03", quantity: 3, minimum: 3, unit: "unidades" },
-        { id: "inv-seal-tape", code: "INF-012", name: "Fita de vedação", category: "Infraestrutura", location: "Estante C · Prateleira 01", quantity: 18, minimum: 8, unit: "rolos" },
-        { id: "inv-hose", code: "HID-006", name: "Mangueira flexível 1/2\"", category: "Hidráulica", location: "Estante D · Prateleira 04", quantity: 1, minimum: 3, unit: "unidades" },
+        { id: "inv-filter-m8", code: "HVAC-008", name: "Filtro MERV 8", description: "Filtro de ar para unidades de climatização, usado na manutenção preventiva e na melhoria da qualidade do ar.", category: "Climatização / HVAC", location: "Estante A · Prateleira 02", quantity: 4, minimum: 6, unit: "unidades" },
+        { id: "inv-gas-r410", code: "HVAC-021", name: "Gás refrigerante R-410A", description: "Fluido refrigerante destinado a equipamentos de ar-condicionado compatíveis com o padrão R-410A.", category: "Climatização / HVAC", location: "Gaiola técnica · Setor 01", quantity: 12, minimum: 4, unit: "kg" },
+        { id: "inv-disj-20", code: "ELE-020", name: "Disjuntor bipolar 20 A", description: "Dispositivo de proteção elétrica bipolar para substituições e intervenções corretivas autorizadas.", category: "Elétrica", location: "Estante B · Prateleira 03", quantity: 3, minimum: 3, unit: "unidades" },
+        { id: "inv-seal-tape", code: "INF-012", name: "Fita de vedação", description: "Fita para vedação e acabamento de intervenções em infraestrutura e climatização.", category: "Infraestrutura", location: "Estante C · Prateleira 01", quantity: 18, minimum: 8, unit: "rolos" },
+        { id: "inv-hose", code: "HID-006", name: "Mangueira flexível 1/2\"", description: "Mangueira flexível para conexões hidráulicas temporárias e substituições de manutenção.", category: "Hidráulica", location: "Estante D · Prateleira 04", quantity: 1, minimum: 3, unit: "unidades" },
       ];
       this.selectedId = "inv-filter-m8";
       this.history = [
@@ -655,11 +661,12 @@
         existing.quantity += data.quantity;
         existing.minimum = data.minimum;
         existing.location = data.location;
+        existing.description = data.note || existing.description;
         this.selectedId = existing.id;
         this.addHistory("Entrada", user.name, existing.id, `registrou entrada de ${data.quantity} ${inventoryUnitLabel(data.quantity, existing.unit)}. ${data.note}`.trim(), data.quantity);
         return { success: true, item: existing, message: "Entrada adicionada ao item já cadastrado." };
       }
-      const item = { id: `inv-${Date.now()}`, code: data.code, name: data.name, category: data.category, location: data.location, quantity: data.quantity, minimum: data.minimum, unit: "unidades" };
+      const item = { id: `inv-${Date.now()}`, code: data.code, name: data.name, description: data.note || "Item registrado no estoque local.", category: data.category, location: data.location, quantity: data.quantity, minimum: data.minimum, unit: "unidades" };
       this.items.unshift(item);
       this.selectedId = item.id;
       this.addHistory("Entrada", user.name, item.id, `registrou ${data.quantity} unidades no estoque. ${data.note}`.trim(), data.quantity);
@@ -1434,26 +1441,6 @@
     }
   }
 
-  function renderInventoryAudit() {
-    inventoryAuditList.replaceChildren(...inventoryLedger.history.slice(0, 6).map((entry) => {
-      const item = inventoryLedger.items.find((candidate) => candidate.id === entry.itemId);
-      const line = document.createElement("li");
-      const marker = document.createElement("span");
-      marker.className = `inventory-audit-marker ${entry.action === "Retirada" ? "is-withdrawal" : "is-entry"}`;
-      marker.textContent = entry.action === "Retirada" ? "↗" : entry.action === "Entrada" ? "↓" : "✓";
-      const content = document.createElement("div");
-      const title = document.createElement("b");
-      title.textContent = `${entry.action} · ${item?.name || "Item removido"}`;
-      const message = document.createElement("p");
-      message.textContent = `${entry.actor} ${entry.message}`;
-      content.append(title, message);
-      const time = document.createElement("time");
-      time.textContent = entry.time;
-      line.append(marker, content, time);
-      return line;
-    }));
-  }
-
   function renderWithdrawalOptions() {
     const current = inventoryWithdrawalItem.value || inventoryLedger.selectedId;
     inventoryWithdrawalItem.replaceChildren(...inventoryLedger.items.map((item) => {
@@ -1480,10 +1467,21 @@
     inventoryTotalItems.textContent = String(inventoryLedger.items.length);
     inventoryTotalUnits.textContent = String(totalUnits);
     inventoryLowStock.textContent = String(lowStockItems);
-    inventoryMovements.textContent = String(inventoryLedger.history.length);
-    inventoryList.replaceChildren(...inventoryLedger.items.map(createInventoryItem));
+    inventoryStockSelect.replaceChildren(...inventoryLedger.items.map((current) => {
+      const option = document.createElement("option");
+      option.value = current.id;
+      option.textContent = `${current.name} · ${current.quantity} ${inventoryUnitLabel(current.quantity, current.unit)}`;
+      option.selected = current.id === inventoryLedger.selectedId;
+      return option;
+    }));
     if (!item) return;
     const status = inventoryStatus(item);
+    const icon = item.category === "Climatização / HVAC" ? "♨" : item.category === "Elétrica" ? "ϟ" : item.category === "Hidráulica" ? "≈" : "▦";
+    inventorySelectedIcon.textContent = icon;
+    inventorySelectedName.textContent = item.name;
+    inventorySelectedCode.textContent = `${item.code} · ${item.location}`;
+    inventorySelectedQuantity.textContent = String(item.quantity);
+    inventorySelectedUnit.textContent = inventoryUnitLabel(item.quantity, item.unit);
     inventoryDetailName.textContent = item.name;
     inventoryDetailStatus.className = `inventory-status ${status.className}`;
     inventoryDetailStatus.textContent = status.label;
@@ -1493,8 +1491,8 @@
     inventoryDetailMinimum.textContent = `${item.minimum} ${inventoryUnitLabel(item.minimum, item.unit)}`;
     inventoryDetailCategory.textContent = item.category;
     inventoryDetailLocation.textContent = item.location;
+    inventoryDetailDescription.textContent = item.description;
     renderInventoryHistory(item);
-    renderInventoryAudit();
   }
 
   function setInventoryFormMessage(element, message = "", state = "error") {
@@ -1691,10 +1689,10 @@
     button.addEventListener("click", () => closeInventoryModal(button.dataset.closeInventoryModal));
   });
 
-  inventoryList.addEventListener("click", (event) => {
-    const row = event.target.closest("[data-inventory-id]");
-    if (!row) return;
-    inventoryLedger.select(row.dataset.inventoryId);
+  inventoryStockSelect.addEventListener("change", () => {
+    inventoryLedger.select(inventoryStockSelect.value);
+    inventoryDetailDropdown.open = true;
+    inventoryTraceDropdown.open = true;
     renderInventory();
   });
 

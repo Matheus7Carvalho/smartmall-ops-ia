@@ -55,13 +55,16 @@ Cada cartão identifica a atividade, ocorrência ou rotina relacionada, priorida
 
 ## Estoque de equipamentos
 
-O módulo **Equipamentos** reúne o inventário demonstrativo em uma única tela. Ele apresenta o saldo disponível, o estoque mínimo, alertas de reposição, localização no almoxarifado, detalhes do item selecionado e o histórico das alterações.
+O módulo **Equipamentos** reúne o inventário demonstrativo em uma única tela. Ele apresenta o saldo disponível, o estoque mínimo, alertas de reposição e localização no almoxarifado. A consulta acontece em dois dropdowns de largura total e empilhados: **Saldo atual** para escolher o item e **Item selecionado** para abrir seus detalhes.
+
+Ao selecionar um item, o segundo dropdown exibe sua descrição, saldo, código, localização e a **rastreabilidade individual** das entradas e retiradas relacionadas a ele. O histórico geral consolidado não é mostrado na tela de estoque: ele fica reservado para o módulo de Relatórios.
 
 Os fluxos locais disponíveis são:
 
 - **Registrar entrada:** cadastra um novo item ou acrescenta quantidade a um código existente;
 - **Retirar equipamento:** valida o saldo, exige uma finalidade e atualiza a quantidade disponível;
-- **Histórico auditável:** registra usuário, horário, ação, item e justificativa da movimentação.
+- **Rastreabilidade por item:** registra usuário, horário, ação e justificativa apenas nas movimentações do item selecionado;
+- **Histórico geral:** consolidado exclusivamente na área de Relatórios.
 
 As movimentações são demonstrativas e permanecem no navegador durante a execução atual. Em produção, esse fluxo exige inventário físico, autorização no servidor e persistência de dados.
 
