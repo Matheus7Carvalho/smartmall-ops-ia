@@ -13,6 +13,7 @@ Protótipo local em **HTML5** do SmartMall Ops IA. A identidade visual usa azul-
 - Estoque de equipamentos com saldos, alerta de mínimo, entradas, retiradas e histórico auditável por item e por movimentação;
 - Tela Relatórios para consulta consolidada das movimentações de estoque, com filtros por período, tipo e busca, indicadores resumidos e exportação CSV;
 - Tela Manutenção com calendário mensal, próximas intervenções, indicadores, checklist preventivo e formulário para novos agendamentos;
+- Pacote independente `dist/smartmall-ops-ia-standalone.html`, com HTML, CSS, JavaScript e logotipo incorporados, pronto para compartilhar com o time e abrir diretamente no Chrome;
 - Navegação lateral, alertas recentes e fila operacional sintética;
 - Fluxo de ocorrências em cinco modais: Registro, Análise, Aprovação, Execução e Encerramento;
 - Registro público de ocorrência, sem login, com imagem ou vídeo opcional, descrição e localização;
