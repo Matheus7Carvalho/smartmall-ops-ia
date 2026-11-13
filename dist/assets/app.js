@@ -992,6 +992,11 @@
   function renderControlTeams() {
     const availableTeams = CONTROL_ROSTER.filter((team) => team.available).length;
     controlTeamCount.textContent = String(CONTROL_ROSTER.length);
+    if (!controlTeamList) {
+      const teamMetric = controlTeamCount.closest(".control-metric");
+      teamMetric.querySelector("small").textContent = `${availableTeams} disponíveis agora`;
+      return;
+    }
     controlTeamList.replaceChildren(...CONTROL_ROSTER.map((team) => {
       const item = document.createElement("li");
       item.className = "control-team-item";

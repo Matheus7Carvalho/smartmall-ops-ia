@@ -81,21 +81,19 @@
             <article class="control-metric control-metric--weather"><span aria-hidden="true">☼</span><div><p>Condições locais</p><strong>32 °C</strong><small>Palmas · TO</small></div></article>
           </section>
 
-          <div class="control-layout">
-            <aside class="control-rail" aria-label="Fila operacional e equipes">
+          <div class="control-layout control-layout--focused">
+            <aside class="control-rail" aria-label="Fila operacional prioritária">
               <section class="control-card queue-card">
                 <header><div><p class="eyebrow">FILA ATIVA</p><h2>Ocorrências prioritárias</h2></div><span class="count-badge" id="control-queue-count">3</span></header>
                 <div class="control-filter-row" aria-label="Filtro demonstrativo"><span class="is-selected">Ativas</span><span>Em atendimento</span></div>
                 <div class="control-queue-list" id="control-queue-list" role="listbox" aria-label="Ocorrências ativas"></div>
               </section>
 
-              <section class="control-card teams-card">
-                <header><div><p class="eyebrow">EQUIPES</p><h2>Capacidade da operação</h2></div><span class="live-indicator"><i></i> Simulado</span></header>
-                <ul class="control-team-list" id="control-team-list" aria-label="Situação das equipes"></ul>
-              </section>
             </aside>
 
-            <section class="control-card map-card" aria-labelledby="map-panel-title">
+            <details class="control-map-dropdown" id="control-map-dropdown">
+              <summary><span><b>Visualização do mapa</b><small>Rota sugerida, área afetada e posições estimadas</small></span><span class="map-dropdown-action">Expandir</span></summary>
+              <section class="control-card map-card" aria-labelledby="map-panel-title">
               <header class="map-card-header"><div><p class="eyebrow">VISUALIZAÇÃO OPERACIONAL</p><h2 id="map-panel-title">Mapa do shopping</h2></div><div class="map-tabs" role="tablist" aria-label="Camadas do mapa"><button class="is-active" type="button" role="tab" aria-selected="true" data-control-tab="map">Mapa</button><button type="button" role="tab" aria-selected="false" data-control-tab="flow">Fluxo</button><button type="button" role="tab" aria-selected="false" data-control-tab="assets">Ativos</button></div></header>
               <div class="map-context"><span id="control-map-mode">Mapa operacional simplificado</span><span id="control-map-context">Rota e posições são estimativas demonstrativas.</span></div>
               <div class="operational-map" id="operational-map">
@@ -120,7 +118,8 @@
                 <p class="map-stage-note" id="control-map-stage-note">Área afetada: Praça de Alimentação</p>
               </div>
               <footer class="map-legend"><span><i class="legend-dot legend-dot--center"></i> Central de Controle</span><span><i class="legend-dot legend-dot--incident"></i> Ocorrência selecionada</span><span><i class="legend-route"></i> Rota sugerida</span><span><i class="legend-area"></i> Área afetada</span></footer>
-            </section>
+              </section>
+            </details>
 
             <aside class="control-card detail-card" aria-labelledby="control-detail-title" aria-live="polite">
               <header><div><p class="eyebrow">OCORRÊNCIA SELECIONADA</p><h2 id="control-detail-title">#2417 · Falha na climatização</h2></div><span class="control-status" id="control-detail-status">Em atendimento</span></header>

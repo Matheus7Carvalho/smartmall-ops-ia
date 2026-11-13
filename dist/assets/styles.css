@@ -24,3 +24,31 @@
 @media(max-width:1200px){.occurrence-layout{grid-template-columns:minmax(16rem,.8fr) minmax(19rem,1.2fr)}.workflow-card{grid-column:1/-1;min-height:0}.workflow-card>.task-controls,.workflow-card>.supervisor-approval{grid-template-columns:1fr 1fr;align-items:end}.workflow-card>.task-controls label,.workflow-card>.task-controls .completion-label{grid-column:1/-1}.workflow-card>.supervisor-approval .approval-check{grid-column:1/-1}.audit-log{max-height:8rem}}@media(max-width:760px){.occurrences-screen{padding:1.4rem 1rem 2rem}.occurrences-header{align-items:flex-start;flex-direction:column}.occurrence-layout{grid-template-columns:1fr}.workflow-card{grid-column:auto}.workflow-card>.task-controls,.workflow-card>.supervisor-approval{grid-template-columns:1fr}.occurrence-steps li+li::before{width:1rem;margin:0 .4rem}.demo-label{font-size:.52rem}.analysis-empty{min-height:12rem}}
 
 @media (min-width:761px) and (max-width:1200px){.occurrence-steps li+li::before{width:1rem;margin:0 .35rem}.occurrence-steps li{font-size:.62rem}}
+
+/* Central de Controle — a fila prioritária é a visão principal; o mapa permanece sob demanda. */
+.control-layout--focused{grid-template-columns:minmax(25rem,1.18fr) minmax(22rem,.82fr)}
+.control-layout--focused .control-rail{grid-column:1;grid-row:1;display:block}
+.control-layout--focused .queue-card{min-height:35rem}
+.control-layout--focused .control-queue-list{gap:.62rem;padding:.75rem .8rem .9rem}
+.control-layout--focused .control-queue-item{grid-template-columns:.68rem minmax(0,1fr);gap:.65rem;padding:.78rem}
+.control-layout--focused .queue-dot{width:.55rem;height:.55rem}
+.control-layout--focused .queue-main b{font-size:.72rem}
+.control-layout--focused .queue-main small{font-size:.62rem}
+.control-layout--focused .queue-meta{margin-top:.48rem}
+.control-layout--focused .queue-meta span{font-size:.58rem}
+.control-layout--focused .queue-status{padding:.23rem .4rem;font-size:.56rem}
+.control-layout--focused .detail-card{grid-column:2;grid-row:1}
+.control-map-dropdown{grid-column:1/-1;grid-row:2;min-width:0;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:.82rem;box-shadow:0 8px 20px rgba(18,76,115,.055)}
+.control-map-dropdown>summary{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.85rem 1rem;cursor:pointer;list-style:none}
+.control-map-dropdown>summary::-webkit-details-marker{display:none}
+.control-map-dropdown>summary>span:first-child{display:grid;gap:.16rem}
+.control-map-dropdown>summary b{color:#193953;font-size:.78rem}
+.control-map-dropdown>summary small{color:#728a9d;font-size:.6rem}
+.map-dropdown-action{display:flex;gap:.32rem;align-items:center;color:#0878bf;font-size:.61rem;font-weight:850;white-space:nowrap}
+.map-dropdown-action::after{display:inline-block;content:"⌄";font-size:.92rem;transition:transform .18s ease}
+.control-map-dropdown[open] .map-dropdown-action::after{transform:rotate(180deg)}
+.control-map-dropdown[open] .map-dropdown-action{font-size:0}
+.control-map-dropdown[open] .map-dropdown-action::before{content:"Recolher";font-size:.61rem}
+.control-map-dropdown .map-card{border:0;border-top:1px solid var(--line);border-radius:0;box-shadow:none}
+@media(max-width:1220px){.control-layout--focused{grid-template-columns:minmax(20rem,1fr) minmax(18rem,.9fr)}.control-layout--focused .detail-card{grid-column:2;grid-row:1;display:flex}.control-layout--focused .control-rail{display:block}.control-layout--focused .queue-card{min-height:31rem}}
+@media(max-width:760px){.control-layout--focused{grid-template-columns:1fr}.control-layout--focused .control-rail,.control-layout--focused .detail-card,.control-map-dropdown{grid-column:1;grid-row:auto}.control-layout--focused .queue-card{min-height:0}.control-map-dropdown>summary{align-items:flex-start;flex-direction:column}.map-dropdown-action{align-self:flex-end}}
