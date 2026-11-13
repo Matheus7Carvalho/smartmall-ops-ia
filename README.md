@@ -9,6 +9,7 @@ Protótipo local em **HTML5** do SmartMall Ops IA. A identidade visual usa azul-
 - Central de Controle para supervisão, com indicadores, fila prioritária ampliada, mapa operacional simplificado em menu expansível e painel de decisão;
 - Quadro Kanban de tarefas para funcionários, com visualização pessoal e etapas A Fazer, Em Andamento, Aguardando Equipamento, Travada e Finalizada;
 - Tela de Equipes com presença operacional, pessoas disponíveis, ocupadas e indisponíveis, conectada aos status demonstrativos de ocorrências;
+- Tela de Usuários e permissões exclusiva para Administradores, com perfis ativos, papéis e privilégios de acesso detalhados;
 - Estoque de equipamentos com saldos, alerta de mínimo, entradas, retiradas e histórico auditável por item e por movimentação;
 - Navegação lateral, alertas recentes e fila operacional sintética;
 - Fluxo de ocorrências em cinco modais: Registro, Análise, Aprovação, Execução e Encerramento;
@@ -62,6 +63,12 @@ Cada cartão identifica a atividade, ocorrência ou rotina relacionada, priorida
 O módulo **Equipes** oferece uma visão de presença operacional em blocos verticais de largura total. Ele destaca o total de profissionais presentes, disponíveis, ocupados e indisponíveis, além de separar as listas de **Funcionários presentes**, **Funcionários disponíveis** e **Funcionários ocupados**.
 
 Cada pessoa exibe nome, especialidade, quantidade de atividades vinculadas e status atual. Os dados são demonstrativos e acompanham o estado local das ocorrências, incluindo atendimento e deslocamento.
+
+## Usuários e permissões
+
+O módulo **Usuários e permissões** é acessível somente ao perfil de **Administrador**. Ele apresenta os perfis cadastrados, e-mail de demonstração, papel, estado da conta e permissões atribuídas. Para Supervisora Operacional e Funcionário, o item de navegação fica oculto e a rota não é disponibilizada.
+
+As informações são apenas demonstrativas: criação, edição, remoção e alteração de privilégios não estão disponíveis neste protótipo local.
 
 ## Estoque de equipamentos
 

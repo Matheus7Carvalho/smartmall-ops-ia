@@ -57,6 +57,7 @@
   const tasksBoard = document.querySelector("#tasks-board");
   const equipmentView = document.querySelector("#equipment-view");
   const teamsView = document.querySelector("#teams-view");
+  const usersView = document.querySelector("#users-view");
   const teamsPresentCount = document.querySelector("#teams-present-count");
   const teamsAvailableCount = document.querySelector("#teams-available-count");
   const teamsBusyCount = document.querySelector("#teams-busy-count");
@@ -856,7 +857,7 @@
 
   function navigateTo(view) {
     if (!currentUser) return;
-    const availableViews = new Set(["dashboard", "control", "occurrences", "tasks", "equipment", "teams"]);
+    const availableViews = new Set(["dashboard", "control", "occurrences", "tasks", "equipment", "teams", "users"]);
     const allowedView = availableViews.has(view) && currentUser.permissions.includes(view)
       ? view
       : "dashboard";
@@ -867,6 +868,7 @@
     tasksView.hidden = allowedView !== "tasks";
     equipmentView.hidden = allowedView !== "equipment";
     teamsView.hidden = allowedView !== "teams";
+    usersView.hidden = allowedView !== "users";
     if (allowedView === "teams") renderTeams();
     document.querySelectorAll(".nav-item[data-view]").forEach((item) => {
       item.classList.toggle("is-active", item.dataset.view === allowedView);
