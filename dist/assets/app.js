@@ -48,6 +48,13 @@
   const dashboardContent = document.querySelector(".dashboard-content");
   const controlView = document.querySelector("#control-view");
   const occurrencesView = document.querySelector("#occurrences-view");
+  const tasksView = document.querySelector("#tasks-view");
+  const tasksTitle = document.querySelector("#tasks-title");
+  const tasksSubtitle = document.querySelector("#tasks-subtitle");
+  const tasksAssignee = document.querySelector("#tasks-assignee");
+  const tasksBoardSummary = document.querySelector("#tasks-board-summary");
+  const tasksFeedback = document.querySelector("#tasks-feedback");
+  const tasksBoard = document.querySelector("#tasks-board");
   const emailField = document.querySelector("#email");
   const passwordField = document.querySelector("#password");
   const loginError = document.querySelector("#login-error");
@@ -524,6 +531,55 @@
 
   const controlCenter = new ControlCenter();
 
+  const TASK_COLUMNS = Object.freeze([
+    { id: "todo", label: "A Fazer" },
+    { id: "in_progress", label: "Em Andamento" },
+    { id: "waiting_equipment", label: "Aguardando Equipamento" },
+    { id: "blocked", label: "Travada" },
+    { id: "done", label: "Finalizada" },
+  ]);
+
+  class TaskBoard {
+    constructor() {
+      this.reset();
+    }
+
+    reset() {
+      this.tasks = [
+        { id: "T-2511", title: "Inspecionar AC-07", occurrence: "Manutenção preventiva", location: "Corredor L1", priority: "Média", priorityTone: "medium", assigneeEmail: "funcionario@smartmall.local", assignee: "João Costa", specialty: "Climatização / HVAC", due: "Hoje · 13:30", status: "todo", note: "Verificar ruído e limpeza do filtro." },
+        { id: "T-2417", title: "Restabelecer climatização", occurrence: "Ocorrência #2417", location: "Praça de Alimentação · L1", priority: "Alta", priorityTone: "high", assigneeEmail: "funcionario@smartmall.local", assignee: "João Costa", specialty: "Climatização / HVAC", due: "Hoje · 14:30", status: "in_progress", note: "Equipe em deslocamento para diagnóstico." },
+        { id: "T-2508", title: "Trocar filtro do AC-03", occurrence: "Manutenção preventiva", location: "Cobertura", priority: "Média", priorityTone: "medium", assigneeEmail: "funcionario@smartmall.local", assignee: "João Costa", specialty: "Climatização / HVAC", due: "Hoje · 16:00", status: "waiting_equipment", note: "Aguardando filtro MERV 8 no almoxarifado." },
+        { id: "T-2503", title: "Acessar casa de máquinas", occurrence: "Inspeção de rotina", location: "Piso técnico", priority: "Baixa", priorityTone: "low", assigneeEmail: "funcionario@smartmall.local", assignee: "João Costa", specialty: "Climatização / HVAC", due: "Aguardando liberação", status: "blocked", note: "Acesso depende da liberação do lojista." },
+        { id: "T-2499", title: "Registrar leitura térmica", occurrence: "Checklist operacional", location: "Praça de Alimentação · L1", priority: "Baixa", priorityTone: "low", assigneeEmail: "funcionario@smartmall.local", assignee: "João Costa", specialty: "Climatização / HVAC", due: "Finalizada · 09:40", status: "done", note: "Leitura dentro do parâmetro após ajuste." },
+        { id: "T-2416", title: "Conter vazamento de água", occurrence: "Ocorrência #2416", location: "Banheiro · Piso L1", priority: "Alta", priorityTone: "high", assigneeEmail: "supervisor@smartmall.local", assignee: "Luana Freitas", specialty: "Hidráulica", due: "Hoje · 13:10", status: "todo", note: "Isolar área e identificar origem do vazamento." },
+        { id: "T-2501", title: "Revisar elevador E2", occurrence: "Alerta preventivo", location: "Acesso norte", priority: "Média", priorityTone: "medium", assigneeEmail: "admin@smartmall.local", assignee: "Caio Nunes", specialty: "Infraestrutura", due: "Hoje · 15:00", status: "waiting_equipment", note: "Aguardando ferramenta de diagnóstico homologada." },
+      ];
+    }
+
+    visibleTasks(user) {
+      if (!user) return [];
+      return user.role === "Funcionário"
+        ? this.tasks.filter((task) => task.assigneeEmail === user.email)
+        : [...this.tasks];
+    }
+
+    move(taskId, user) {
+      const task = this.tasks.find((item) => item.id === taskId);
+      if (!task || !user || (user.role === "Funcionário" && task.assigneeEmail !== user.email)) return null;
+      const nextStatus = {
+        todo: "in_progress",
+        in_progress: "waiting_equipment",
+        waiting_equipment: "in_progress",
+        blocked: "todo",
+      }[task.status];
+      if (!nextStatus) return null;
+      task.status = nextStatus;
+      return task;
+    }
+  }
+
+  const taskBoard = new TaskBoard();
+
   class ModalOccurrenceFlow {
     constructor() {
       this.reset();
@@ -682,7 +738,7 @@
 
   function navigateTo(view) {
     if (!currentUser) return;
-    const availableViews = new Set(["dashboard", "control", "occurrences"]);
+    const availableViews = new Set(["dashboard", "control", "occurrences", "tasks"]);
     const allowedView = availableViews.has(view) && currentUser.permissions.includes(view)
       ? view
       : "dashboard";
@@ -690,6 +746,7 @@
     dashboardContent.hidden = allowedView !== "dashboard";
     controlView.hidden = allowedView !== "control";
     occurrencesView.hidden = allowedView !== "occurrences";
+    tasksView.hidden = allowedView !== "tasks";
     document.querySelectorAll(".nav-item[data-view]").forEach((item) => {
       item.classList.toggle("is-active", item.dataset.view === allowedView);
     });
@@ -711,6 +768,7 @@
     });
     renderOccurrence();
     renderControl();
+    renderTasks();
     renderModalFlow();
     navigateTo("dashboard");
   }
@@ -723,10 +781,12 @@
     loginError.textContent = "";
     occurrence.reset();
     controlCenter.reset();
+    taskBoard.reset();
     clearPhoto();
     renderOccurrence();
     setControlMessage("");
     renderControl();
+    renderTasks();
     renderModalFlow();
     emailField.focus();
   }
@@ -1116,6 +1176,101 @@
     renderControlDetail(incident);
   }
 
+  function taskAction(status) {
+    return ({
+      todo: { label: "Iniciar atividade", next: "Em Andamento" },
+      in_progress: { label: "Aguardar equipamento", next: "Aguardando Equipamento" },
+      waiting_equipment: { label: "Retomar atividade", next: "Em Andamento" },
+      blocked: { label: "Destravar e retomar", next: "A Fazer" },
+    })[status] || null;
+  }
+
+  function createTaskCard(task) {
+    const card = document.createElement("article");
+    card.className = "kanban-task";
+    card.setAttribute("role", "listitem");
+
+    const top = document.createElement("div");
+    top.className = "kanban-task-top";
+    const identifier = document.createElement("span");
+    identifier.textContent = task.id;
+    const priority = document.createElement("b");
+    priority.className = `kanban-priority kanban-priority--${task.priorityTone}`;
+    priority.textContent = task.priority;
+    top.append(identifier, priority);
+
+    const title = document.createElement("h3");
+    title.textContent = task.title;
+    const occurrence = document.createElement("p");
+    occurrence.className = "kanban-occurrence";
+    occurrence.textContent = task.occurrence;
+    const location = document.createElement("p");
+    location.className = "kanban-location";
+    location.textContent = `⌖ ${task.location}`;
+    const note = document.createElement("p");
+    note.className = "kanban-note";
+    note.textContent = task.note;
+
+    const footer = document.createElement("footer");
+    const assignee = document.createElement("span");
+    assignee.className = "kanban-assignee";
+    const initials = document.createElement("i");
+    initials.textContent = task.assignee.split(" ").map((name) => name[0]).join("").slice(0, 2);
+    const person = document.createElement("span");
+    const personName = document.createElement("b");
+    personName.textContent = task.assignee;
+    const specialty = document.createElement("small");
+    specialty.textContent = task.specialty;
+    person.append(personName, specialty);
+    assignee.append(initials, person);
+    const due = document.createElement("time");
+    due.textContent = task.due;
+    footer.append(assignee, due);
+
+    card.append(top, title, occurrence, location, note, footer);
+    const action = taskAction(task.status);
+    if (action) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "kanban-task-action";
+      button.dataset.taskId = task.id;
+      button.textContent = action.label;
+      card.append(button);
+    }
+    return card;
+  }
+
+  function renderTasks() {
+    const tasks = taskBoard.visibleTasks(currentUser);
+    const personalBoard = currentUser?.role === "Funcionário";
+    const firstName = currentUser?.name.split(" ")[0] || "Equipe";
+    tasksTitle.textContent = personalBoard ? "Minhas tarefas" : "Tarefas da operação";
+    tasksSubtitle.textContent = personalBoard
+      ? "Acompanhe as atividades atribuídas a você e mantenha seu status atualizado."
+      : "Acompanhe a distribuição das atividades e os impedimentos da equipe.";
+    tasksAssignee.querySelector("i").textContent = currentUser?.initials || "—";
+    tasksAssignee.querySelector("b").textContent = personalBoard ? currentUser?.name || "—" : "Visão da equipe";
+    tasksAssignee.querySelector("small").textContent = personalBoard ? "Atividades atribuídas" : "Todos os responsáveis";
+
+    const activeTasks = tasks.filter((task) => task.status !== "done").length;
+    tasksBoardSummary.textContent = personalBoard
+      ? `${tasks.length} atividade(s) atribuída(s) a ${firstName}; ${activeTasks} ainda em acompanhamento.`
+      : `${tasks.length} atividade(s) na operação; ${activeTasks} ainda em acompanhamento.`;
+
+    TASK_COLUMNS.forEach((column) => {
+      const container = document.querySelector(`#tasks-${column.id}`);
+      const items = tasks.filter((task) => task.status === column.id);
+      document.querySelector(`#task-count-${column.id}`).textContent = String(items.length);
+      container.replaceChildren(...items.map(createTaskCard));
+      if (items.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "kanban-empty";
+        empty.textContent = "Nenhuma atividade nesta etapa.";
+        container.append(empty);
+      }
+    });
+  }
+
   function renderAnalysis() {
     const analysis = occurrence.analysis;
     analysisEmpty.hidden = Boolean(analysis);
@@ -1279,6 +1434,22 @@
 
   document.querySelectorAll("[data-view]").forEach((button) => {
     button.addEventListener("click", () => navigateTo(button.dataset.view));
+  });
+
+  tasksBoard.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-task-id]");
+    if (!button) return;
+    const task = taskBoard.move(button.dataset.taskId, currentUser);
+    if (!task) {
+      tasksFeedback.textContent = "Esta atividade não pode ser alterada pelo perfil atual.";
+      return;
+    }
+    const next = taskAction(task.status);
+    const statusLabel = TASK_COLUMNS.find((column) => column.id === task.status)?.label || task.status;
+    tasksFeedback.textContent = `${task.id} foi movida para “${statusLabel}” nesta demonstração local.`;
+    tasksFeedback.classList.add("is-success");
+    renderTasks();
+    if (next) button.focus();
   });
 
   incidentPhoto.addEventListener("change", () => {

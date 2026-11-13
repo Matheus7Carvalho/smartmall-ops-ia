@@ -40,7 +40,7 @@
           <button class="nav-item is-active" type="button" data-permission="dashboard" data-view="dashboard"><span aria-hidden="true">⌂</span> Dashboard</button>
           <button class="nav-item" type="button" data-permission="control" data-view="control"><span aria-hidden="true">⌖</span> Central de Controle</button>
           <button class="nav-item" type="button" data-permission="occurrences" data-view="occurrences"><span aria-hidden="true">⌁</span> Ocorrências <b>8</b></button>
-          <button class="nav-item" type="button" data-permission="tasks"><span aria-hidden="true">✓</span> Tarefas <b>3</b></button>
+          <button class="nav-item" type="button" data-permission="tasks" data-view="tasks"><span aria-hidden="true">✓</span> Tarefas <b>3</b></button>
           <button class="nav-item" type="button" data-permission="equipment"><span aria-hidden="true">▦</span> Equipamentos</button>
           <button class="nav-item" type="button" data-permission="teams"><span aria-hidden="true">♧</span> Equipes</button>
           <button class="nav-item" type="button" data-permission="users"><span aria-hidden="true">◉</span> Usuários e permissões</button>
@@ -169,6 +169,20 @@
             </section>
           </div>
           <section class="safety-disclaimer" hidden><span aria-hidden="true">⌾</span><p><b>Limite do protótipo:</b> a classificação é determinística e demonstrativa. Para situações de risco, siga os protocolos do shopping e acione imediatamente a pessoa responsável.</p></section>
+        </section>
+
+        <section class="tasks-screen" id="tasks-view" hidden aria-labelledby="tasks-title">
+          <header class="tasks-header"><div><button class="back-dashboard" type="button" data-view="dashboard"><span aria-hidden="true">←</span> Voltar ao dashboard</button><p class="eyebrow">ROTINA OPERACIONAL</p><h1 id="tasks-title">Minhas tarefas</h1><p id="tasks-subtitle">Acompanhe as atividades atribuídas a você e mantenha seu status atualizado.</p></div><div class="tasks-header-actions"><span class="demo-label">QUADRO KANBAN</span><span class="tasks-assignee" id="tasks-assignee"><i aria-hidden="true">JC</i><span><b>João Costa</b><small>Atividades atribuídas</small></span></span></div></header>
+          <section class="tasks-overview" aria-label="Resumo do quadro"><span class="tasks-overview-icon" aria-hidden="true">✓</span><div><b id="tasks-board-summary">5 atividades atribuídas a você neste quadro.</b><p>Use as ações rápidas em cada cartão para atualizar o andamento local da atividade.</p></div><span class="tasks-local-status"><i></i> Atualização local</span></section>
+          <p class="tasks-feedback" id="tasks-feedback" role="status" aria-live="polite"></p>
+          <section class="tasks-board" id="tasks-board" aria-label="Quadro Kanban de tarefas">
+            <article class="kanban-column kanban-column--todo" data-task-status="todo"><header><span class="kanban-column-icon" aria-hidden="true">○</span><div><h2>A Fazer</h2><p>Priorizadas para início</p></div><b id="task-count-todo">0</b></header><div class="kanban-cards" id="tasks-todo" role="list" aria-label="Tarefas a fazer"></div></article>
+            <article class="kanban-column kanban-column--progress" data-task-status="in_progress"><header><span class="kanban-column-icon" aria-hidden="true">↻</span><div><h2>Em Andamento</h2><p>Em execução pela equipe</p></div><b id="task-count-in_progress">0</b></header><div class="kanban-cards" id="tasks-in_progress" role="list" aria-label="Tarefas em andamento"></div></article>
+            <article class="kanban-column kanban-column--waiting" data-task-status="waiting_equipment"><header><span class="kanban-column-icon" aria-hidden="true">▦</span><div><h2>Aguardando Equipamento</h2><p>Dependem de material ou peça</p></div><b id="task-count-waiting_equipment">0</b></header><div class="kanban-cards" id="tasks-waiting_equipment" role="list" aria-label="Tarefas aguardando equipamento"></div></article>
+            <article class="kanban-column kanban-column--blocked" data-task-status="blocked"><header><span class="kanban-column-icon" aria-hidden="true">!</span><div><h2>Travada</h2><p>Requer acompanhamento</p></div><b id="task-count-blocked">0</b></header><div class="kanban-cards" id="tasks-blocked" role="list" aria-label="Tarefas travadas"></div></article>
+            <article class="kanban-column kanban-column--done" data-task-status="done"><header><span class="kanban-column-icon" aria-hidden="true">✓</span><div><h2>Finalizada</h2><p>Concluídas nesta rotina</p></div><b id="task-count-done">0</b></header><div class="kanban-cards" id="tasks-done" role="list" aria-label="Tarefas finalizadas"></div></article>
+          </section>
+          <section class="tasks-disclaimer"><span aria-hidden="true">⌾</span><p><b>Ambiente demonstrativo:</b> alterações de status ficam somente nesta sessão local e devem ser registradas no fluxo operacional real antes de qualquer intervenção.</p></section>
         </section>
       </main>
     </div>
