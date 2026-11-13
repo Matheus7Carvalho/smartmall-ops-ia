@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#17142f" />
+    <meta name="description" content="Tela demonstrativa de cadastro de ocorrência do SmartMall Ops AI." />
+    <title>Nova ocorrência — SmartMall Ops AI</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Navegação principal">
+        <div class="brand" aria-label="SmartMall Ops AI"><span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SmartMall</strong><small>Ops AI</small></span></div>
+        <nav class="navigation" aria-label="Módulos do sistema">
+          <a href="#inicio" class="nav-item"><span aria-hidden="true">⌂</span> Início</a>
+          <a href="#ocorrencias" class="nav-item is-active"><span aria-hidden="true">⌁</span> Ocorrências <b>3</b></a>
+          <a href="#tarefas" class="nav-item"><span aria-hidden="true">✓</span> Tarefas</a>
+          <a href="#equipes" class="nav-item"><span aria-hidden="true">♧</span> Equipes</a>
+          <a href="#locais" class="nav-item"><span aria-hidden="true">⌖</span> Locais (QR Code)</a>
+          <a href="#relatorios" class="nav-item"><span aria-hidden="true">▥</span> Relatórios</a>
+          <a href="#configuracoes" class="nav-item"><span aria-hidden="true">⚙</span> Configurações</a>
+        </nav>
+        <div class="sidebar-bottom"><span class="mall-icon" aria-hidden="true">⌂</span><span><b>Capim Dourado</b><small>Shopping · Palmas, TO</small></span></div>
+      </aside>
+      <main class="page" id="inicio">
+        <header class="topbar">
+          <div class="location"><span aria-hidden="true">⌖</span> Capim Dourado Shopping</div>
+          <div class="topbar-right"><span class="operation-status"><i></i> Operação estável</span><span class="divider" aria-hidden="true"></span><button class="notification" type="button" aria-label="Notificações">♧<b></b></button><span class="divider" aria-hidden="true"></span><span class="avatar" aria-hidden="true">A</span><span class="profile"><b>Ana Souza</b><small>Supervisora Operacional</small></span><span class="chevron" aria-hidden="true">⌄</span></div>
+        </header>
+        <section class="content" id="ocorrencias" aria-labelledby="page-title">
+          <a href="#ocorrencias" class="back-link"><span aria-hidden="true">←</span> Voltar para ocorrências</a>
+          <div class="title-row"><div><p class="eyebrow">GESTÃO OPERACIONAL</p><h1 id="page-title">Nova ocorrência</h1><p>Registre o que foi identificado para que a operação possa analisar e direcionar o atendimento.</p></div><span class="demo-label">MODELO DE DEMONSTRAÇÃO</span></div>
+          <section class="form-card" aria-label="Formulário de cadastro de ocorrência">
+            <ol class="stepper" aria-label="Etapas do cadastro"><li class="is-current"><span>1</span><b>Registrar</b></li><li><span>2</span><b>Análise assistida</b></li><li><span>3</span><b>Confirmação humana</b></li></ol>
+            <div class="form-layout">
+              <section class="photo-column" aria-labelledby="photo-title"><h2 id="photo-title">Evidência visual <em>opcional</em></h2><div class="photo-frame" role="img" aria-label="Foto demonstrativa de uma saída de ar-condicionado no teto"><div class="air-conditioner"><span></span><span></span><span></span><span></span><span></span></div><div class="ceiling-line"></div><span class="remove-photo" aria-hidden="true">×</span></div><button type="button" class="change-photo"><span aria-hidden="true">▧</span> Alterar foto</button><p class="photo-help">Fotos ajudam a contextualizar a ocorrência. Evite imagens com pessoas identificáveis.</p></section>
+              <form class="occurrence-form"><div class="field"><label for="description">Descrição da ocorrência <span>*</span></label><textarea id="description" rows="5" readonly>O ar-condicionado da praça de alimentação parou de funcionar e o ambiente está muito quente.</textarea><small>Descreva o problema observado e o impacto percebido.</small></div><div class="field"><label for="location">Local <span>*</span></label><div class="select-wrap"><select id="location" aria-label="Local da ocorrência"><option>Praça de Alimentação</option></select><span aria-hidden="true">⌄</span></div></div><div class="field"><label for="observation">Informação adicional <em>opcional</em></label><input id="observation" type="text" placeholder="Ex.: há quanto tempo o problema foi observado?" /></div><div class="assistive-note"><span aria-hidden="true">✦</span><p><b>Próxima etapa:</b> o motor assistivo apresentará uma sugestão de categoria, prioridade e equipe. A decisão final será validada por uma pessoa responsável.</p></div><button type="button" class="submit-button">Analisar ocorrência <span aria-hidden="true">✦</span></button></form>
+            </div>
+          </section>
+          <section class="privacy-note" aria-label="Aviso de segurança"><span aria-hidden="true">⌾</span><p><b>Ambiente de demonstração:</b> os dados exibidos são sintéticos. Esta tela simula o cadastro e não aciona equipes reais nem substitui procedimentos de segurança.</p></section>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
