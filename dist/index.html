@@ -36,8 +36,8 @@
       <aside class="sidebar" aria-label="Navegação principal">
         <div class="brand"><span class="brand-logo"><img src="assets/smartmall-ops-ai-logo.png" alt="Símbolo SmartMall Ops IA" /></span><span class="brand-name"><strong>SmartMall</strong><small>Ops IA</small></span></div>
         <nav class="navigation" aria-label="Módulos do sistema">
-          <button class="nav-item is-active" type="button" data-permission="dashboard"><span aria-hidden="true">⌂</span> Dashboard</button>
-          <button class="nav-item" type="button" data-permission="occurrences"><span aria-hidden="true">⌁</span> Ocorrências <b>8</b></button>
+          <button class="nav-item is-active" type="button" data-permission="dashboard" data-view="dashboard"><span aria-hidden="true">⌂</span> Dashboard</button>
+          <button class="nav-item" type="button" data-permission="occurrences" data-view="occurrences"><span aria-hidden="true">⌁</span> Ocorrências <b>8</b></button>
           <button class="nav-item" type="button" data-permission="tasks"><span aria-hidden="true">✓</span> Tarefas <b>3</b></button>
           <button class="nav-item" type="button" data-permission="equipment"><span aria-hidden="true">▦</span> Equipamentos</button>
           <button class="nav-item" type="button" data-permission="teams"><span aria-hidden="true">♧</span> Equipes</button>
@@ -63,6 +63,41 @@
             <article class="dashboard-panel alert-panel"><header><div><p class="eyebrow">MONITORAMENTO</p><h2>Alertas recentes</h2></div><span class="live-indicator"><i></i> Atualizando</span></header><div class="alert-item"><span aria-hidden="true">⌁</span><div><b>Climatização — AC-03</b><p>Temperatura acima do parâmetro definido.</p></div><small>Agora</small></div><div class="alert-item"><span aria-hidden="true">▦</span><div><b>Elevador — E2</b><p>Inspeção preventiva programada para hoje.</p></div><small>12 min</small></div><div class="alert-item"><span aria-hidden="true">◌</span><div><b>Bomba d'água — B01</b><p>Leitura fora da faixa esperada.</p></div><small>28 min</small></div></article>
           </section>
           <section class="permission-card" id="permission-card"><span aria-hidden="true">⌾</span><div><b>Permissões deste perfil</b><p id="permission-summary"></p></div></section>
+        </section>
+
+        <section class="occurrences-screen" id="occurrences-view" hidden aria-labelledby="occurrences-title">
+          <header class="occurrences-header"><div><button class="back-dashboard" type="button" data-view="dashboard"><span aria-hidden="true">←</span> Voltar ao dashboard</button><p class="eyebrow">GESTÃO DE OCORRÊNCIAS</p><h1 id="occurrences-title">Central de decisões operacionais</h1><p>Registre uma ocorrência, revise a sugestão e mantenha o supervisor no controle do encaminhamento.</p></div><span class="demo-label">AMBIENTE DE DEMONSTRAÇÃO</span></header>
+          <ol class="occurrence-steps" aria-label="Fluxo de atendimento"><li class="is-current" data-step="register"><span>1</span> Registrar</li><li data-step="analyze"><span>2</span> Analisar</li><li data-step="approve"><span>3</span> Aprovar</li><li data-step="execute"><span>4</span> Executar</li><li data-step="resolve"><span>5</span> Encerrar</li></ol>
+          <div class="occurrence-layout">
+            <form class="occurrence-card registration-card" id="occurrence-form" novalidate>
+              <header><span class="panel-number">01</span><div><p class="eyebrow">CAPTURA</p><h2>Registrar ocorrência</h2></div></header>
+              <label class="photo-input" for="incident-photo"><span class="photo-preview" id="photo-preview" aria-hidden="true">▧</span><span><b>Adicionar foto</b><small>Opcional · armazenada somente neste navegador</small></span><input id="incident-photo" type="file" accept="image/*" /></label>
+              <label>Descrição da ocorrência <span class="required">*</span><textarea id="incident-description" minlength="10" required placeholder="Descreva o problema observado, o impacto e possíveis riscos.">O ar-condicionado da praça de alimentação parou de funcionar e o ambiente está muito quente.</textarea></label>
+              <label>Local <span class="required">*</span><select id="incident-location" required><option>Praça de Alimentação</option><option>Banheiro — Piso L1</option><option>Corredor — Piso L2</option><option>Entrada principal</option><option>Estacionamento</option></select></label>
+              <p class="form-message" id="incident-form-message" role="alert"></p>
+              <button class="primary-button" type="submit">Classificar ocorrência <span aria-hidden="true">✦</span></button>
+            </form>
+
+            <section class="occurrence-card decision-card" aria-labelledby="decision-title">
+              <header><span class="panel-number">02</span><div><p class="eyebrow">DECISÃO ASSISTIDA</p><h2 id="decision-title">Classificação e prioridade</h2></div><span class="ai-badge">✦ IA simulada</span></header>
+              <div class="analysis-empty" id="analysis-empty"><span aria-hidden="true">✦</span><strong>Aguardando registro</strong><p>Envie a descrição para gerar uma sugestão explicável de categoria, prioridade e equipe.</p></div>
+              <div class="analysis-result" id="analysis-result" hidden>
+                <div class="suggestion-alert"><span aria-hidden="true">✦</span><p><b>Sugestão gerada localmente.</b> Revise os dados antes de aprovar; esta análise não autoriza intervenções técnicas.</p></div>
+                <div class="decision-summary"><div><span>Categoria sugerida</span><strong id="ai-category">—</strong></div><div><span>Prioridade sugerida</span><strong class="priority-pill" id="ai-priority">—</strong></div></div>
+                <div class="rule-card"><h3>Priorização por regras</h3><ul id="priority-rules"></ul><p id="priority-explanation"></p></div>
+                <section class="team-section" aria-labelledby="team-title"><div class="section-heading"><h3 id="team-title">Equipe responsável sugerida</h3><span id="team-count"></span></div><div id="team-suggestions" class="team-suggestions"></div></section>
+              </div>
+            </section>
+
+            <section class="occurrence-card workflow-card" aria-labelledby="workflow-title">
+              <header><span class="panel-number">03</span><div><p class="eyebrow">GOVERNANÇA HUMANA</p><h2 id="workflow-title">Aprovar e acompanhar</h2></div></header>
+              <div class="workflow-state" id="workflow-state"><span class="status-indicator is-review"></span><div><b>Aguardando classificação</b><small>O supervisor aprova a atribuição após revisar a sugestão.</small></div></div>
+              <div class="supervisor-approval" id="supervisor-approval" hidden><label class="approval-check"><input id="supervisor-check" type="checkbox" /><span>Confirmo que revisei a prioridade, a equipe e as informações disponíveis.</span></label><button class="primary-button" id="approve-assignment" type="button" disabled>Aprovar e atribuir tarefa</button></div>
+              <div class="task-controls" id="task-controls" hidden><label>Atualização da tarefa<textarea id="task-update" placeholder="Registre o diagnóstico, a ação executada ou uma pendência."></textarea></label><button class="secondary-button" id="start-task" type="button">Iniciar atendimento</button><button class="secondary-button" id="save-update" type="button">Registrar atualização</button><label class="completion-label" id="completion-field" hidden>Resumo da resolução <textarea id="completion-note" placeholder="Descreva a solução aplicada antes de encerrar."></textarea></label><button class="resolve-button" id="resolve-task" type="button" hidden>✓ Encerrar ocorrência</button></div>
+              <section class="audit-section"><h3>Histórico auditável</h3><ol id="audit-log" class="audit-log"><li><time>Agora</time><span>Fluxo de demonstração iniciado.</span></li></ol></section>
+            </section>
+          </div>
+          <section class="safety-disclaimer"><span aria-hidden="true">⌾</span><p><b>Limite do protótipo:</b> a classificação é determinística e demonstrativa. Para situações de risco, siga os protocolos do shopping e acione imediatamente a pessoa responsável.</p></section>
         </section>
       </main>
     </div>
