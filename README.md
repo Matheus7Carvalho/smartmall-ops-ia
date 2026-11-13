@@ -1,6 +1,6 @@
 # SmartMall Ops AI — Cadastro de ocorrência
 
-Entrega local de uma única tela estática de cadastro de ocorrência, guiada pelos protótipos de média fidelidade fornecidos.
+Entrega local de uma única tela estática em **HTML5** para cadastro de ocorrência, guiada pelos protótipos de média fidelidade fornecidos. A identidade visual usa azul-marinho com degradês para azul-claro e a logo oficial do SmartMall Ops IA.
 
 ## Incluído
 
