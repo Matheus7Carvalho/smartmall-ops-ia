@@ -58,6 +58,17 @@
   const equipmentView = document.querySelector("#equipment-view");
   const teamsView = document.querySelector("#teams-view");
   const usersView = document.querySelector("#users-view");
+  const reportsView = document.querySelector("#reports-view");
+  const reportsActiveIncidents = document.querySelector("#reports-active-incidents");
+  const reportsResolvedIncidents = document.querySelector("#reports-resolved-incidents");
+  const reportsAvailableTeams = document.querySelector("#reports-available-teams");
+  const reportsLowStock = document.querySelector("#reports-low-stock");
+  const reportsIncidentCount = document.querySelector("#reports-incident-count");
+  const reportsTeamCount = document.querySelector("#reports-team-count");
+  const reportsInventoryCount = document.querySelector("#reports-inventory-count");
+  const reportsIncidentsList = document.querySelector("#reports-incidents-list");
+  const reportsTeamSummary = document.querySelector("#reports-team-summary");
+  const reportsInventoryHistory = document.querySelector("#reports-inventory-history");
   const teamsPresentCount = document.querySelector("#teams-present-count");
   const teamsAvailableCount = document.querySelector("#teams-available-count");
   const teamsBusyCount = document.querySelector("#teams-busy-count");
@@ -857,7 +868,7 @@
 
   function navigateTo(view) {
     if (!currentUser) return;
-    const availableViews = new Set(["dashboard", "control", "occurrences", "tasks", "equipment", "teams", "users"]);
+    const availableViews = new Set(["dashboard", "control", "occurrences", "tasks", "equipment", "teams", "users", "reports"]);
     const allowedView = availableViews.has(view) && currentUser.permissions.includes(view)
       ? view
       : "dashboard";
@@ -869,7 +880,9 @@
     equipmentView.hidden = allowedView !== "equipment";
     teamsView.hidden = allowedView !== "teams";
     usersView.hidden = allowedView !== "users";
+    reportsView.hidden = allowedView !== "reports";
     if (allowedView === "teams") renderTeams();
+    if (allowedView === "reports") renderReports();
     document.querySelectorAll(".nav-item[data-view]").forEach((item) => {
       item.classList.toggle("is-active", item.dataset.view === allowedView);
     });
@@ -1216,6 +1229,74 @@
     teamsPresentList.replaceChildren(...roster.map(({ team, status }) => createTeamPersonCard(team, status)));
     teamsAvailableList.replaceChildren(...available.map(({ team, status }) => createTeamPersonCard(team, status)));
     teamsBusyList.replaceChildren(...busy.map(({ team, status }) => createTeamPersonCard(team, status)));
+  }
+
+  function renderReports() {
+    const activeIncidents = controlCenter.activeIncidents;
+    const resolvedIncidents = controlCenter.incidents.filter((incident) => incident.state === "resolved");
+    const availableTeams = CONTROL_ROSTER.filter((team) => teamStatus(team).label === "Disponível");
+    const busyTeams = CONTROL_ROSTER.filter((team) => teamStatus(team).className === "is-busy");
+    const offlineTeams = CONTROL_ROSTER.filter((team) => teamStatus(team).className === "is-offline");
+    const lowStock = inventoryLedger.items.filter((item) => item.quantity <= item.minimum);
+
+    reportsActiveIncidents.textContent = String(activeIncidents.length);
+    reportsResolvedIncidents.textContent = String(resolvedIncidents.length);
+    reportsAvailableTeams.textContent = String(availableTeams.length);
+    reportsLowStock.textContent = String(lowStock.length);
+    reportsIncidentCount.textContent = String(activeIncidents.length);
+    reportsTeamCount.textContent = String(CONTROL_ROSTER.length);
+    reportsInventoryCount.textContent = String(inventoryLedger.history.length);
+
+    reportsIncidentsList.replaceChildren(...activeIncidents.map((incident) => {
+      const item = document.createElement("li");
+      const dot = document.createElement("span");
+      dot.className = `report-priority-dot report-priority-dot--${incident.priority.toLowerCase()}`;
+      const summary = document.createElement("div");
+      const title = document.createElement("b");
+      title.textContent = `#${incident.id} · ${incident.title}`;
+      const details = document.createElement("small");
+      details.textContent = `${incident.location} · ${incident.age}`;
+      summary.append(title, details);
+      const status = document.createElement("span");
+      status.className = `report-status report-status--${incident.state}`;
+      status.textContent = controlStateLabel(incident.state);
+      item.append(dot, summary, status);
+      return item;
+    }));
+
+    const teamBlocks = [
+      { label: "Disponíveis", value: availableTeams.length, className: "is-available" },
+      { label: "Em atendimento ou deslocamento", value: busyTeams.length, className: "is-busy" },
+      { label: "Indisponíveis", value: offlineTeams.length, className: "is-offline" },
+    ];
+    reportsTeamSummary.replaceChildren(...teamBlocks.map((block) => {
+      const card = document.createElement("div");
+      card.className = `reports-team-block ${block.className}`;
+      const value = document.createElement("strong");
+      value.textContent = String(block.value);
+      const label = document.createElement("span");
+      label.textContent = block.label;
+      card.append(value, label);
+      return card;
+    }));
+
+    reportsInventoryHistory.replaceChildren(...inventoryLedger.history.slice(0, 6).map((entry) => {
+      const item = document.createElement("li");
+      const marker = document.createElement("span");
+      marker.className = `reports-history-marker ${entry.action === "Retirada" ? "is-withdrawal" : ""}`;
+      marker.textContent = entry.action === "Retirada" ? "−" : "+";
+      const summary = document.createElement("div");
+      const title = document.createElement("b");
+      const inventoryItem = inventoryLedger.items.find((candidate) => candidate.id === entry.itemId);
+      title.textContent = `${entry.action} · ${inventoryItem?.name || "Item removido"}`;
+      const description = document.createElement("p");
+      description.textContent = `${entry.actor} ${entry.message}`;
+      summary.append(title, description);
+      const time = document.createElement("time");
+      time.textContent = entry.time;
+      item.append(marker, summary, time);
+      return item;
+    }));
   }
 
   function renderControlTeams() {

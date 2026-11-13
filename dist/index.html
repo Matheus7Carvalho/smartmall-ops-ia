@@ -44,7 +44,7 @@
           <button class="nav-item" type="button" data-permission="equipment" data-view="equipment"><span aria-hidden="true">▦</span> Equipamentos</button>
           <button class="nav-item" type="button" data-permission="teams" data-view="teams"><span aria-hidden="true">♧</span> Equipes</button>
           <button class="nav-item" type="button" data-permission="users" data-view="users"><span aria-hidden="true">◉</span> Usuários e permissões</button>
-          <button class="nav-item" type="button" data-permission="reports"><span aria-hidden="true">▥</span> Relatórios</button>
+          <button class="nav-item" type="button" data-permission="reports" data-view="reports"><span aria-hidden="true">▥</span> Relatórios</button>
         </nav>
         <section class="sidebar-footer"><span class="mall-icon" aria-hidden="true">⌂</span><span><b>Capim Dourado</b><small>Shopping · Palmas, TO</small></span></section>
       </aside>
@@ -217,6 +217,18 @@
             <article class="user-access-card"><header><span class="user-avatar user-avatar--employee" aria-hidden="true">JC</span><div><p class="eyebrow">FUNCIONÁRIO</p><h2>João Costa</h2><small>funcionario@smartmall.local</small></div><span class="user-active-status">Ativo</span></header><div class="user-permission-summary"><span>Permissões de acesso</span><div><b>Dashboard</b><b>Ocorrências</b><b>Tarefas</b><b>Equipamentos</b></div></div><footer><span>Escopo limitado às atividades e registros operacionais.</span><span class="user-role-chip user-role-chip--employee">Acesso restrito</span></footer></article>
           </section>
           <section class="users-disclaimer"><span aria-hidden="true">⌾</span><p><b>Ambiente demonstrativo:</b> os perfis apresentados são estáticos e não permitem criar, editar ou remover contas. Em produção, essas ações devem exigir autenticação forte, confirmação administrativa e auditoria.</p></section>
+        </section>
+
+        <section class="reports-screen" id="reports-view" hidden aria-labelledby="reports-title">
+          <header class="reports-header"><div><button class="back-dashboard" type="button" data-view="dashboard"><span aria-hidden="true">←</span> Voltar ao dashboard</button><p class="eyebrow">INTELIGÊNCIA OPERACIONAL</p><h1 id="reports-title">Relatórios operacionais</h1><p>Consulte os indicadores consolidados desta sessão local para apoiar o acompanhamento da operação.</p></div><span class="demo-label">DADOS SINTÉTICOS</span></header>
+          <section class="reports-metrics" aria-label="Indicadores consolidados"><article><span aria-hidden="true">⌁</span><div><p>Ocorrências na fila</p><strong id="reports-active-incidents">0</strong><small>Em análise, atribuídas ou em atendimento</small></div></article><article class="reports-metric--done"><span aria-hidden="true">✓</span><div><p>Ocorrências concluídas</p><strong id="reports-resolved-incidents">0</strong><small>Encerradas nesta sessão</small></div></article><article class="reports-metric--team"><span aria-hidden="true">♧</span><div><p>Equipes disponíveis</p><strong id="reports-available-teams">0</strong><small>Prontas para nova atribuição</small></div></article><article class="reports-metric--inventory"><span aria-hidden="true">▦</span><div><p>Itens abaixo do mínimo</p><strong id="reports-low-stock">0</strong><small>Materiais que requerem reposição</small></div></article></section>
+          <section class="reports-info"><span aria-hidden="true">⌾</span><div><b>Consolidação local</b><p>Este painel reúne os eventos demonstrativos da sessão atual. Use os dados como apoio visual, não como registro oficial da operação.</p></div></section>
+          <section class="report-sections">
+            <article class="report-card"><header><div><p class="eyebrow">OCORRÊNCIAS</p><h2>Resumo da fila operacional</h2><p>Ocorrências ativas e o respectivo estado de atendimento.</p></div><span class="report-card-count" id="reports-incident-count">0</span></header><ol class="report-incidents-list" id="reports-incidents-list"></ol></article>
+            <article class="report-card"><header><div><p class="eyebrow">EQUIPES</p><h2>Distribuição da operação</h2><p>Disponibilidade consolidada das pessoas presentes na escala.</p></div><span class="report-card-count" id="reports-team-count">0</span></header><div class="reports-team-summary" id="reports-team-summary"></div></article>
+            <article class="report-card"><header><div><p class="eyebrow">ESTOQUE</p><h2>Histórico geral de movimentações</h2><p>Trilha auditável consolidada. A rastreabilidade por item permanece na tela de Estoque.</p></div><span class="report-card-count" id="reports-inventory-count">0</span></header><ol class="reports-inventory-history" id="reports-inventory-history"></ol></article>
+          </section>
+          <section class="reports-disclaimer"><span aria-hidden="true">⌾</span><p><b>Ambiente demonstrativo:</b> relatórios não possuem exportação nem persistência. Uma versão produtiva deve usar dados validados, filtros, períodos, controle de acesso e auditoria no servidor.</p></section>
         </section>
       </main>
     </div>
