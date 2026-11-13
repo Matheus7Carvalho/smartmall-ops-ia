@@ -3,44 +3,69 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#17142f" />
-    <meta name="description" content="Tela demonstrativa de cadastro de ocorrência do SmartMall Ops AI." />
-    <title>Nova ocorrência — SmartMall Ops AI</title>
+    <meta name="theme-color" content="#062044" />
+    <meta name="description" content="Protótipo HTML5 local do SmartMall Ops IA." />
+    <title>SmartMall Ops IA</title>
     <link rel="stylesheet" href="assets/styles.css" />
   </head>
   <body>
-    <div class="app-shell">
+    <main class="auth-shell" id="auth-view" aria-labelledby="login-title">
+      <section class="auth-brand-panel">
+        <div class="auth-logo"><span class="auth-logo-crop"><img src="assets/smartmall-ops-ai-logo.png" alt="Símbolo SmartMall Ops IA" /></span><span><strong>SmartMall</strong><small>Ops IA</small></span></div>
+        <div class="auth-pitch"><p class="eyebrow">OPERAÇÃO CONECTADA</p><h1>Decisões operacionais mais claras, <em>em tempo real.</em></h1><p>Centralize ocorrências, equipes, ativos e alertas em uma única visão operacional.</p></div>
+        <div class="auth-decoration" aria-hidden="true"><span></span><span></span><span></span></div>
+        <p class="auth-footnote">Ambiente local de demonstração · Dados sintéticos</p>
+      </section>
+
+      <section class="login-panel">
+        <div class="login-card">
+          <p class="eyebrow">ACESSO RESTRITO</p><h2 id="login-title">Entrar no sistema</h2><p class="muted">Use um perfil de demonstração para visualizar as permissões de cada papel.</p>
+          <form id="login-form" novalidate>
+            <label>E-mail<input id="email" name="email" type="email" autocomplete="username" placeholder="nome@smartmall.local" required /></label>
+            <label>Senha<input id="password" name="password" type="password" autocomplete="current-password" placeholder="Digite sua senha" required /></label>
+            <p class="form-error" id="login-error" role="alert"></p>
+            <button class="primary-button" type="submit">Entrar <span aria-hidden="true">→</span></button>
+          </form>
+          <div class="demo-accounts" aria-label="Acessos de demonstração"><p>Perfis de demonstração</p><div><button type="button" data-demo="admin@smartmall.local">Administrador</button><button type="button" data-demo="supervisor@smartmall.local">Supervisor</button><button type="button" data-demo="funcionario@smartmall.local">Funcionário</button></div><small>Senha para todos: <strong>demo123</strong></small></div>
+          <p class="security-note"><span aria-hidden="true">⌾</span> Esta autenticação é uma simulação local. Em produção, use servidor, senhas protegidas e controle de sessão seguro.</p>
+        </div>
+      </section>
+    </main>
+
+    <div class="application" id="app-view" hidden>
       <aside class="sidebar" aria-label="Navegação principal">
         <div class="brand"><span class="brand-logo"><img src="assets/smartmall-ops-ai-logo.png" alt="Símbolo SmartMall Ops IA" /></span><span class="brand-name"><strong>SmartMall</strong><small>Ops IA</small></span></div>
         <nav class="navigation" aria-label="Módulos do sistema">
-          <a href="#inicio" class="nav-item"><span aria-hidden="true">⌂</span> Início</a>
-          <a href="#ocorrencias" class="nav-item is-active"><span aria-hidden="true">⌁</span> Ocorrências <b>3</b></a>
-          <a href="#tarefas" class="nav-item"><span aria-hidden="true">✓</span> Tarefas</a>
-          <a href="#equipes" class="nav-item"><span aria-hidden="true">♧</span> Equipes</a>
-          <a href="#locais" class="nav-item"><span aria-hidden="true">⌖</span> Locais (QR Code)</a>
-          <a href="#relatorios" class="nav-item"><span aria-hidden="true">▥</span> Relatórios</a>
-          <a href="#configuracoes" class="nav-item"><span aria-hidden="true">⚙</span> Configurações</a>
+          <button class="nav-item is-active" type="button" data-permission="dashboard"><span aria-hidden="true">⌂</span> Dashboard</button>
+          <button class="nav-item" type="button" data-permission="occurrences"><span aria-hidden="true">⌁</span> Ocorrências <b>8</b></button>
+          <button class="nav-item" type="button" data-permission="tasks"><span aria-hidden="true">✓</span> Tarefas <b>3</b></button>
+          <button class="nav-item" type="button" data-permission="equipment"><span aria-hidden="true">▦</span> Equipamentos</button>
+          <button class="nav-item" type="button" data-permission="teams"><span aria-hidden="true">♧</span> Equipes</button>
+          <button class="nav-item" type="button" data-permission="users"><span aria-hidden="true">◉</span> Usuários e permissões</button>
+          <button class="nav-item" type="button" data-permission="reports"><span aria-hidden="true">▥</span> Relatórios</button>
         </nav>
-        <div class="sidebar-bottom"><span class="mall-icon" aria-hidden="true">⌂</span><span><b>Capim Dourado</b><small>Shopping · Palmas, TO</small></span></div>
+        <section class="sidebar-footer"><span class="mall-icon" aria-hidden="true">⌂</span><span><b>Capim Dourado</b><small>Shopping · Palmas, TO</small></span></section>
       </aside>
-      <main class="page" id="inicio">
-        <header class="topbar">
-          <div class="location"><span aria-hidden="true">⌖</span> Capim Dourado Shopping</div>
-          <div class="topbar-right"><span class="operation-status"><i></i> Operação estável</span><span class="divider" aria-hidden="true"></span><button class="notification" type="button" aria-label="Notificações">♧<b></b></button><span class="divider" aria-hidden="true"></span><span class="avatar" aria-hidden="true">A</span><span class="profile"><b>Ana Souza</b><small>Supervisora Operacional</small></span><span class="chevron" aria-hidden="true">⌄</span></div>
-        </header>
-        <section class="content" id="ocorrencias" aria-labelledby="page-title">
-          <a href="#ocorrencias" class="back-link"><span aria-hidden="true">←</span> Voltar para ocorrências</a>
-          <div class="title-row"><div><p class="eyebrow">GESTÃO OPERACIONAL</p><h1 id="page-title">Nova ocorrência</h1><p>Registre o que foi identificado para que a operação possa analisar e direcionar o atendimento.</p></div><span class="demo-label">MODELO DE DEMONSTRAÇÃO</span></div>
-          <section class="form-card" aria-label="Formulário de cadastro de ocorrência">
-            <ol class="stepper" aria-label="Etapas do cadastro"><li class="is-current"><span>1</span><b>Registrar</b></li><li><span>2</span><b>Análise assistida</b></li><li><span>3</span><b>Confirmação humana</b></li></ol>
-            <div class="form-layout">
-              <section class="photo-column" aria-labelledby="photo-title"><h2 id="photo-title">Evidência visual <em>opcional</em></h2><div class="photo-frame" role="img" aria-label="Foto demonstrativa de uma saída de ar-condicionado no teto"><div class="air-conditioner"><span></span><span></span><span></span><span></span><span></span></div><div class="ceiling-line"></div><span class="remove-photo" aria-hidden="true">×</span></div><button type="button" class="change-photo"><span aria-hidden="true">▧</span> Alterar foto</button><p class="photo-help">Fotos ajudam a contextualizar a ocorrência. Evite imagens com pessoas identificáveis.</p></section>
-              <form class="occurrence-form"><div class="field"><label for="description">Descrição da ocorrência <span>*</span></label><textarea id="description" rows="5" readonly>O ar-condicionado da praça de alimentação parou de funcionar e o ambiente está muito quente.</textarea><small>Descreva o problema observado e o impacto percebido.</small></div><div class="field"><label for="location">Local <span>*</span></label><div class="select-wrap"><select id="location" aria-label="Local da ocorrência"><option>Praça de Alimentação</option></select><span aria-hidden="true">⌄</span></div></div><div class="field"><label for="observation">Informação adicional <em>opcional</em></label><input id="observation" type="text" placeholder="Ex.: há quanto tempo o problema foi observado?" /></div><div class="assistive-note"><span aria-hidden="true">✦</span><p><b>Próxima etapa:</b> o motor assistivo apresentará uma sugestão de categoria, prioridade e equipe. A decisão final será validada por uma pessoa responsável.</p></div><button type="button" class="submit-button">Analisar ocorrência <span aria-hidden="true">✦</span></button></form>
-            </div>
+
+      <main class="app-main" id="dashboard" aria-labelledby="dashboard-title">
+        <header class="topbar"><div class="location"><span aria-hidden="true">⌖</span> Capim Dourado Shopping</div><div class="topbar-right"><span class="operation-status"><i></i> Operação estável</span><span class="divider" aria-hidden="true"></span><button class="notification" type="button" aria-label="Notificações">♧<b></b></button><span class="divider" aria-hidden="true"></span><span class="avatar" id="user-initials" aria-hidden="true"></span><span class="profile"><b id="user-name"></b><small id="user-role"></small></span><button class="logout-button" type="button" id="logout-button">Sair</button></div></header>
+        <section class="dashboard-content">
+          <header class="dashboard-header"><div><p class="eyebrow">VISÃO OPERACIONAL</p><h1 id="dashboard-title">Olá, <span id="user-first-name"></span>.</h1><p id="role-description">Acompanhe os indicadores essenciais da operação.</p></div><span class="access-badge" id="access-badge"></span></header>
+          <section class="demo-banner"><span aria-hidden="true">i</span><p><strong>Dados de demonstração:</strong> os indicadores abaixo são sintéticos e servem apenas para apresentar o fluxo do SmartMall Ops IA.</p></section>
+          <section class="metrics" aria-label="Indicadores operacionais">
+            <article class="metric-card metric-card--alert"><span class="metric-icon" aria-hidden="true">!</span><div><p>Ocorrências abertas</p><strong>8</strong><small>3 com prioridade alta</small></div><span class="metric-trend trend-up">+2 hoje</span></article>
+            <article class="metric-card metric-card--task"><span class="metric-icon" aria-hidden="true">✓</span><div><p>Tarefas em andamento</p><strong>3</strong><small>7 concluídas hoje</small></div><span class="metric-trend">37% da fila</span></article>
+            <article class="metric-card metric-card--equipment"><span class="metric-icon" aria-hidden="true">▦</span><div><p>Equipamentos monitorados</p><strong>56</strong><small>52 em operação normal</small></div><span class="metric-trend trend-good">93% ativos</span></article>
+            <article class="metric-card metric-card--warning"><span class="metric-icon" aria-hidden="true">△</span><div><p>Alertas</p><strong>5</strong><small>2 requerem atenção hoje</small></div><span class="metric-trend trend-up">+1 nas últimas 2h</span></article>
           </section>
-          <section class="privacy-note" aria-label="Aviso de segurança"><span aria-hidden="true">⌾</span><p><b>Ambiente de demonstração:</b> os dados exibidos são sintéticos. Esta tela simula o cadastro e não aciona equipes reais nem substitui procedimentos de segurança.</p></section>
+          <section class="dashboard-grid">
+            <article class="dashboard-panel occurrence-panel"><header><div><p class="eyebrow">FILA OPERACIONAL</p><h2>Ocorrências prioritárias</h2></div><button type="button">Ver todas →</button></header><ol class="occurrence-list"><li><span class="priority-dot priority-high"></span><div><b>#2417 · Falha na climatização</b><small>Praça de Alimentação · há 6 min</small></div><span class="status-chip high">Alta</span></li><li><span class="priority-dot priority-medium"></span><div><b>#2416 · Vazamento de água</b><small>Banheiro — Piso L1 · há 18 min</small></div><span class="status-chip medium">Média</span></li><li><span class="priority-dot priority-low"></span><div><b>#2415 · Limpeza necessária</b><small>Corredor — Piso L2 · há 31 min</small></div><span class="status-chip low">Baixa</span></li></ol></article>
+            <article class="dashboard-panel alert-panel"><header><div><p class="eyebrow">MONITORAMENTO</p><h2>Alertas recentes</h2></div><span class="live-indicator"><i></i> Atualizando</span></header><div class="alert-item"><span aria-hidden="true">⌁</span><div><b>Climatização — AC-03</b><p>Temperatura acima do parâmetro definido.</p></div><small>Agora</small></div><div class="alert-item"><span aria-hidden="true">▦</span><div><b>Elevador — E2</b><p>Inspeção preventiva programada para hoje.</p></div><small>12 min</small></div><div class="alert-item"><span aria-hidden="true">◌</span><div><b>Bomba d'água — B01</b><p>Leitura fora da faixa esperada.</p></div><small>28 min</small></div></article>
+          </section>
+          <section class="permission-card" id="permission-card"><span aria-hidden="true">⌾</span><div><b>Permissões deste perfil</b><p id="permission-summary"></p></div></section>
         </section>
       </main>
     </div>
+    <script src="assets/app.js"></script>
   </body>
 </html>
