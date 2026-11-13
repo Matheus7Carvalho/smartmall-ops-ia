@@ -17,6 +17,7 @@ Protótipo local em **HTML5** do SmartMall Ops IA. A identidade visual usa azul-
 - Aprovação obrigatória por Administrador ou Supervisora Operacional antes da execução;
 - Execução técnica com materiais usados, rota estimada, início da atividade, descrição do serviço e gastos;
 - Encerramento com histórico, tempo, responsável técnico, gastos e finalização restrita a Administrador ou Supervisora Operacional.
+- Padrão unificado de dropdowns: largura total do conteúdo, organização vertical e acabamento visual consistente nas telas e formulários.
 
 ## Fluxo da ocorrência
 
@@ -44,6 +45,8 @@ Disponível para os perfis de Administrador e Supervisora Operacional, a Central
 - rota, localização de equipe e tempo de resposta identificados como estimativas demonstrativas;
 - painel de acompanhamento para aprovar, iniciar, atualizar, reatribuir, registrar evidência e encerrar a ocorrência;
 - histórico local de decisões e ações; o encerramento requer resumo da resolução e remove a ocorrência da fila ativa.
+
+O seletor de piso segue o padrão visual dos dropdowns do sistema: ocupa toda a largura da área de conteúdo e fica em uma linha própria abaixo do cabeçalho. O mapa expansível também ocupa a largura integral e permanece separado da fila e do painel de decisão.
 
 > A Central de Controle usa dados sintéticos. Ela não representa telemetria real, geolocalização real de equipes ou decisões automáticas da IA.
 
