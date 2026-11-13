@@ -55,6 +55,32 @@
   const tasksBoardSummary = document.querySelector("#tasks-board-summary");
   const tasksFeedback = document.querySelector("#tasks-feedback");
   const tasksBoard = document.querySelector("#tasks-board");
+  const equipmentView = document.querySelector("#equipment-view");
+  const inventoryList = document.querySelector("#inventory-list");
+  const inventoryTotalItems = document.querySelector("#inventory-total-items");
+  const inventoryTotalUnits = document.querySelector("#inventory-total-units");
+  const inventoryLowStock = document.querySelector("#inventory-low-stock");
+  const inventoryMovements = document.querySelector("#inventory-movements");
+  const inventoryDetailName = document.querySelector("#inventory-detail-name");
+  const inventoryDetailStatus = document.querySelector("#inventory-detail-status");
+  const inventoryDetailQuantity = document.querySelector("#inventory-detail-quantity");
+  const inventoryDetailUnit = document.querySelector("#inventory-detail-unit");
+  const inventoryDetailCode = document.querySelector("#inventory-detail-code");
+  const inventoryDetailMinimum = document.querySelector("#inventory-detail-minimum");
+  const inventoryDetailCategory = document.querySelector("#inventory-detail-category");
+  const inventoryDetailLocation = document.querySelector("#inventory-detail-location");
+  const inventoryItemHistory = document.querySelector("#inventory-item-history");
+  const inventoryAuditList = document.querySelector("#inventory-audit-list");
+  const inventoryEntryModal = document.querySelector("#inventory-entry-modal");
+  const inventoryWithdrawalModal = document.querySelector("#inventory-withdrawal-modal");
+  const inventoryEntryForm = document.querySelector("#inventory-entry-form");
+  const inventoryWithdrawalForm = document.querySelector("#inventory-withdrawal-form");
+  const inventoryEntryMessage = document.querySelector("#inventory-entry-message");
+  const inventoryWithdrawalMessage = document.querySelector("#inventory-withdrawal-message");
+  const inventoryWithdrawalItem = document.querySelector("#inventory-withdrawal-item");
+  const inventoryWithdrawalQuantity = document.querySelector("#inventory-withdrawal-quantity");
+  const inventoryWithdrawalReason = document.querySelector("#inventory-withdrawal-reason");
+  const inventoryWithdrawalStock = document.querySelector("#inventory-withdrawal-stock");
   const emailField = document.querySelector("#email");
   const passwordField = document.querySelector("#password");
   const loginError = document.querySelector("#login-error");
@@ -579,6 +605,80 @@
   }
 
   const taskBoard = new TaskBoard();
+  const inventoryUnitLabel = (quantity, unit) => quantity === 1 && unit === "unidades" ? "unidade" : unit;
+
+  class InventoryLedger {
+    constructor() {
+      this.reset();
+    }
+
+    reset() {
+      this.items = [
+        { id: "inv-filter-m8", code: "HVAC-008", name: "Filtro MERV 8", category: "Climatização / HVAC", location: "Estante A · Prateleira 02", quantity: 4, minimum: 6, unit: "unidades" },
+        { id: "inv-gas-r410", code: "HVAC-021", name: "Gás refrigerante R-410A", category: "Climatização / HVAC", location: "Gaiola técnica · Setor 01", quantity: 12, minimum: 4, unit: "kg" },
+        { id: "inv-disj-20", code: "ELE-020", name: "Disjuntor bipolar 20 A", category: "Elétrica", location: "Estante B · Prateleira 03", quantity: 3, minimum: 3, unit: "unidades" },
+        { id: "inv-seal-tape", code: "INF-012", name: "Fita de vedação", category: "Infraestrutura", location: "Estante C · Prateleira 01", quantity: 18, minimum: 8, unit: "rolos" },
+        { id: "inv-hose", code: "HID-006", name: "Mangueira flexível 1/2\"", category: "Hidráulica", location: "Estante D · Prateleira 04", quantity: 1, minimum: 3, unit: "unidades" },
+      ];
+      this.selectedId = "inv-filter-m8";
+      this.history = [
+        { id: "mov-01", time: "Hoje · 10:18", action: "Retirada", actor: "João Costa", itemId: "inv-filter-m8", message: "retirou 2 unidades para a manutenção do AC-03.", quantity: -2 },
+        { id: "mov-02", time: "Hoje · 09:42", action: "Entrada", actor: "Rafael Mendes", itemId: "inv-gas-r410", message: "registrou entrada de 8 kg para reposição preventiva.", quantity: 8 },
+        { id: "mov-03", time: "Ontem · 16:25", action: "Inventário", actor: "Ana Souza", itemId: "inv-hose", message: "confirmou o saldo físico no almoxarifado.", quantity: 0 },
+        { id: "mov-04", time: "Ontem · 14:10", action: "Retirada", actor: "Pedro Lima", itemId: "inv-disj-20", message: "retirou 1 unidade para correção em loja técnica.", quantity: -1 },
+      ];
+    }
+
+    get selected() {
+      return this.items.find((item) => item.id === this.selectedId) || this.items[0] || null;
+    }
+
+    select(itemId) {
+      if (this.items.some((item) => item.id === itemId)) this.selectedId = itemId;
+    }
+
+    addHistory(action, actor, itemId, message, quantity = 0) {
+      this.history.unshift({
+        id: `mov-${Date.now()}`,
+        time: new Intl.DateTimeFormat("pt-BR", { hour: "2-digit", minute: "2-digit" }).format(new Date()),
+        action,
+        actor,
+        itemId,
+        message,
+        quantity,
+      });
+    }
+
+    registerEntry(data, user) {
+      const existing = this.items.find((item) => item.code.toLowerCase() === data.code.toLowerCase());
+      if (existing) {
+        existing.quantity += data.quantity;
+        existing.minimum = data.minimum;
+        existing.location = data.location;
+        this.selectedId = existing.id;
+        this.addHistory("Entrada", user.name, existing.id, `registrou entrada de ${data.quantity} ${inventoryUnitLabel(data.quantity, existing.unit)}. ${data.note}`.trim(), data.quantity);
+        return { success: true, item: existing, message: "Entrada adicionada ao item já cadastrado." };
+      }
+      const item = { id: `inv-${Date.now()}`, code: data.code, name: data.name, category: data.category, location: data.location, quantity: data.quantity, minimum: data.minimum, unit: "unidades" };
+      this.items.unshift(item);
+      this.selectedId = item.id;
+      this.addHistory("Entrada", user.name, item.id, `registrou ${data.quantity} unidades no estoque. ${data.note}`.trim(), data.quantity);
+      return { success: true, item, message: "Novo item registrado no estoque." };
+    }
+
+    withdraw(itemId, quantity, reason, user) {
+      const item = this.items.find((candidate) => candidate.id === itemId);
+      if (!item) return { success: false, message: "Selecione um item válido para retirada." };
+      if (!Number.isInteger(quantity) || quantity <= 0) return { success: false, message: "Informe uma quantidade inteira maior que zero." };
+      if (quantity > item.quantity) return { success: false, message: `Saldo insuficiente: há ${item.quantity} ${inventoryUnitLabel(item.quantity, item.unit)} disponível(is).` };
+      item.quantity -= quantity;
+      this.selectedId = item.id;
+      this.addHistory("Retirada", user.name, item.id, `retirou ${quantity} ${inventoryUnitLabel(quantity, item.unit)} para ${reason}`, -quantity);
+      return { success: true, item, message: "Retirada registrada e saldo atualizado." };
+    }
+  }
+
+  const inventoryLedger = new InventoryLedger();
 
   class ModalOccurrenceFlow {
     constructor() {
@@ -738,7 +838,7 @@
 
   function navigateTo(view) {
     if (!currentUser) return;
-    const availableViews = new Set(["dashboard", "control", "occurrences", "tasks"]);
+    const availableViews = new Set(["dashboard", "control", "occurrences", "tasks", "equipment"]);
     const allowedView = availableViews.has(view) && currentUser.permissions.includes(view)
       ? view
       : "dashboard";
@@ -747,6 +847,7 @@
     controlView.hidden = allowedView !== "control";
     occurrencesView.hidden = allowedView !== "occurrences";
     tasksView.hidden = allowedView !== "tasks";
+    equipmentView.hidden = allowedView !== "equipment";
     document.querySelectorAll(".nav-item[data-view]").forEach((item) => {
       item.classList.toggle("is-active", item.dataset.view === allowedView);
     });
@@ -769,6 +870,7 @@
     renderOccurrence();
     renderControl();
     renderTasks();
+    renderInventory();
     renderModalFlow();
     navigateTo("dashboard");
   }
@@ -782,11 +884,13 @@
     occurrence.reset();
     controlCenter.reset();
     taskBoard.reset();
+    inventoryLedger.reset();
     clearPhoto();
     renderOccurrence();
     setControlMessage("");
     renderControl();
     renderTasks();
+    renderInventory();
     renderModalFlow();
     emailField.focus();
   }
@@ -1271,6 +1375,151 @@
     });
   }
 
+  function inventoryStatus(item) {
+    if (item.quantity < item.minimum) return { label: "Abaixo do mínimo", className: "is-low" };
+    if (item.quantity === item.minimum) return { label: "No limite mínimo", className: "is-limit" };
+    return { label: "Estoque adequado", className: "is-healthy" };
+  }
+
+  function createInventoryItem(item) {
+    const status = inventoryStatus(item);
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "inventory-row";
+    button.dataset.inventoryId = item.id;
+    button.setAttribute("role", "option");
+    button.setAttribute("aria-selected", String(item.id === inventoryLedger.selectedId));
+    button.classList.toggle("is-selected", item.id === inventoryLedger.selectedId);
+
+    const icon = document.createElement("span");
+    icon.className = "inventory-row-icon";
+    icon.textContent = item.category === "Climatização / HVAC" ? "♨" : item.category === "Elétrica" ? "ϟ" : item.category === "Hidráulica" ? "≈" : "▦";
+    const main = document.createElement("span");
+    main.className = "inventory-row-main";
+    const name = document.createElement("b");
+    name.textContent = item.name;
+    const metadata = document.createElement("small");
+    metadata.textContent = `${item.code} · ${item.location}`;
+    main.append(name, metadata);
+    const balance = document.createElement("span");
+    balance.className = "inventory-row-balance";
+    const quantity = document.createElement("strong");
+    quantity.textContent = String(item.quantity);
+    const unit = document.createElement("small");
+    unit.textContent = inventoryUnitLabel(item.quantity, item.unit);
+    balance.append(quantity, unit);
+    const state = document.createElement("span");
+    state.className = `inventory-row-state ${status.className}`;
+    state.textContent = status.label;
+    button.append(icon, main, balance, state);
+    return button;
+  }
+
+  function renderInventoryHistory(item) {
+    const entries = inventoryLedger.history.filter((entry) => entry.itemId === item.id).slice(0, 4);
+    inventoryItemHistory.replaceChildren(...entries.map((entry) => {
+      const line = document.createElement("li");
+      const time = document.createElement("time");
+      time.textContent = entry.time;
+      const text = document.createElement("span");
+      text.textContent = `${entry.actor} ${entry.message}`;
+      line.append(time, text);
+      return line;
+    }));
+    if (entries.length === 0) {
+      const line = document.createElement("li");
+      line.className = "inventory-history-empty";
+      line.textContent = "Nenhuma movimentação local para este item.";
+      inventoryItemHistory.append(line);
+    }
+  }
+
+  function renderInventoryAudit() {
+    inventoryAuditList.replaceChildren(...inventoryLedger.history.slice(0, 6).map((entry) => {
+      const item = inventoryLedger.items.find((candidate) => candidate.id === entry.itemId);
+      const line = document.createElement("li");
+      const marker = document.createElement("span");
+      marker.className = `inventory-audit-marker ${entry.action === "Retirada" ? "is-withdrawal" : "is-entry"}`;
+      marker.textContent = entry.action === "Retirada" ? "↗" : entry.action === "Entrada" ? "↓" : "✓";
+      const content = document.createElement("div");
+      const title = document.createElement("b");
+      title.textContent = `${entry.action} · ${item?.name || "Item removido"}`;
+      const message = document.createElement("p");
+      message.textContent = `${entry.actor} ${entry.message}`;
+      content.append(title, message);
+      const time = document.createElement("time");
+      time.textContent = entry.time;
+      line.append(marker, content, time);
+      return line;
+    }));
+  }
+
+  function renderWithdrawalOptions() {
+    const current = inventoryWithdrawalItem.value || inventoryLedger.selectedId;
+    inventoryWithdrawalItem.replaceChildren(...inventoryLedger.items.map((item) => {
+      const option = document.createElement("option");
+      option.value = item.id;
+      option.textContent = `${item.name} · ${item.quantity} ${item.unit}`;
+      option.selected = item.id === current;
+      return option;
+    }));
+    updateWithdrawalStock();
+  }
+
+  function updateWithdrawalStock() {
+    const item = inventoryLedger.items.find((candidate) => candidate.id === inventoryWithdrawalItem.value);
+    inventoryWithdrawalStock.textContent = item
+      ? `Saldo disponível: ${item.quantity} ${inventoryUnitLabel(item.quantity, item.unit)}. Estoque mínimo: ${item.minimum} ${inventoryUnitLabel(item.minimum, item.unit)}.`
+      : "Selecione um item para consultar o saldo disponível.";
+  }
+
+  function renderInventory() {
+    const item = inventoryLedger.selected;
+    const totalUnits = inventoryLedger.items.reduce((total, current) => total + current.quantity, 0);
+    const lowStockItems = inventoryLedger.items.filter((current) => current.quantity <= current.minimum).length;
+    inventoryTotalItems.textContent = String(inventoryLedger.items.length);
+    inventoryTotalUnits.textContent = String(totalUnits);
+    inventoryLowStock.textContent = String(lowStockItems);
+    inventoryMovements.textContent = String(inventoryLedger.history.length);
+    inventoryList.replaceChildren(...inventoryLedger.items.map(createInventoryItem));
+    if (!item) return;
+    const status = inventoryStatus(item);
+    inventoryDetailName.textContent = item.name;
+    inventoryDetailStatus.className = `inventory-status ${status.className}`;
+    inventoryDetailStatus.textContent = status.label;
+    inventoryDetailQuantity.textContent = String(item.quantity);
+    inventoryDetailUnit.textContent = inventoryUnitLabel(item.quantity, item.unit);
+    inventoryDetailCode.textContent = item.code;
+    inventoryDetailMinimum.textContent = `${item.minimum} ${inventoryUnitLabel(item.minimum, item.unit)}`;
+    inventoryDetailCategory.textContent = item.category;
+    inventoryDetailLocation.textContent = item.location;
+    renderInventoryHistory(item);
+    renderInventoryAudit();
+  }
+
+  function setInventoryFormMessage(element, message = "", state = "error") {
+    element.textContent = message;
+    element.classList.toggle("is-success", state === "success");
+  }
+
+  function openInventoryModal(name) {
+    const dialog = name === "entry" ? inventoryEntryModal : inventoryWithdrawalModal;
+    const alternate = name === "entry" ? inventoryWithdrawalModal : inventoryEntryModal;
+    if (alternate.open) alternate.close();
+    if (name === "withdrawal") {
+      renderWithdrawalOptions();
+      setInventoryFormMessage(inventoryWithdrawalMessage);
+    } else {
+      setInventoryFormMessage(inventoryEntryMessage);
+    }
+    if (!dialog.open) dialog.showModal();
+  }
+
+  function closeInventoryModal(name) {
+    const dialog = name === "entry" ? inventoryEntryModal : inventoryWithdrawalModal;
+    if (dialog.open) dialog.close();
+  }
+
   function renderAnalysis() {
     const analysis = occurrence.analysis;
     analysisEmpty.hidden = Boolean(analysis);
@@ -1434,6 +1683,60 @@
 
   document.querySelectorAll("[data-view]").forEach((button) => {
     button.addEventListener("click", () => navigateTo(button.dataset.view));
+  });
+
+  document.querySelector("#open-entry-modal").addEventListener("click", () => openInventoryModal("entry"));
+  document.querySelector("#open-withdrawal-modal").addEventListener("click", () => openInventoryModal("withdrawal"));
+  document.querySelectorAll("[data-close-inventory-modal]").forEach((button) => {
+    button.addEventListener("click", () => closeInventoryModal(button.dataset.closeInventoryModal));
+  });
+
+  inventoryList.addEventListener("click", (event) => {
+    const row = event.target.closest("[data-inventory-id]");
+    if (!row) return;
+    inventoryLedger.select(row.dataset.inventoryId);
+    renderInventory();
+  });
+
+  inventoryWithdrawalItem.addEventListener("change", updateWithdrawalStock);
+
+  inventoryEntryForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const name = document.querySelector("#inventory-entry-name").value.trim();
+    const code = document.querySelector("#inventory-entry-code").value.trim().toUpperCase();
+    const quantity = Number(document.querySelector("#inventory-entry-quantity").value);
+    const category = document.querySelector("#inventory-entry-category").value;
+    const minimum = Number(document.querySelector("#inventory-entry-minimum").value);
+    const location = document.querySelector("#inventory-entry-location").value.trim();
+    const note = document.querySelector("#inventory-entry-note").value.trim();
+    if (!name || !code || !category || !location || !Number.isInteger(quantity) || quantity <= 0 || !Number.isInteger(minimum) || minimum < 0) {
+      setInventoryFormMessage(inventoryEntryMessage, "Preencha os campos obrigatórios com quantidades válidas.");
+      return;
+    }
+    const result = inventoryLedger.registerEntry({ name, code, quantity, category, minimum, location, note }, currentUser);
+    setInventoryFormMessage(inventoryEntryMessage, result.message, "success");
+    renderInventory();
+    inventoryEntryForm.reset();
+    closeInventoryModal("entry");
+  });
+
+  inventoryWithdrawalForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const quantity = Number(inventoryWithdrawalQuantity.value);
+    const reason = inventoryWithdrawalReason.value.trim();
+    if (!reason || reason.length < 6) {
+      setInventoryFormMessage(inventoryWithdrawalMessage, "Informe uma finalidade com pelo menos 6 caracteres.");
+      return;
+    }
+    const result = inventoryLedger.withdraw(inventoryWithdrawalItem.value, quantity, reason, currentUser);
+    if (!result.success) {
+      setInventoryFormMessage(inventoryWithdrawalMessage, result.message);
+      return;
+    }
+    setInventoryFormMessage(inventoryWithdrawalMessage, result.message, "success");
+    renderInventory();
+    inventoryWithdrawalForm.reset();
+    closeInventoryModal("withdrawal");
   });
 
   tasksBoard.addEventListener("click", (event) => {

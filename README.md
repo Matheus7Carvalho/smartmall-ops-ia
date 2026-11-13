@@ -8,6 +8,7 @@ Protótipo local em **HTML5** do SmartMall Ops IA. A identidade visual usa azul-
 - RF02 — dashboard operacional com ocorrências abertas, tarefas em andamento, equipamentos monitorados e alertas;
 - Central de Controle para supervisão, com indicadores, fila prioritária ampliada, mapa operacional simplificado em menu expansível e painel de decisão;
 - Quadro Kanban de tarefas para funcionários, com visualização pessoal e etapas A Fazer, Em Andamento, Aguardando Equipamento, Travada e Finalizada;
+- Estoque de equipamentos com saldos, alerta de mínimo, entradas, retiradas e histórico auditável por item e por movimentação;
 - Navegação lateral, alertas recentes e fila operacional sintética;
 - Fluxo de ocorrências em cinco modais: Registro, Análise, Aprovação, Execução e Encerramento;
 - Registro público de ocorrência, sem login, com imagem ou vídeo opcional, descrição e localização;
@@ -51,6 +52,18 @@ Disponível para os perfis de Administrador e Supervisora Operacional, a Central
 O módulo **Tarefas** apresenta um quadro Kanban de acompanhamento operacional com cinco etapas: **A Fazer**, **Em Andamento**, **Aguardando Equipamento**, **Travada** e **Finalizada**. O perfil de Funcionário visualiza apenas os cartões atribuídos a ele; os perfis de Administrador e Supervisora Operacional visualizam a distribuição completa da equipe.
 
 Cada cartão identifica a atividade, ocorrência ou rotina relacionada, prioridade, local, responsável, especialidade, prazo e pendência. As ações rápidas alteram o status apenas nesta demonstração local — elas não substituem o registro operacional real.
+
+## Estoque de equipamentos
+
+O módulo **Equipamentos** reúne o inventário demonstrativo em uma única tela. Ele apresenta o saldo disponível, o estoque mínimo, alertas de reposição, localização no almoxarifado, detalhes do item selecionado e o histórico das alterações.
+
+Os fluxos locais disponíveis são:
+
+- **Registrar entrada:** cadastra um novo item ou acrescenta quantidade a um código existente;
+- **Retirar equipamento:** valida o saldo, exige uma finalidade e atualiza a quantidade disponível;
+- **Histórico auditável:** registra usuário, horário, ação, item e justificativa da movimentação.
+
+As movimentações são demonstrativas e permanecem no navegador durante a execução atual. Em produção, esse fluxo exige inventário físico, autorização no servidor e persistência de dados.
 
 ## Credenciais de demonstração
 
