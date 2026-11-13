@@ -12,6 +12,7 @@ Protótipo local em **HTML5** do SmartMall Ops IA. A identidade visual usa azul-
 - Tela de Usuários e permissões exclusiva para Administradores, com perfis ativos, papéis e privilégios de acesso detalhados;
 - Estoque de equipamentos com saldos, alerta de mínimo, entradas, retiradas e histórico auditável por item e por movimentação;
 - Tela Relatórios para consulta consolidada das movimentações de estoque, com filtros por período, tipo e busca, indicadores resumidos e exportação CSV;
+- Tela Manutenção com calendário mensal, próximas intervenções, indicadores, checklist preventivo e formulário para novos agendamentos;
 - Navegação lateral, alertas recentes e fila operacional sintética;
 - Fluxo de ocorrências em cinco modais: Registro, Análise, Aprovação, Execução e Encerramento;
 - Registro público de ocorrência, sem login, com imagem ou vídeo opcional, descrição e localização;
@@ -91,6 +92,12 @@ As movimentações são demonstrativas e permanecem no navegador durante a execu
 A tela **Relatórios** consolida o histórico geral de entradas, retiradas e registros de inventário. Administradores e Supervisoras Operacionais podem filtrar os lançamentos por intervalo de datas, tipo de movimentação e busca por item, código, responsável ou descrição. O resumo apresenta a quantidade de registros, unidades recebidas, unidades retiradas e itens no mínimo ou abaixo do mínimo no estado atual do estoque.
 
 O botão **Baixar CSV** exporta somente os registros que correspondem aos filtros aplicados. A tela e a exportação usam os dados demonstrativos mantidos em memória durante a sessão; não constituem auditoria persistente, relatório financeiro ou fonte oficial para operação. O perfil Funcionário não tem permissão para acessar o módulo.
+
+## Manutenção
+
+O menu **Manutenção** está disponível para Administrador, Supervisora Operacional e Funcionário autenticados. A tela reúne calendário mensal, intervenções próximas, indicadores de manutenção, etapa atual, checklist preventivo e recomendações operacionais para serviço afetado, janela sugerida e rota alternativa. O formulário permite agendar manutenção preventiva ou corretiva, com equipamento, data, horário, duração, equipe sugerida e observações.
+
+O acesso exige uma sessão interna; a área não é exibida no fluxo público de registro de ocorrências para visitantes ou outros usuários externos. Os dados de agenda e checklist existem somente em memória nesta demonstração, são reiniciados ao encerrar a sessão e não reservam equipes ou ativos. Em produção, a autorização deve ser aplicada no servidor e as ordens de serviço precisam de persistência, auditoria e confirmação de disponibilidade.
 
 ## Credenciais de demonstração
 

@@ -8,7 +8,7 @@
       name: "Rafael Mendes",
       role: "Administrador",
       initials: "RM",
-      permissions: ["dashboard", "control", "occurrences", "tasks", "equipment", "teams", "users", "reports"],
+      permissions: ["dashboard", "control", "occurrences", "tasks", "equipment", "maintenance", "teams", "users", "reports"],
       description: "Você possui acesso administrativo aos indicadores, equipes e permissões do ambiente demonstrativo.",
     },
     {
@@ -17,7 +17,7 @@
       name: "Ana Souza",
       role: "Supervisora Operacional",
       initials: "AS",
-      permissions: ["dashboard", "control", "occurrences", "tasks", "equipment", "teams", "reports"],
+      permissions: ["dashboard", "control", "occurrences", "tasks", "equipment", "maintenance", "teams", "reports"],
       description: "Você pode acompanhar a operação, revisar ocorrências e coordenar equipes.",
     },
     {
@@ -26,8 +26,8 @@
       name: "João Costa",
       role: "Funcionário",
       initials: "JC",
-      permissions: ["dashboard", "occurrences", "tasks", "equipment"],
-      description: "Você pode consultar sua operação, tarefas e o estado dos equipamentos.",
+      permissions: ["dashboard", "occurrences", "tasks", "equipment", "maintenance"],
+      description: "Você pode consultar sua operação, tarefas, equipamentos e a agenda interna de manutenção.",
     },
   ]);
 
@@ -38,6 +38,21 @@
     { id: "maria", name: "Maria Souza", initials: "MS", specialty: "Limpeza", available: true, openTasks: 0 },
     { id: "elisa", name: "Elisa Rocha", initials: "ER", specialty: "Segurança", available: true, openTasks: 0 },
     { id: "caio", name: "Caio Nunes", initials: "CN", specialty: "Infraestrutura", available: true, openTasks: 1 },
+  ]);
+
+  const MAINTENANCE_ASSETS = Object.freeze([
+    { id: "elevator-e1", name: "Elevador E1", icon: "↕", location: "Elevador de acesso · Praça Central", affectedService: "Acesso ao cinema", alternate: "Elevador E2", window: "Quinta-feira · 8h", checklist: ["Inspeção do sistema de tração", "Verificação dos cabos e freios", "Teste de segurança e emergência", "Revisão das portas e sensores", "Checagem do sistema de comando", "Teste de funcionamento e nivelamento"] },
+    { id: "elevator-e2", name: "Elevador E2", icon: "↕", location: "Elevador de acesso · Praça Central", affectedService: "Acesso aos pisos superiores", alternate: "Elevador E1", window: "Terça-feira · 8h", checklist: ["Inspeção de portas e sensores", "Teste do sistema de nivelamento", "Verificação de freios e alarmes", "Registro de ruídos e vibrações"] },
+    { id: "hvac-b", name: "Ar-condicionado — Ala B", icon: "❄", location: "Ala B · Piso L2", affectedService: "Conforto térmico das lojas", alternate: "Sistema HVAC da Ala A", window: "Quarta-feira · 7h", checklist: ["Inspeção dos filtros de ar", "Medição de temperatura e pressão", "Verificação de drenos e conexões", "Teste de ventiladores e controles"] },
+    { id: "generator-1", name: "Gerador de emergência", icon: "ϟ", location: "Casa de máquinas · Piso técnico", affectedService: "Alimentação de emergência", alternate: "Rede elétrica redundante", window: "Segunda-feira · 6h", checklist: ["Verificação de nível e vazamentos", "Teste de partida e transferência", "Inspeção de baterias e conexões", "Registro de horas e alarmes"] },
+    { id: "water-pump-1", name: "Bomba hidráulica B01", icon: "≈", location: "Casa de bombas · Piso L1", affectedService: "Abastecimento de água", alternate: "Bomba hidráulica B02", window: "Terça-feira · 7h", checklist: ["Verificação de pressão e vazão", "Inspeção de vedações", "Teste de acionamento automático", "Checagem de ruído e vibração"] },
+    { id: "escalator-1", name: "Escada rolante ECR-02", icon: "↗", location: "Conexão entre L1 e L2", affectedService: "Circulação entre pisos", alternate: "Escada fixa próxima", window: "Quarta-feira · 6h", checklist: ["Inspeção de degraus e corrimãos", "Teste de parada de emergência", "Verificação de sensores e freios", "Limpeza da área de acesso"] },
+    { id: "emergency-lighting", name: "Iluminação de emergência", icon: "☼", location: "Corredor técnico · Piso L1", affectedService: "Orientação em emergência", alternate: "Rota sinalizada adjacente", window: "Quinta-feira · 8h", checklist: ["Teste de autonomia das luminárias", "Inspeção de baterias e sinalização", "Verificação de pontos apagados", "Registro dos circuitos revisados"] },
+    { id: "fire-pump", name: "Bomba de incêndio", icon: "≈", location: "Central de incêndio · Piso técnico", affectedService: "Sistema de combate a incêndio", alternate: "Bomba reserva instalada", window: "Segunda-feira · 5h", checklist: ["Inspeção de válvulas e lacres", "Teste controlado de acionamento", "Verificação de pressão e alarmes", "Registro conforme plano de segurança"] },
+    { id: "automatic-door", name: "Porta automática — Entrada principal", icon: "↔", location: "Entrada principal · Piso L1", affectedService: "Acesso principal de visitantes", alternate: "Porta lateral acessível", window: "Terça-feira · 8h", checklist: ["Teste de sensores de presença", "Inspeção de trilhos e folhas", "Verificação de abertura manual", "Teste de rota acessível"] },
+    { id: "cctv", name: "Câmeras CFTV — Piso L2", icon: "◉", location: "Corredor · Piso L2", affectedService: "Monitoramento de segurança", alternate: "Câmeras dos acessos adjacentes", window: "Quarta-feira · 8h", checklist: ["Verificação de imagem e foco", "Teste de gravação e retenção", "Inspeção de conectividade", "Confirmação de horário e identificação"] },
+    { id: "exhaust", name: "Exaustão — Praça de alimentação", icon: "≋", location: "Praça de alimentação · Cobertura", affectedService: "Qualidade do ar da praça", alternate: "Ventilação auxiliar", window: "Quinta-feira · 6h", checklist: ["Inspeção de filtros e dutos", "Verificação de correias e motores", "Medição de vibração e ruído", "Limpeza técnica programada"] },
+    { id: "substation", name: "Subestação elétrica", icon: "ϟ", location: "Subestação · Área técnica", affectedService: "Distribuição elétrica do shopping", alternate: "Alimentação redundante", window: "Domingo · 5h", checklist: ["Inspeção visual sem abertura de painéis", "Conferência de temperatura e alarmes", "Checagem de sinalização e acesso", "Intervenção somente por equipe habilitada"] },
   ]);
 
   const SUPERVISORY_ROLES = new Set(["Administrador", "Supervisora Operacional"]);
@@ -59,6 +74,39 @@
   const teamsView = document.querySelector("#teams-view");
   const usersView = document.querySelector("#users-view");
   const reportsView = document.querySelector("#reports-view");
+  const maintenanceView = document.querySelector("#maintenance-view");
+  const maintenanceMonthCount = document.querySelector("#maintenance-month-count");
+  const maintenanceDueSoonCount = document.querySelector("#maintenance-due-soon-count");
+  const maintenanceOnTrackCount = document.querySelector("#maintenance-on-track-count");
+  const maintenanceCriticalCount = document.querySelector("#maintenance-critical-count");
+  const maintenanceFeedback = document.querySelector("#maintenance-feedback");
+  const maintenanceMonthLabel = document.querySelector("#maintenance-month-label");
+  const maintenanceCalendarGrid = document.querySelector("#maintenance-calendar-grid");
+  const maintenanceUpcomingTitle = document.querySelector("#maintenance-upcoming-title");
+  const maintenanceUpcomingCount = document.querySelector("#maintenance-upcoming-count");
+  const maintenanceUpcomingList = document.querySelector("#maintenance-upcoming-list");
+  const maintenanceEquipmentIcon = document.querySelector("#maintenance-equipment-icon");
+  const maintenanceDetailType = document.querySelector("#maintenance-detail-type");
+  const maintenanceDetailTitle = document.querySelector("#maintenance-detail-title");
+  const maintenanceDetailLocation = document.querySelector("#maintenance-detail-location");
+  const maintenanceScheduleMeta = document.querySelector("#maintenance-schedule-meta");
+  const maintenanceStatusBadge = document.querySelector("#maintenance-status-badge");
+  const maintenanceStepper = document.querySelector("#maintenance-stepper");
+  const maintenanceChecklist = document.querySelector("#maintenance-checklist");
+  const maintenanceChecklistProgress = document.querySelector("#maintenance-checklist-progress");
+  const maintenanceAffectedService = document.querySelector("#maintenance-affected-service");
+  const maintenanceSuggestedWindow = document.querySelector("#maintenance-suggested-window");
+  const maintenanceAlternative = document.querySelector("#maintenance-alternative");
+  const maintenanceScheduleModal = document.querySelector("#maintenance-schedule-modal");
+  const maintenanceScheduleForm = document.querySelector("#maintenance-schedule-form");
+  const maintenanceScheduleMessage = document.querySelector("#maintenance-schedule-message");
+  const maintenanceFormAsset = document.querySelector("#maintenance-form-asset");
+  const maintenanceFormType = document.querySelector("#maintenance-form-type");
+  const maintenanceFormDate = document.querySelector("#maintenance-form-date");
+  const maintenanceFormTime = document.querySelector("#maintenance-form-time");
+  const maintenanceFormDuration = document.querySelector("#maintenance-form-duration");
+  const maintenanceFormTeam = document.querySelector("#maintenance-form-team");
+  const maintenanceFormNotes = document.querySelector("#maintenance-form-notes");
   const reportsMovementCount = document.querySelector("#reports-movement-count");
   const reportsEntryTotal = document.querySelector("#reports-entry-total");
   const reportsWithdrawalTotal = document.querySelector("#reports-withdrawal-total");
@@ -722,6 +770,89 @@
 
   const inventoryLedger = new InventoryLedger();
 
+  class MaintenancePlanner {
+    constructor() {
+      this.reset();
+    }
+
+    reset() {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const scheduledAt = (dayOffset, hour = 8) => {
+        const date = new Date(today);
+        date.setDate(date.getDate() + dayOffset);
+        date.setHours(hour, 0, 0, 0);
+        return date;
+      };
+      const seed = [
+        { id: "maintenance-done-01", assetId: "elevator-e2", offset: -3, status: "completed", team: "Pedro Lima" },
+        { id: "maintenance-e1", assetId: "elevator-e1", offset: 2, status: "attention", team: "João Costa" },
+        { id: "maintenance-hvac", assetId: "hvac-b", offset: 4, status: "scheduled", team: "Luana Freitas" },
+        { id: "maintenance-generator", assetId: "generator-1", offset: 5, status: "scheduled", team: "Caio Nunes" },
+        { id: "maintenance-water-pump", assetId: "water-pump-1", offset: 6, status: "scheduled", team: "Luana Freitas" },
+        { id: "maintenance-escalator", assetId: "escalator-1", offset: 7, status: "scheduled", team: "Pedro Lima" },
+        { id: "maintenance-lighting", assetId: "emergency-lighting", offset: 8, status: "scheduled", team: "Caio Nunes" },
+        { id: "maintenance-fire-pump", assetId: "fire-pump", offset: 9, status: "scheduled", team: "João Costa" },
+        { id: "maintenance-door", assetId: "automatic-door", offset: 10, status: "scheduled", team: "Luana Freitas" },
+        { id: "maintenance-cctv", assetId: "cctv", offset: 11, status: "scheduled", team: "Caio Nunes" },
+        { id: "maintenance-exhaust", assetId: "exhaust", offset: 13, status: "scheduled", team: "Pedro Lima" },
+        { id: "maintenance-substation", assetId: "substation", offset: 15, status: "scheduled", team: "Equipe elétrica" },
+      ];
+      this.entries = seed.map((record) => {
+        const asset = MAINTENANCE_ASSETS.find((item) => item.id === record.assetId);
+        return {
+          ...record,
+          date: scheduledAt(record.offset, record.status === "completed" ? 14 : 8),
+          type: "preventive",
+          critical: false,
+          notes: "",
+          checklist: asset.checklist.map((label, index) => ({ id: `${record.id}-check-${index}`, label, done: record.status === "completed" })),
+        };
+      });
+      this.viewMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+      this.selectedDate = new Date(today);
+      this.selectedId = "maintenance-e1";
+    }
+
+    get selected() {
+      return this.entries.find((entry) => entry.id === this.selectedId) || this.entries[0] || null;
+    }
+
+    add({ assetId, type, date, time, duration, team, notes, createdBy }) {
+      const asset = MAINTENANCE_ASSETS.find((item) => item.id === assetId);
+      const scheduledDate = new Date(`${date}T${time}:00`);
+      if (!asset || Number.isNaN(scheduledDate.getTime())) return null;
+      const entry = {
+        id: `maintenance-${Date.now()}`,
+        assetId,
+        date: scheduledDate,
+        type,
+        status: "scheduled",
+        duration,
+        team: team || "A definir",
+        notes,
+        createdBy,
+        critical: false,
+        checklist: asset.checklist.map((label, index) => ({ id: `maintenance-${Date.now()}-check-${index}`, label, done: false })),
+      };
+      this.entries.unshift(entry);
+      this.selectedId = entry.id;
+      this.selectedDate = new Date(scheduledDate.getFullYear(), scheduledDate.getMonth(), scheduledDate.getDate());
+      this.viewMonth = new Date(scheduledDate.getFullYear(), scheduledDate.getMonth(), 1);
+      return entry;
+    }
+
+    toggleChecklist(entryId, checklistId, checked) {
+      const entry = this.entries.find((item) => item.id === entryId);
+      const check = entry?.checklist.find((item) => item.id === checklistId);
+      if (!check) return false;
+      check.done = checked;
+      return true;
+    }
+  }
+
+  const maintenancePlanner = new MaintenancePlanner();
+
   class ModalOccurrenceFlow {
     constructor() {
       this.reset();
@@ -875,12 +1006,13 @@
       teams: "Equipes",
       users: "Usuários e permissões",
       reports: "Relatórios",
+      maintenance: "Manutenção",
     })[permission];
   }
 
   function navigateTo(view) {
     if (!currentUser) return;
-    const availableViews = new Set(["dashboard", "control", "occurrences", "tasks", "equipment", "teams", "users", "reports"]);
+    const availableViews = new Set(["dashboard", "control", "occurrences", "tasks", "equipment", "maintenance", "teams", "users", "reports"]);
     const allowedView = availableViews.has(view) && currentUser.permissions.includes(view)
       ? view
       : "dashboard";
@@ -893,8 +1025,10 @@
     teamsView.hidden = allowedView !== "teams";
     usersView.hidden = allowedView !== "users";
     reportsView.hidden = allowedView !== "reports";
+    maintenanceView.hidden = allowedView !== "maintenance";
     if (allowedView === "teams") renderTeams();
     if (allowedView === "reports") renderReports();
+    if (allowedView === "maintenance") renderMaintenance();
     document.querySelectorAll(".nav-item[data-view]").forEach((item) => {
       item.classList.toggle("is-active", item.dataset.view === allowedView);
     });
@@ -919,6 +1053,7 @@
     renderTasks();
     renderInventory();
     renderReports();
+    renderMaintenance();
     renderTeams();
     renderModalFlow();
     navigateTo("dashboard");
@@ -941,6 +1076,8 @@
     renderTasks();
     renderInventory();
     renderReports();
+    maintenancePlanner.reset();
+    renderMaintenance();
     renderModalFlow();
     emailField.focus();
   }
@@ -1700,6 +1837,229 @@
     window.setTimeout(() => URL.revokeObjectURL(url), 0);
   }
 
+  function maintenanceDateKey(date) {
+    const value = new Date(date);
+    return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, "0")}-${String(value.getDate()).padStart(2, "0")}`;
+  }
+
+  function maintenanceDayDifference(date) {
+    const target = new Date(date);
+    const today = new Date();
+    const targetUtc = Date.UTC(target.getFullYear(), target.getMonth(), target.getDate());
+    const todayUtc = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+    return Math.round((targetUtc - todayUtc) / 86400000);
+  }
+
+  function maintenanceTypeLabel(type) {
+    return type === "corrective" ? "Manutenção corretiva" : "Manutenção preventiva";
+  }
+
+  function maintenanceStatusLabel(entry) {
+    if (entry.status === "completed") return "Concluída";
+    if (entry.status === "critical") return "Falha crítica";
+    const days = maintenanceDayDifference(entry.date);
+    if (days < 0) {
+      const lateDays = Math.abs(days);
+      return `Atrasada há ${lateDays} ${lateDays === 1 ? "dia" : "dias"}`;
+    }
+    if (days === 0) return "Agendada para hoje";
+    if (entry.status === "attention") return `Revisão em ${days} ${days === 1 ? "dia" : "dias"}`;
+    if (days <= 3) return `Agendada em ${days} ${days === 1 ? "dia" : "dias"}`;
+    return new Intl.DateTimeFormat("pt-BR", { day: "numeric", month: "short" }).format(entry.date).replace(".", "");
+  }
+
+  function maintenanceSameDay(first, second) {
+    return maintenanceDateKey(first) === maintenanceDateKey(second);
+  }
+
+  function renderMaintenanceCalendar() {
+    const year = maintenancePlanner.viewMonth.getFullYear();
+    const month = maintenancePlanner.viewMonth.getMonth();
+    const monthLabel = new Intl.DateTimeFormat("pt-BR", { month: "long", year: "numeric" }).format(maintenancePlanner.viewMonth);
+    maintenanceMonthLabel.textContent = monthLabel.charAt(0).toLocaleUpperCase("pt-BR") + monthLabel.slice(1);
+    const firstWeekday = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const cellCount = Math.ceil((firstWeekday + daysInMonth) / 7) * 7;
+    const cells = [];
+
+    for (let index = 0; index < cellCount; index += 1) {
+      const day = index - firstWeekday + 1;
+      if (day < 1 || day > daysInMonth) {
+        const spacer = document.createElement("span");
+        spacer.className = "maintenance-calendar-spacer";
+        spacer.setAttribute("aria-hidden", "true");
+        cells.push(spacer);
+        continue;
+      }
+
+      const date = new Date(year, month, day);
+      const dateKey = maintenanceDateKey(date);
+      const dayEntries = maintenancePlanner.entries.filter((entry) => maintenanceSameDay(entry.date, date));
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "maintenance-calendar-day";
+      button.dataset.maintenanceDate = dateKey;
+      button.setAttribute("aria-pressed", String(maintenanceSameDay(date, maintenancePlanner.selectedDate)));
+      button.setAttribute("aria-label", `${new Intl.DateTimeFormat("pt-BR", { dateStyle: "full" }).format(date)}${dayEntries.length ? `, ${dayEntries.length} manutenção(ões)` : ""}`);
+      if (maintenanceSameDay(date, new Date())) button.classList.add("is-today");
+      if (maintenanceSameDay(date, maintenancePlanner.selectedDate)) button.classList.add("is-selected");
+      const number = document.createElement("span");
+      number.className = "maintenance-calendar-number";
+      number.textContent = String(day);
+      button.append(number);
+
+      if (dayEntries.length) {
+        button.classList.add("has-maintenance");
+        const markers = document.createElement("span");
+        markers.className = "maintenance-calendar-markers";
+        dayEntries.slice(0, 3).forEach((entry) => {
+          const marker = document.createElement("i");
+          marker.className = `maintenance-dot ${entry.type === "preventive" ? "maintenance-dot--preventive" : "maintenance-dot--scheduled"}`;
+          marker.setAttribute("aria-hidden", "true");
+          markers.append(marker);
+        });
+        button.append(markers);
+      }
+      cells.push(button);
+    }
+    maintenanceCalendarGrid.replaceChildren(...cells);
+  }
+
+  function renderMaintenanceUpcoming() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const upcoming = maintenancePlanner.entries
+      .filter((entry) => entry.status !== "completed" && entry.date >= today)
+      .sort((first, second) => first.date - second.date);
+    const selectedDayEntries = upcoming.filter((entry) => maintenanceSameDay(entry.date, maintenancePlanner.selectedDate));
+    const entriesToShow = selectedDayEntries.length ? selectedDayEntries : upcoming.slice(0, 3);
+    maintenanceUpcomingTitle.textContent = selectedDayEntries.length ? "Manutenções nesta data" : "Próximas manutenções";
+    maintenanceUpcomingCount.textContent = String(upcoming.length);
+    const rows = entriesToShow.map((entry) => {
+      const asset = MAINTENANCE_ASSETS.find((item) => item.id === entry.assetId);
+      const wrapper = document.createElement("div");
+      wrapper.className = "maintenance-upcoming-row";
+      wrapper.setAttribute("role", "listitem");
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "maintenance-upcoming-item";
+      button.dataset.maintenanceId = entry.id;
+      button.setAttribute("aria-pressed", String(entry.id === maintenancePlanner.selectedId));
+      if (entry.id === maintenancePlanner.selectedId) button.classList.add("is-selected");
+      const icon = document.createElement("span");
+      icon.className = "maintenance-upcoming-icon";
+      icon.textContent = asset.icon;
+      const detail = document.createElement("span");
+      detail.className = "maintenance-upcoming-detail";
+      const name = document.createElement("b");
+      name.textContent = asset.name;
+      const kind = document.createElement("small");
+      kind.textContent = maintenanceTypeLabel(entry.type);
+      detail.append(name, kind);
+      const status = document.createElement("span");
+      status.className = `maintenance-upcoming-status maintenance-upcoming-status--${entry.status}`;
+      status.textContent = maintenanceStatusLabel(entry);
+      const arrow = document.createElement("span");
+      arrow.className = "maintenance-upcoming-arrow";
+      arrow.textContent = "›";
+      arrow.setAttribute("aria-hidden", "true");
+      button.append(icon, detail, status, arrow);
+      wrapper.append(button);
+      return wrapper;
+    });
+
+    if (!entriesToShow.length) {
+      const empty = document.createElement("p");
+      empty.className = "maintenance-empty-state";
+      empty.textContent = "Não há manutenção preventiva programada neste período.";
+      rows.push(empty);
+    }
+    maintenanceUpcomingList.replaceChildren(...rows);
+  }
+
+  function renderMaintenanceDetail() {
+    const entry = maintenancePlanner.selected;
+    if (!entry) return;
+    const asset = MAINTENANCE_ASSETS.find((item) => item.id === entry.assetId);
+    maintenanceEquipmentIcon.textContent = asset.icon;
+    maintenanceDetailType.textContent = maintenanceTypeLabel(entry.type).toLocaleUpperCase("pt-BR");
+    maintenanceDetailTitle.textContent = asset.name;
+    maintenanceDetailLocation.textContent = asset.location;
+    const dateTimeLabel = new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium", timeStyle: "short" }).format(entry.date);
+    maintenanceScheduleMeta.textContent = `${entry.status === "completed" ? "Realizada" : "Agendada"}: ${dateTimeLabel}${entry.team ? ` · Equipe: ${entry.team}` : ""}`;
+    maintenanceStatusBadge.className = `maintenance-status-badge maintenance-status-badge--${entry.status}`;
+    maintenanceStatusBadge.textContent = maintenanceStatusLabel(entry);
+    maintenanceAffectedService.textContent = asset.affectedService;
+    maintenanceSuggestedWindow.textContent = asset.window;
+    maintenanceAlternative.textContent = asset.alternate;
+
+    const steps = ["Aviso", "Agendamento", "Execução", "Verificação"];
+    const activeStep = entry.status === "completed" ? steps.length : entry.status === "in_progress" ? 2 : 1;
+    maintenanceStepper.replaceChildren(...steps.map((label, index) => {
+      const step = document.createElement("li");
+      step.className = index < activeStep ? "is-complete" : index === activeStep ? "is-current" : "";
+      const marker = document.createElement("span");
+      marker.className = "maintenance-step-marker";
+      marker.textContent = index < activeStep ? "✓" : String(index + 1);
+      const caption = document.createElement("b");
+      caption.textContent = label;
+      step.append(marker, caption);
+      return step;
+    }));
+
+    const checkedCount = entry.checklist.filter((item) => item.done).length;
+    maintenanceChecklistProgress.textContent = `${checkedCount}/${entry.checklist.length} concluídos`;
+    maintenanceChecklist.replaceChildren(...entry.checklist.map((item) => {
+      const label = document.createElement("label");
+      label.className = "maintenance-check-item";
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.checked = item.done;
+      input.dataset.maintenanceChecklistId = item.id;
+      input.dataset.maintenanceEntryId = entry.id;
+      const text = document.createElement("span");
+      text.textContent = item.label;
+      label.append(input, text);
+      return label;
+    }));
+  }
+
+  function renderMaintenance() {
+    if (!currentUser?.permissions.includes("maintenance")) return;
+    const year = maintenancePlanner.viewMonth.getFullYear();
+    const month = maintenancePlanner.viewMonth.getMonth();
+    const monthEntries = maintenancePlanner.entries.filter((entry) => entry.date.getFullYear() === year && entry.date.getMonth() === month);
+    maintenanceMonthCount.textContent = String(monthEntries.length);
+    maintenanceDueSoonCount.textContent = String(monthEntries.filter((entry) => entry.status === "attention" && maintenanceDayDifference(entry.date) >= 0 && maintenanceDayDifference(entry.date) <= 3).length);
+    maintenanceOnTrackCount.textContent = String(monthEntries.filter((entry) => entry.status === "scheduled" && maintenanceDayDifference(entry.date) >= 0).length);
+    maintenanceCriticalCount.textContent = String(monthEntries.filter((entry) => entry.critical || entry.status === "critical").length);
+    renderMaintenanceCalendar();
+    renderMaintenanceUpcoming();
+    renderMaintenanceDetail();
+  }
+
+  function openMaintenanceSchedule() {
+    const selected = maintenancePlanner.selected;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const defaultDate = selected && maintenanceDayDifference(selected.date) >= 0 ? selected.date : new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, 8);
+    maintenanceScheduleForm.reset();
+    maintenanceFormDate.min = maintenanceDateKey(today);
+    maintenanceFormAsset.value = selected?.assetId || MAINTENANCE_ASSETS[0].id;
+    maintenanceFormType.value = selected?.type || "preventive";
+    maintenanceFormDate.value = maintenanceDateKey(defaultDate);
+    maintenanceFormTime.value = "08:00";
+    maintenanceFormDuration.value = "2";
+    maintenanceFormTeam.value = ["João Costa", "Pedro Lima", "Luana Freitas", "Caio Nunes"].includes(selected?.team) ? selected.team : "";
+    maintenanceFormNotes.value = selected?.notes || "";
+    maintenanceScheduleMessage.textContent = "";
+    maintenanceScheduleModal.showModal();
+  }
+
+  function closeMaintenanceSchedule() {
+    if (maintenanceScheduleModal.open) maintenanceScheduleModal.close();
+  }
+
   function setInventoryFormMessage(element, message = "", state = "error") {
     element.textContent = message;
     element.classList.toggle("is-success", state === "success");
@@ -1912,6 +2272,80 @@
     reportsDateFrom.value = "";
     reportsDateTo.value = "";
     renderReports();
+  });
+
+  const moveMaintenanceMonth = (offset) => {
+    const month = maintenancePlanner.viewMonth;
+    maintenancePlanner.viewMonth = new Date(month.getFullYear(), month.getMonth() + offset, 1);
+    maintenancePlanner.selectedDate = new Date(maintenancePlanner.viewMonth.getFullYear(), maintenancePlanner.viewMonth.getMonth(), 1);
+    const monthEntries = maintenancePlanner.entries
+      .filter((entry) => entry.date.getFullYear() === maintenancePlanner.viewMonth.getFullYear() && entry.date.getMonth() === maintenancePlanner.viewMonth.getMonth())
+      .sort((first, second) => first.date - second.date);
+    if (monthEntries.length) maintenancePlanner.selectedId = (monthEntries.find((entry) => entry.status !== "completed") || monthEntries[0]).id;
+    renderMaintenance();
+  };
+
+  document.querySelector("#maintenance-prev-month").addEventListener("click", () => moveMaintenanceMonth(-1));
+  document.querySelector("#maintenance-next-month").addEventListener("click", () => moveMaintenanceMonth(1));
+  maintenanceCalendarGrid.addEventListener("click", (event) => {
+    const dayButton = event.target.closest("[data-maintenance-date]");
+    if (!dayButton) return;
+    maintenancePlanner.selectedDate = new Date(`${dayButton.dataset.maintenanceDate}T12:00:00`);
+    const scheduled = maintenancePlanner.entries
+      .filter((entry) => maintenanceSameDay(entry.date, maintenancePlanner.selectedDate))
+      .sort((first, second) => first.date - second.date);
+    if (scheduled.length) maintenancePlanner.selectedId = (scheduled.find((entry) => entry.status !== "completed") || scheduled[0]).id;
+    renderMaintenance();
+  });
+  maintenanceUpcomingList.addEventListener("click", (event) => {
+    const itemButton = event.target.closest("[data-maintenance-id]");
+    if (!itemButton) return;
+    const item = maintenancePlanner.entries.find((entry) => entry.id === itemButton.dataset.maintenanceId);
+    if (!item) return;
+    maintenancePlanner.selectedId = item.id;
+    maintenancePlanner.selectedDate = new Date(item.date.getFullYear(), item.date.getMonth(), item.date.getDate());
+    maintenancePlanner.viewMonth = new Date(item.date.getFullYear(), item.date.getMonth(), 1);
+    renderMaintenance();
+  });
+  maintenanceChecklist.addEventListener("change", (event) => {
+    const checkbox = event.target.closest("input[data-maintenance-checklist-id]");
+    if (!checkbox) return;
+    maintenancePlanner.toggleChecklist(checkbox.dataset.maintenanceEntryId, checkbox.dataset.maintenanceChecklistId, checkbox.checked);
+    const entry = maintenancePlanner.selected;
+    const completed = entry.checklist.filter((item) => item.done).length;
+    maintenanceChecklistProgress.textContent = `${completed}/${entry.checklist.length} concluídos`;
+  });
+  document.querySelector("#maintenance-open-schedule").addEventListener("click", openMaintenanceSchedule);
+  document.querySelectorAll("[data-close-maintenance-modal]").forEach((button) => {
+    button.addEventListener("click", closeMaintenanceSchedule);
+  });
+  maintenanceScheduleForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!maintenanceScheduleForm.reportValidity()) return;
+    const scheduledAt = new Date(`${maintenanceFormDate.value}T${maintenanceFormTime.value}:00`);
+    if (Number.isNaN(scheduledAt.getTime()) || scheduledAt < new Date()) {
+      maintenanceScheduleMessage.textContent = "Escolha uma data e um horário futuros para programar a manutenção.";
+      maintenanceFormDate.focus();
+      return;
+    }
+    const entry = maintenancePlanner.add({
+      assetId: maintenanceFormAsset.value,
+      type: maintenanceFormType.value,
+      date: maintenanceFormDate.value,
+      time: maintenanceFormTime.value,
+      duration: Number(maintenanceFormDuration.value),
+      team: maintenanceFormTeam.value,
+      notes: maintenanceFormNotes.value.trim(),
+      createdBy: currentUser.name,
+    });
+    if (!entry) {
+      maintenanceScheduleMessage.textContent = "Não foi possível salvar o agendamento. Revise os dados e tente novamente.";
+      return;
+    }
+    closeMaintenanceSchedule();
+    maintenanceFeedback.classList.add("is-success");
+    maintenanceFeedback.textContent = `${MAINTENANCE_ASSETS.find((item) => item.id === entry.assetId).name} agendada para ${new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium", timeStyle: "short" }).format(entry.date)}.`;
+    renderMaintenance();
   });
 
   inventoryWithdrawalItem.addEventListener("change", updateWithdrawalStock);

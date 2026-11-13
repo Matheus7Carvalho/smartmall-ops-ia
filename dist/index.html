@@ -42,6 +42,7 @@
           <button class="nav-item" type="button" data-permission="occurrences" data-view="occurrences"><span aria-hidden="true">⌁</span> Ocorrências <b>8</b></button>
           <button class="nav-item" type="button" data-permission="tasks" data-view="tasks"><span aria-hidden="true">✓</span> Tarefas <b>3</b></button>
           <button class="nav-item" type="button" data-permission="equipment" data-view="equipment"><span aria-hidden="true">▦</span> Equipamentos</button>
+          <button class="nav-item" type="button" data-permission="maintenance" data-view="maintenance"><span aria-hidden="true">⚒</span> Manutenção</button>
           <button class="nav-item" type="button" data-permission="teams" data-view="teams"><span aria-hidden="true">♧</span> Equipes</button>
           <button class="nav-item" type="button" data-permission="users" data-view="users"><span aria-hidden="true">◉</span> Usuários e permissões</button>
           <button class="nav-item" type="button" data-permission="reports" data-view="reports"><span aria-hidden="true">▥</span> Relatórios</button>
@@ -212,9 +213,9 @@
           <section class="users-metrics" aria-label="Resumo de usuários"><article><span aria-hidden="true">◉</span><div><p>Usuários cadastrados</p><strong>3</strong><small>Contas demonstrativas</small></div></article><article class="users-metric--admin"><span aria-hidden="true">⌾</span><div><p>Administradores</p><strong>1</strong><small>Gestão integral do ambiente</small></div></article><article class="users-metric--active"><span aria-hidden="true">✓</span><div><p>Contas ativas</p><strong>3</strong><small>Sem bloqueios neste protótipo</small></div></article></section>
           <section class="users-info"><span aria-hidden="true">⌾</span><div><b>Controle de acesso demonstrativo</b><p>Somente Administradores podem visualizar esta área e revisar permissões. Alterações reais exigem trilha de auditoria e confirmação em servidor.</p></div></section>
           <section class="user-access-list" aria-label="Perfis cadastrados">
-            <article class="user-access-card"><header><span class="user-avatar user-avatar--admin" aria-hidden="true">RM</span><div><p class="eyebrow">ADMINISTRADOR</p><h2>Rafael Mendes</h2><small>admin@smartmall.local</small></div><span class="user-active-status">Ativo</span></header><div class="user-permission-summary"><span>Permissões de acesso</span><div><b>Dashboard</b><b>Central de Controle</b><b>Ocorrências</b><b>Tarefas</b><b>Equipamentos</b><b>Equipes</b><b>Usuários e permissões</b><b>Relatórios</b></div></div><footer><span>Escopo: administração completa da operação.</span><span class="user-role-chip user-role-chip--admin">Acesso total</span></footer></article>
-            <article class="user-access-card"><header><span class="user-avatar user-avatar--supervisor" aria-hidden="true">AS</span><div><p class="eyebrow">SUPERVISORA OPERACIONAL</p><h2>Ana Souza</h2><small>supervisor@smartmall.local</small></div><span class="user-active-status">Ativa</span></header><div class="user-permission-summary"><span>Permissões de acesso</span><div><b>Dashboard</b><b>Central de Controle</b><b>Ocorrências</b><b>Tarefas</b><b>Equipamentos</b><b>Equipes</b><b>Relatórios</b></div></div><footer><span>Não possui acesso à gestão de usuários e permissões.</span><span class="user-role-chip user-role-chip--supervisor">Acesso operacional</span></footer></article>
-            <article class="user-access-card"><header><span class="user-avatar user-avatar--employee" aria-hidden="true">JC</span><div><p class="eyebrow">FUNCIONÁRIO</p><h2>João Costa</h2><small>funcionario@smartmall.local</small></div><span class="user-active-status">Ativo</span></header><div class="user-permission-summary"><span>Permissões de acesso</span><div><b>Dashboard</b><b>Ocorrências</b><b>Tarefas</b><b>Equipamentos</b></div></div><footer><span>Escopo limitado às atividades e registros operacionais.</span><span class="user-role-chip user-role-chip--employee">Acesso restrito</span></footer></article>
+            <article class="user-access-card"><header><span class="user-avatar user-avatar--admin" aria-hidden="true">RM</span><div><p class="eyebrow">ADMINISTRADOR</p><h2>Rafael Mendes</h2><small>admin@smartmall.local</small></div><span class="user-active-status">Ativo</span></header><div class="user-permission-summary"><span>Permissões de acesso</span><div><b>Dashboard</b><b>Central de Controle</b><b>Ocorrências</b><b>Tarefas</b><b>Equipamentos</b><b>Manutenção</b><b>Equipes</b><b>Usuários e permissões</b><b>Relatórios</b></div></div><footer><span>Escopo: administração completa da operação.</span><span class="user-role-chip user-role-chip--admin">Acesso total</span></footer></article>
+            <article class="user-access-card"><header><span class="user-avatar user-avatar--supervisor" aria-hidden="true">AS</span><div><p class="eyebrow">SUPERVISORA OPERACIONAL</p><h2>Ana Souza</h2><small>supervisor@smartmall.local</small></div><span class="user-active-status">Ativa</span></header><div class="user-permission-summary"><span>Permissões de acesso</span><div><b>Dashboard</b><b>Central de Controle</b><b>Ocorrências</b><b>Tarefas</b><b>Equipamentos</b><b>Manutenção</b><b>Equipes</b><b>Relatórios</b></div></div><footer><span>Não possui acesso à gestão de usuários e permissões.</span><span class="user-role-chip user-role-chip--supervisor">Acesso operacional</span></footer></article>
+            <article class="user-access-card"><header><span class="user-avatar user-avatar--employee" aria-hidden="true">JC</span><div><p class="eyebrow">FUNCIONÁRIO</p><h2>João Costa</h2><small>funcionario@smartmall.local</small></div><span class="user-active-status">Ativo</span></header><div class="user-permission-summary"><span>Permissões de acesso</span><div><b>Dashboard</b><b>Ocorrências</b><b>Tarefas</b><b>Equipamentos</b><b>Manutenção</b></div></div><footer><span>Escopo limitado às atividades e registros operacionais.</span><span class="user-role-chip user-role-chip--employee">Acesso restrito</span></footer></article>
           </section>
           <section class="users-disclaimer"><span aria-hidden="true">⌾</span><p><b>Ambiente demonstrativo:</b> os perfis apresentados são estáticos e não permitem criar, editar ou remover contas. Em produção, essas ações devem exigir autenticação forte, confirmação administrativa e auditoria.</p></section>
         </section>
@@ -260,6 +261,62 @@
 
           <section class="reports-disclaimer"><span aria-hidden="true">⌾</span><p><b>Limite do protótipo:</b> este relatório consolida somente o histórico local do estoque; não representa auditoria persistente nem relatório financeiro oficial. Em produção, os registros devem ser armazenados e protegidos no servidor.</p></section>
         </section>
+
+        <section class="maintenance-screen" id="maintenance-view" hidden aria-labelledby="maintenance-title">
+          <header class="maintenance-header">
+            <div><button class="back-dashboard" type="button" data-view="dashboard"><span aria-hidden="true">←</span> Voltar ao dashboard</button><p class="eyebrow">PLANEJAMENTO OPERACIONAL</p><h1 id="maintenance-title">Manutenção preventiva</h1><p>Planeje intervenções, preserve a continuidade dos serviços e reduza o impacto na experiência dos visitantes.</p></div>
+            <span class="demo-label">AGENDA INTERNA · DADOS DEMONSTRATIVOS</span>
+          </header>
+
+          <section class="maintenance-metrics" aria-label="Indicadores de manutenção">
+            <article class="maintenance-metric"><span class="maintenance-metric-icon">▦</span><div><p>Manutenções no mês</p><strong id="maintenance-month-count">0</strong></div></article>
+            <article class="maintenance-metric maintenance-metric--attention"><span class="maintenance-metric-icon">!</span><div><p>Revisão em breve</p><strong id="maintenance-due-soon-count">0</strong></div></article>
+            <article class="maintenance-metric maintenance-metric--good"><span class="maintenance-metric-icon">✓</span><div><p>Em dia</p><strong id="maintenance-on-track-count">0</strong></div></article>
+            <article class="maintenance-metric maintenance-metric--critical"><span class="maintenance-metric-icon">△</span><div><p>Falhas críticas</p><strong id="maintenance-critical-count">0</strong></div></article>
+          </section>
+          <p class="maintenance-feedback" id="maintenance-feedback" role="status" aria-live="polite"></p>
+
+          <div class="maintenance-workspace">
+            <div class="maintenance-sidebar-column">
+              <section class="maintenance-panel maintenance-calendar-panel" aria-labelledby="maintenance-calendar-title">
+                <header class="maintenance-panel-header"><div><p class="eyebrow">AGENDA</p><h2 id="maintenance-calendar-title">Calendário de manutenção</h2></div><div class="maintenance-month-controls"><button type="button" id="maintenance-prev-month" aria-label="Mês anterior">‹</button><b id="maintenance-month-label">—</b><button type="button" id="maintenance-next-month" aria-label="Próximo mês">›</button></div></header>
+                <div class="maintenance-weekdays" aria-hidden="true"><span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span></div>
+                <div class="maintenance-calendar-grid" id="maintenance-calendar-grid" role="group" aria-label="Dias do mês"></div>
+                <div class="maintenance-legend"><span><i class="maintenance-dot maintenance-dot--preventive"></i> Preventiva</span><span><i class="maintenance-dot maintenance-dot--scheduled"></i> Agendada</span><span><i class="maintenance-dot maintenance-dot--selected"></i> Selecionada</span></div>
+              </section>
+
+              <section class="maintenance-panel maintenance-upcoming-panel" aria-labelledby="maintenance-upcoming-title">
+                <header class="maintenance-panel-header"><div><p class="eyebrow">PROGRAMAÇÃO</p><h2 id="maintenance-upcoming-title">Próximas manutenções</h2></div><span class="maintenance-upcoming-count" id="maintenance-upcoming-count">0</span></header>
+                <div class="maintenance-upcoming-list" id="maintenance-upcoming-list" role="list"></div>
+              </section>
+            </div>
+
+            <section class="maintenance-panel maintenance-detail-panel" aria-labelledby="maintenance-detail-title">
+              <header class="maintenance-detail-header">
+                <span class="maintenance-equipment-icon" id="maintenance-equipment-icon" aria-hidden="true">⇅</span>
+                <div><p class="eyebrow" id="maintenance-detail-type">MANUTENÇÃO PREVENTIVA</p><h2 id="maintenance-detail-title">Elevador E1</h2><p id="maintenance-detail-location">Elevador de acesso · Praça Central</p><p class="maintenance-schedule-meta" id="maintenance-schedule-meta"></p></div>
+                <span class="maintenance-status-badge" id="maintenance-status-badge">Revisão em 2 dias</span>
+              </header>
+
+              <ol class="maintenance-stepper" id="maintenance-stepper" aria-label="Etapas da manutenção"></ol>
+
+              <div class="maintenance-detail-grid">
+                <section class="maintenance-checklist-card" aria-labelledby="maintenance-checklist-title">
+                  <header><span aria-hidden="true">☷</span><h3 id="maintenance-checklist-title">Checklist preventivo</h3><small id="maintenance-checklist-progress">0/0</small></header>
+                  <div class="maintenance-checklist" id="maintenance-checklist"></div>
+                </section>
+                <div class="maintenance-recommendations">
+                  <article class="maintenance-recommendation maintenance-recommendation--service"><span aria-hidden="true">♧</span><div><small>Serviço afetado</small><b id="maintenance-affected-service">Acesso ao cinema</b><p>Considere rota acessível e comunicação prévia ao shopping.</p></div></article>
+                  <article class="maintenance-recommendation maintenance-recommendation--window"><span aria-hidden="true">▦</span><div><small>Janela sugerida</small><b id="maintenance-suggested-window">Quinta-feira · 8h</b><p>Período de menor fluxo para reduzir impacto.</p></div></article>
+                  <article class="maintenance-recommendation maintenance-recommendation--alternative"><span aria-hidden="true">↔</span><div><small>Alternativa operacional</small><b id="maintenance-alternative">Elevador E2</b><p>Mantenha outra rota acessível durante o serviço.</p></div></article>
+                </div>
+              </div>
+
+              <footer class="maintenance-detail-footer"><p>Agendamentos demonstrativos são locais e não reservam equipes nem equipamentos reais.</p><button class="primary-button maintenance-schedule-button" id="maintenance-open-schedule" type="button"><span aria-hidden="true">▦</span> Agendar manutenção</button></footer>
+            </section>
+          </div>
+          <section class="maintenance-disclaimer"><span aria-hidden="true">⌾</span><p><b>Acesso interno:</b> Administrador, Supervisora Operacional e Funcionário podem consultar e incluir agendamentos. A agenda é demonstrativa, não substitui ordens de serviço nem confirma disponibilidade real da equipe.</p></section>
+        </section>
       </main>
     </div>
     <dialog class="flow-modal flow-modal--register" id="modal-register" aria-labelledby="modal-register-title">
@@ -295,6 +352,21 @@
     <dialog class="inventory-dialog" id="inventory-entry-modal" aria-labelledby="inventory-entry-title"><form class="inventory-dialog-shell" id="inventory-entry-form" novalidate><header><div><p class="eyebrow">MOVIMENTAÇÃO DE ENTRADA</p><h2 id="inventory-entry-title">Registrar equipamento no estoque</h2><p>Inclua os dados mínimos para manter a rastreabilidade do inventário.</p></div><button class="modal-close" type="button" data-close-inventory-modal="entry" aria-label="Fechar registro de entrada">×</button></header><div class="inventory-dialog-body"><label>Nome do item <span class="required">*</span><input id="inventory-entry-name" required maxlength="70" placeholder="Ex.: Disjuntor bipolar 20 A" /></label><div class="inventory-form-grid"><label>Código / referência <span class="required">*</span><input id="inventory-entry-code" required maxlength="30" placeholder="EX.: ELE-020" /></label><label>Quantidade <span class="required">*</span><input id="inventory-entry-quantity" type="number" min="1" required placeholder="0" /></label></div><div class="inventory-form-grid"><label class="system-dropdown-field">Categoria <span class="required">*</span><select id="inventory-entry-category" required><option value="">Selecione</option><option>Climatização / HVAC</option><option>Elétrica</option><option>Hidráulica</option><option>Infraestrutura</option><option>Limpeza</option><option>Segurança</option></select></label><label>Estoque mínimo <span class="required">*</span><input id="inventory-entry-minimum" type="number" min="0" required placeholder="0" /></label></div><label>Localização no almoxarifado <span class="required">*</span><input id="inventory-entry-location" required maxlength="50" placeholder="Ex.: Estante B · Prateleira 03" /></label><label>Observação da entrada <textarea id="inventory-entry-note" placeholder="Ex.: recebido para reposição preventiva."></textarea></label><p class="inventory-form-message" id="inventory-entry-message" role="alert"></p></div><footer><span>O usuário logado será identificado no histórico auditável.</span><button class="primary-button" type="submit">Registrar entrada</button></footer></form></dialog>
 
     <dialog class="inventory-dialog" id="inventory-withdrawal-modal" aria-labelledby="inventory-withdrawal-title"><form class="inventory-dialog-shell" id="inventory-withdrawal-form" novalidate><header><div><p class="eyebrow">MOVIMENTAÇÃO DE SAÍDA</p><h2 id="inventory-withdrawal-title">Retirar equipamento do estoque</h2><p>Informe a finalidade da retirada para manter o registro auditável.</p></div><button class="modal-close" type="button" data-close-inventory-modal="withdrawal" aria-label="Fechar retirada de equipamento">×</button></header><div class="inventory-dialog-body"><label class="system-dropdown-field">Item <span class="required">*</span><select id="inventory-withdrawal-item" required></select></label><div class="inventory-selected-stock" id="inventory-withdrawal-stock">Selecione um item para consultar o saldo disponível.</div><label>Quantidade a retirar <span class="required">*</span><input id="inventory-withdrawal-quantity" type="number" min="1" required placeholder="0" /></label><label>Finalidade / atividade vinculada <span class="required">*</span><textarea id="inventory-withdrawal-reason" required minlength="6" placeholder="Ex.: manutenção corretiva da ocorrência #2417."></textarea></label><p class="inventory-form-message" id="inventory-withdrawal-message" role="alert"></p></div><footer><span>A retirada será atribuída ao perfil conectado.</span><button class="primary-button" type="submit">Confirmar retirada</button></footer></form></dialog>
+
+    <dialog class="flow-modal maintenance-schedule-modal" id="maintenance-schedule-modal" aria-labelledby="maintenance-schedule-title">
+      <form class="modal-shell maintenance-schedule-form" id="maintenance-schedule-form" novalidate>
+        <header class="modal-header"><div><p class="eyebrow">AGENDA INTERNA</p><h2 id="maintenance-schedule-title">Agendar manutenção</h2><p>Registre uma janela planejada para o equipamento selecionado.</p></div><button class="modal-close" type="button" data-close-maintenance-modal aria-label="Fechar agendamento">×</button></header>
+        <div class="modal-body maintenance-modal-body">
+          <label>Equipamento <span class="required">*</span><select id="maintenance-form-asset" required><option value="elevator-e1">Elevador E1</option><option value="elevator-e2">Elevador E2</option><option value="hvac-b">Ar-condicionado — Ala B</option><option value="generator-1">Gerador de emergência</option><option value="water-pump-1">Bomba hidráulica B01</option><option value="escalator-1">Escada rolante ECR-02</option><option value="emergency-lighting">Iluminação de emergência</option><option value="fire-pump">Bomba de incêndio</option><option value="automatic-door">Porta automática — Entrada principal</option><option value="cctv">Câmeras CFTV — Piso L2</option><option value="exhaust">Exaustão — Praça de alimentação</option><option value="substation">Subestação elétrica</option></select></label>
+          <div class="maintenance-form-grid"><label>Tipo <span class="required">*</span><select id="maintenance-form-type" required><option value="preventive">Manutenção preventiva</option><option value="corrective">Manutenção corretiva</option></select></label><label>Data <span class="required">*</span><input id="maintenance-form-date" type="date" required /></label></div>
+          <div class="maintenance-form-grid"><label>Horário <span class="required">*</span><input id="maintenance-form-time" type="time" value="08:00" required /></label><label>Duração prevista<select id="maintenance-form-duration"><option value="1">1 hora</option><option value="2" selected>2 horas</option><option value="4">4 horas</option><option value="6">6 horas</option></select></label></div>
+          <label>Equipe sugerida<select id="maintenance-form-team"><option value="">A definir</option><option>João Costa</option><option>Pedro Lima</option><option>Luana Freitas</option><option>Caio Nunes</option></select></label>
+          <label>Observação / escopo<textarea id="maintenance-form-notes" maxlength="240" placeholder="Informe o escopo, peças previstas ou cuidados para manter a operação. (opcional)"></textarea></label>
+          <p class="modal-message" id="maintenance-schedule-message" role="alert" aria-live="polite"></p>
+        </div>
+        <footer class="modal-footer"><button class="secondary-button" type="button" data-close-maintenance-modal>Cancelar</button><button class="primary-button" type="submit">Salvar agendamento</button></footer>
+      </form>
+    </dialog>
 
     <script src="assets/app.js"></script>
   </body>
