@@ -1,0 +1,48 @@
+name: smartmall-ops
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-smartmall}
+      POSTGRES_USER: ${POSTGRES_USER:-smartmall}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-smartmall}
+      TZ: America/Araguaina
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # Stack completa em containers: docker compose --profile app up --build
+  backend:
+    profiles: [app]
+    build: ./backend
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      POSTGRES_DB: ${POSTGRES_DB:-smartmall}
+      POSTGRES_USER: ${POSTGRES_USER:-smartmall}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-smartmall}
+      APP_CHAMADO_PUBLICO_CONFIAR_IP_PROXY: "true"
+      APP_CHAMADO_PUBLICO_LIMITE_IP: ${CHAMADO_PUBLICO_LIMITE_IP:-300}
+      APP_CHAMADO_PUBLICO_LIMITE_IP_LOCAL: ${CHAMADO_PUBLICO_LIMITE_IP_LOCAL:-30}
+      APP_CHAMADO_PUBLICO_JANELA_SEGUNDOS: ${CHAMADO_PUBLICO_JANELA_SEGUNDOS:-600}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    profiles: [app]
+    build: ./frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  db:

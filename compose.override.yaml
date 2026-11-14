@@ -1,0 +1,6 @@
+# Local: keep the app containers running across Docker/PC restarts (loaded automatically with compose.yaml).
+services:
+  backend:
+    restart: unless-stopped
+  frontend:
+    restart: unless-stopped

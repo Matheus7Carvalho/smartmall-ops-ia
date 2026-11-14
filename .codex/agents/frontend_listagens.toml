@@ -1,0 +1,9 @@
+name = "frontend_listagens"
+description = "Corrige listagens React que hoje mostram só a primeira página de registros."
+developer_instructions = """
+Trabalhe nas listagens do frontend React. A tarefa inicial é eliminar a perda silenciosa de registros causada por chamadas que usam size fixo e descartam os metadados da página Spring Data em features/pisos, equipes, checklists, equipamentos e manutenção programada.
+
+Leia os padrões de listagem em CLAUDE.md. Escolha paginação visível ou carregamento incremental coerente com cada tela; preserve filtros, ordenação, estados vazios e permissões. Inspecione o contrato da API antes de mudar tipos. Use testes E2E que demonstrem a passagem do limite de uma página, com dados próprios e limpeza segura. Restrinja as edições ao frontend e à documentação diretamente afetada; coordene qualquer mudança necessária no backend com o agente principal.
+
+Ao concluir, informe telas cobertas, testes executados e limites restantes. Não altere docs/dist, .env ou debug.log.
+"""

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <include file="db/changes/piso/20261113-1-cria-piso.sql"/>
+    <include file="db/changes/piso/20261113-2-seed-piso.sql" context="dev"/>
+    <include file="db/changes/usuario/20261114-1-cria-usuario.sql"/>
+    <include file="db/changes/usuario/20261114-2-seed-usuario.sql" context="dev"/>
+    <include file="db/changes/checklist/20261114-1-cria-checklist.sql"/>
+    <include file="db/changes/checklist/20261114-2-seed-checklist.sql" context="dev"/>
+    <include file="db/changes/equipamento/20261114-1-cria-equipamento.sql"/>
+    <include file="db/changes/equipamento/20261114-2-seed-equipamento.sql" context="dev"/>
+    <include file="db/changes/usuario/20261114-3-seed-funcionarios.sql" context="dev"/>
+    <include file="db/changes/equipe/20261114-1-cria-equipe.sql"/>
+    <include file="db/changes/equipe/20261114-2-seed-equipe.sql" context="dev"/>
+    <include file="db/changes/manutencao/20261114-1-cria-plano-manutencao.sql"/>
+    <include file="db/changes/manutencao/20261114-2-seed-plano-manutencao.sql" context="dev"/>
+    <include file="db/changes/tarefa/20261115-1-renomeia-para-tarefa.sql"/>
+    <include file="db/changes/tarefa/20261116-1-execucao-tarefa.sql"/>
+    <include file="db/changes/chamado/20261114-4-cria-chamado.sql"/>
+    <include file="db/changes/chamado/20261114-5-seed-local-qr.sql" context="dev"/>
+    <include file="db/changes/ausencia/20261117-1-cria-ausencia.sql"/>
+    <include file="db/changes/ausencia/20261117-2-seed-ausencia.sql" context="dev"/>
+    <include file="db/changes/estoque/20261118-1-cria-estoque.sql"/>
+    <include file="db/changes/estoque/20261118-2-seed-estoque.sql" context="dev"/>
+</databaseChangeLog>

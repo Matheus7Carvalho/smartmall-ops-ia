@@ -1,121 +1,124 @@
-# SmartMall Ops AI — Operação e ocorrências
+# SmartMall Ops AI
 
-Protótipo local em **HTML5** do SmartMall Ops IA. A identidade visual usa azul-marinho com degradês para azul-claro e a logo oficial do SmartMall Ops IA.
+MVP de gestão operacional para shopping centers. Requisitos em [docs/SmartMall_Ops_AI_Documentacao_Inicial.md](docs/SmartMall_Ops_AI_Documentacao_Inicial.md). Padrões de projeto em [CLAUDE.md](CLAUDE.md).
 
-## Incluído
+| Pasta | Conteúdo |
+|---|---|
+| `backend/` | API Spring Boot 3.5 (Java 21), PostgreSQL, Liquibase |
+| `frontend/` | React + TypeScript (Vite), Tailwind, shadcn/ui |
+| `docs/dist/` | Protótipo HTML5 original, apenas referência |
+| `docs/` | Documentação |
 
-- RF01 — login de demonstração para Administrador, Supervisor e Funcionário, com menus e permissões de interface conforme o perfil;
-- RF02 — dashboard operacional com ocorrências abertas, tarefas em andamento, equipamentos monitorados e alertas;
-- Central de Controle para supervisão, com indicadores, fila prioritária ampliada, mapa operacional simplificado em menu expansível e painel de decisão;
-- Quadro Kanban de tarefas para funcionários, com visualização pessoal e etapas A Fazer, Em Andamento, Aguardando Equipamento, Travada e Finalizada;
-- Tela de Equipes com presença operacional, pessoas disponíveis, ocupadas e indisponíveis, conectada aos status demonstrativos de ocorrências;
-- Tela de Usuários e permissões exclusiva para Administradores, com perfis ativos, papéis e privilégios de acesso detalhados;
-- Estoque de equipamentos com saldos, alerta de mínimo, entradas, retiradas e histórico auditável por item e por movimentação;
-- Tela Relatórios para consulta consolidada das movimentações de estoque, com filtros por período, tipo e busca, indicadores resumidos e exportação CSV;
-- Tela Manutenção com calendário mensal, próximas intervenções, indicadores, checklist preventivo e formulário para novos agendamentos;
-- Pacote independente `dist/smartmall-ops-ia-standalone.html`, com HTML, CSS, JavaScript e logotipo incorporados, pronto para compartilhar com o time e abrir diretamente no Chrome;
-- Navegação lateral, alertas recentes e fila operacional sintética;
-- Fluxo de ocorrências em cinco modais: Registro, Análise, Aprovação, Execução e Encerramento;
-- Registro público de ocorrência, sem login, com imagem ou vídeo opcional, descrição e localização;
-- Acesso por QR Code simulado com localização pré-cadastrada e bloqueada para edição;
-- Classificação demonstrativa e explicável por regras, com categoria, prioridade e equipe indicada;
-- Aprovação obrigatória por Administrador ou Supervisora Operacional antes da execução;
-- Execução técnica com materiais usados, rota estimada, início da atividade, descrição do serviço e gastos;
-- Encerramento com histórico, tempo, responsável técnico, gastos e finalização restrita a Administrador ou Supervisora Operacional.
-- Padrão unificado de dropdowns: largura total do conteúdo, organização vertical e acabamento visual consistente nas telas e formulários.
+## Requisitos
 
-## Fluxo da ocorrência
+- Docker Desktop em execução
+- Java 21 (`JAVA_HOME` apontando para a pasta do JDK, não para `bin`)
+- Node.js 22+
 
-`Registrar → Analisar → Aprovar → Executar → Encerrar`
+## Rodar em modo desenvolvimento
 
-As etapas são exibidas como botões na tela de Ocorrências e cada uma abre uma modal específica. A classificação é uma simulação local e determinística: ela não representa um modelo de IA em produção nem autoriza intervenções técnicas. Situações de risco continuam exigindo os protocolos e a decisão humana do shopping.
-
-### Registro público e QR Code
-
-O botão **“Registrar ocorrência sem login”** na tela de acesso abre a modal de Registro para clientes ou funcionários do local. Para simular a leitura de um QR Code com local pré-cadastrado, abra a URL abaixo:
-
-```text
-http://127.0.0.1:4174/?qr=1&local=praca-alimentacao
+```bash
+cd backend && ./mvnw spring-boot:run
 ```
 
-O parâmetro `local` aceita, nesta demonstração: `praca-alimentacao`, `banheiro-l1`, `corredor-l2`, `entrada` e `estacionamento`.
+```bash
+cd frontend && npm install && npm run dev
+```
 
-## Central de Controle
+- Frontend: http://localhost:5173
+- API e Swagger: http://localhost:8080
 
-Disponível para os perfis de Administrador e Supervisora Operacional, a Central de Controle reúne em uma única visão:
+O backend sobe o PostgreSQL do `compose.yaml` automaticamente e aplica as migrações com dados de demonstração. O `.env` é opcional; veja `.env.example`.
 
-- indicadores agregados de ocorrências, equipes, ativos, saúde operacional e condições locais;
-- fila de ocorrências prioritárias ampliada e selecionável, com prioridade, status, local e horário relativo;
-- mapa operacional em SVG, explicitamente simplificado, não georreferenciado e disponível em um menu expansível separado;
-- rota, localização de equipe e tempo de resposta identificados como estimativas demonstrativas;
-- painel de acompanhamento para aprovar, iniciar, atualizar, reatribuir, registrar evidência e encerrar a ocorrência;
-- histórico local de decisões e ações; o encerramento requer resumo da resolução e remove a ocorrência da fila ativa.
+No VS Code com PowerShell, use dois terminais abertos na raiz do projeto. No primeiro:
 
-O seletor de piso segue o padrão visual dos dropdowns do sistema: ocupa toda a largura da área de conteúdo e fica em uma linha própria abaixo do cabeçalho. A Central também segue o fluxo vertical do sistema: **Fila Ativa**, **Ocorrência selecionada** e **Mapa expansível** ocupam a largura integral em blocos sucessivos, sem painéis lado a lado.
+```powershell
+cd backend
+$env:JAVA_HOME = 'C:\Program Files\Java\jdk-21.0.12.1' # ajuste se o JDK 21 estiver em outra pasta
+.\mvnw.cmd spring-boot:run
+```
 
-> A Central de Controle usa dados sintéticos. Ela não representa telemetria real, geolocalização real de equipes ou decisões automáticas da IA.
+No segundo:
 
-## Tarefas em Kanban
+```powershell
+cd frontend
+npm install
+npm run dev
+```
 
-O módulo **Tarefas** apresenta um quadro Kanban de acompanhamento operacional com cinco etapas: **A Fazer**, **Em Andamento**, **Aguardando Equipamento**, **Travada** e **Finalizada**. O perfil de Funcionário visualiza apenas os cartões atribuídos a ele; os perfis de Administrador e Supervisora Operacional visualizam a distribuição completa da equipe.
+## Rodar tudo em containers
 
-Cada cartão identifica a atividade, ocorrência ou rotina relacionada, prioridade, local, responsável, especialidade, prazo e pendência. As ações rápidas alteram o status apenas nesta demonstração local — elas não substituem o registro operacional real.
+```bash
+docker compose --profile app up --build
+```
 
-## Equipes
+Frontend em http://localhost:5173, API em http://localhost:5173/api. A porta 8080 do backend não é publicada no modo com containers. No modo desenvolvimento acima, a API continua em http://localhost:8080.
 
-O módulo **Equipes** oferece uma visão de presença operacional em blocos verticais de largura total. Ele destaca o total de profissionais presentes, disponíveis, ocupados e indisponíveis, além de separar as listas de **Funcionários presentes**, **Funcionários disponíveis** e **Funcionários ocupados**.
+O nginx aceita até 21 MB no envio de chamado público (`POST /api/publico/chamado`), mantém 6 MB nas outras APIs e limita os envios por IP na borda. Os limites adicionais do backend podem ser configurados pelas variáveis `CHAMADO_PUBLICO_*` em `.env.example`.
 
-Cada pessoa exibe nome, especialidade, quantidade de atividades vinculadas e status atual. Os dados são demonstrativos e acompanham o estado local das ocorrências, incluindo atendimento e deslocamento.
+## Registrar chamado pelo QR Code
 
-## Usuários e permissões
+No navegador da máquina, abra `http://localhost:5173/relatar?local=banheiro-norte`. Para um QR Code lido no celular, use um domínio ou IP acessível ao aparelho, como `http://<IP-da-maquina>:5173/relatar?local=banheiro-norte` no modo com containers; `localhost` no celular aponta para o próprio aparelho. O visitante informa o problema e pode enviar mídia sem login; o local vem preenchido pelo código da URL. A equipe revisa o pré-cadastro em `/chamados` com perfil Supervisor ou Administrador. A seed de desenvolvimento também oferece `praca-alimentacao` e `entrada`.
 
-O módulo **Usuários e permissões** é acessível somente ao perfil de **Administrador**. Ele apresenta os perfis cadastrados, e-mail de demonstração, papel, estado da conta e permissões atribuídas. Para Supervisora Operacional e Funcionário, o item de navegação fica oculto e a rota não é disponibilizada.
+No formulário, **Abrir câmera** pede permissão ao navegador, mostra a prévia e permite **Fotografar**; **Escolher arquivo** abre a galeria ou o explorador para anexar foto/vídeo. A câmera do navegador funciona em `localhost` ou HTTPS. Se o QR Code abrir um endereço `http://<IP>` no celular, o formulário e o anexo continuam disponíveis, mas a câmera mostra uma orientação para usar HTTPS. Para usar a câmera pelo QR Code, gere os códigos com a URL HTTPS definitiva.
 
-As informações são apenas demonstrativas: criação, edição, remoção e alteração de privilégios não estão disponíveis neste protótipo local.
+Os QR Codes de demonstração estão em `docs/qrcodes/demo/` (PNG para impressão e SVG vetorial). Eles apontam para o IP Wi-Fi desta máquina no momento da geração (`192.168.10.111:5173`); use-os apenas na mesma rede, com a stack em containers ativa. Esse IP pode mudar. Confira `enderecos.json` antes de imprimir.
 
-## Estoque de equipamentos
+Para gerar os três QR Codes com o endereço definitivo do sistema:
 
-O módulo **Equipamentos** reúne o inventário demonstrativo em uma única tela. Ele apresenta o saldo disponível, o estoque mínimo, alertas de reposição e localização no almoxarifado. A consulta acontece em dois dropdowns de largura total e empilhados: **Saldo atual** para escolher o item e **Item selecionado** para abrir seus detalhes.
+```bash
+cd frontend
+npm install
+npm run qr:gerar -- --base-url https://seu-dominio.com --output ../docs/qrcodes/finais
+```
 
-Ao selecionar um item, o segundo dropdown exibe sua descrição, saldo, código, localização e a **rastreabilidade individual** das entradas e retiradas relacionadas a ele. O histórico geral consolidado não é mostrado na tela de estoque: ele fica reservado para o módulo de Relatórios.
+O gerador exige um domínio ou IP acessível pelo celular e recusa `localhost`. Cada código abre `/relatar?local=<codigo>` para o local correspondente.
 
-Os fluxos locais disponíveis são:
+### Como acessar as funções
 
-- **Registrar entrada:** cadastra um novo item ou acrescenta quantidade a um código existente;
-- **Retirar equipamento:** valida o saldo, exige uma finalidade e atualiza a quantidade disponível;
-- **Rastreabilidade por item:** registra usuário, horário, ação e justificativa apenas nas movimentações do item selecionado;
-- **Histórico geral:** consolidado exclusivamente na área de Relatórios.
+| Função | Como abrir | Acesso |
+|---|---|---|
+| Formulário de relato | Abra `http://localhost:5173/relatar?local=banheiro-norte` no computador, ou leia um QR Code de `docs/qrcodes/demo/` com o celular quando o servidor estiver acessível na rede. O campo Local vem preenchido e pode ser editado. | Sem login |
+| Triagem dos chamados | Abra `http://localhost:5173/login`, entre como Supervisor ou Administrador e vá em **Operação → Chamados**. Abra um relato para aprovar e criar tarefa ou arquivar com motivo. | Supervisor e Administrador |
+| Tarefa aprovada | No chamado aprovado, clique em **Abrir tarefa criada**. A equipe responsável também encontra a tarefa em **Operação → Tarefas**. | Equipe responsável e gestão |
+| Membros e permissões | Após entrar, vá em **Cadastros → Membros e permissões**. | Administrador |
 
-As movimentações são demonstrativas e permanecem no navegador durante a execução atual. Em produção, esse fluxo exige inventário físico, autorização no servidor e persistência de dados.
+Os arquivos PNG/SVG e a lista das URLs codificadas ficam em [`docs/qrcodes/demo/`](docs/qrcodes/demo/README.md). O Vite iniciado apenas com `npm run dev` nesta máquina atende `localhost`; para testar a leitura pelo celular, use a stack em containers ou inicie o Vite com `npm run dev -- --host 0.0.0.0` e confirme que o celular alcança o IP da máquina.
 
-## Relatórios
+## Contas de demonstração
 
-A tela **Relatórios** consolida o histórico geral de entradas, retiradas e registros de inventário. Administradores e Supervisoras Operacionais podem filtrar os lançamentos por intervalo de datas, tipo de movimentação e busca por item, código, responsável ou descrição. O resumo apresenta a quantidade de registros, unidades recebidas, unidades retiradas e itens no mínimo ou abaixo do mínimo no estado atual do estoque.
-
-O botão **Baixar CSV** exporta somente os registros que correspondem aos filtros aplicados. A tela e a exportação usam os dados demonstrativos mantidos em memória durante a sessão; não constituem auditoria persistente, relatório financeiro ou fonte oficial para operação. O perfil Funcionário não tem permissão para acessar o módulo.
-
-## Manutenção
-
-O menu **Manutenção** está disponível para Administrador, Supervisora Operacional e Funcionário autenticados. A tela reúne calendário mensal, intervenções próximas, indicadores de manutenção, etapa atual, checklist preventivo e recomendações operacionais para serviço afetado, janela sugerida e rota alternativa. O formulário permite agendar manutenção preventiva ou corretiva, com equipamento, data, horário, duração, equipe sugerida e observações.
-
-O acesso exige uma sessão interna; a área não é exibida no fluxo público de registro de ocorrências para visitantes ou outros usuários externos. Os dados de agenda e checklist existem somente em memória nesta demonstração, são reiniciados ao encerrar a sessão e não reservam equipes ou ativos. Em produção, a autorização deve ser aplicada no servidor e as ordens de serviço precisam de persistência, auditoria e confirmação de disponibilidade.
-
-## Credenciais de demonstração
+Criadas pela seed do Liquibase (contexto `dev`). A tela de login tem atalhos para cada perfil.
 
 | Perfil | E-mail | Senha |
-| --- | --- | --- |
+|---|---|---|
 | Administrador | `admin@smartmall.local` | `demo123` |
 | Supervisor | `supervisor@smartmall.local` | `demo123` |
 | Funcionário | `funcionario@smartmall.local` | `demo123` |
 
-> A autenticação usa `sessionStorage` exclusivamente para demonstração local. Ela **não é segura para produção**; um sistema real exige backend, senhas com hash, sessões ou tokens seguros, controle de acesso no servidor e auditoria.
+Também há funcionários para compor as equipes, todos com senha `demo123`: `pedro.lima@`, `luana.freitas@`, `elisa.rocha@` e `caio.nunes@smartmall.local`.
 
-## Visualização local
+A seed traz ainda 8 equipamentos, 4 equipes, 2 modelos de checklist e 2 manutenções programadas. A semanal do Elevador E1 começa no passado, então Tarefas já mostra tarefas atrasadas.
 
-Com Python instalado, execute na pasta deste projeto:
+## Testes
 
-```powershell
-python -m http.server 4174 --directory dist
+```bash
+cd backend && ./mvnw test
 ```
 
-Abra `http://127.0.0.1:4174/`. Nenhum dado é enviado para fora do computador e esta versão não possui integração, persistência nem envio de formulário. O anexo de imagem e o histórico existem somente enquanto a página estiver aberta.
+```bash
+cd frontend && npm run build && npm run lint
+```
+
+Testes E2E (Playwright). Exigem o backend no ar com a seed de dev; o Vite é iniciado automaticamente se não estiver rodando. Na primeira vez, instale o navegador:
+
+```bash
+cd frontend && npx playwright install chromium
+```
+
+```bash
+cd frontend && npm run test:e2e
+```
+
+Relatório em `frontend/playwright-report`. Para outra URL: `E2E_BASE_URL=http://host:porta npm run test:e2e`.
+
+Antes dos testes, uma verificação aguarda até 60 s pelo frontend, pelo backend e pelo login da seed. Se o ambiente não estiver pronto, a suíte não roda e a mensagem indica a causa.

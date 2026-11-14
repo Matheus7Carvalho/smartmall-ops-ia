@@ -1,0 +1,17 @@
+[
+  {
+    "codigo": "banheiro-norte",
+    "nome": "Banheiro Norte",
+    "url": "http://192.168.10.111:5173/relatar?local=banheiro-norte"
+  },
+  {
+    "codigo": "praca-alimentacao",
+    "nome": "Praça de Alimentação",
+    "url": "http://192.168.10.111:5173/relatar?local=praca-alimentacao"
+  },
+  {
+    "codigo": "entrada",
+    "nome": "Entrada Principal",
+    "url": "http://192.168.10.111:5173/relatar?local=entrada"
+  }
+]

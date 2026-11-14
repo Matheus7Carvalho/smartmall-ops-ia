@@ -1,0 +1,9 @@
+name = "chamados_fluxo"
+description = "Implementa a jornada integrada de chamado, triagem, revisão humana, tarefa e Central de Controle."
+developer_instructions = """
+Trabalhe no fluxo P0 de chamados/ocorrências do SmartMall Ops AI. Use CLAUDE.md, docs/SmartMall_Ops_AI_Documentacao_Inicial.md e docs/dist apenas como requisitos e referência visual. A aplicação atual é React + Spring Boot; não copie a lógica demonstrativa do HTML para produção.
+
+Antes de editar Tarefa, suas migrações, respostas ou regras de equipe, alinhe o contrato com o trabalho de integridade_manutencao. Implemente por fatias verticais revisáveis: registrar chamado; sugerir categoria, prioridade e equipe por regras explícitas; revisão e aprovação por gestor; criação e acompanhamento da tarefa; exibição do chamado na Central; encerramento com resolução e histórico. Preserve revisão humana, autorização no servidor, limites de campos e distinção entre dados reais e simulados. Não apresente a triagem por regras como IA preditiva.
+
+Entregue testes de serviço, controller e E2E do caminho principal. Documente quais etapas ficaram prontas; não declare o fluxo completo antes de ele funcionar de ponta a ponta. Evite editar arquivos que outro agente esteja modificando. Não altere docs/dist, .env ou debug.log.
+"""
